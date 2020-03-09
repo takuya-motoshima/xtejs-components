@@ -1,0 +1,137 @@
+:root {
+  --camera-capturing-button-scale: 64px;
+  --camera-capturing-button-border: 6px;
+  --camera-capturing-button-touchable-scale: calc( var(--camera-capturing-button-scale) - var(--camera-capturing-button-border) - 10px );
+  --camera-rotation-button-scale: 48px;
+  --camera-captured-scale: 48px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.camera-viewer {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 414px;
+  height: 736px;
+  max-width: 100%;
+  max-height: 100%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
+  .camera-viewer-camera {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    z-index: 1001;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .camera-viewer-canvas {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    z-index: 1002;
+  }
+
+
+  .camera-controls {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    z-index: 1003;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 10px;
+    width: 100%;
+    background: #000000;
+  }
+
+    .camera-captured {
+      box-sizing: border-box;
+      display: block;
+      margin-right: auto;
+      width: var(--camera-captured-scale);
+      height: var(--camera-captured-scale);
+      border: 1px solid hsla(0,0%,100%,.1);
+      border-radius: 4px;
+    }
+
+      .camera-captured img {
+        box-sizing: border-box;
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+      }
+
+    .camera-capturing-button,
+    .camera-rotation-button {
+      padding: 0;
+      border: none;
+      appearance: none;
+      background-color: transparent;
+    }
+
+    .camera-capturing-button:focus,
+    .camera-rotation-button:focus {
+      outline: none;
+      outline-offset: unset;
+    }
+
+    .camera-capturing-button {
+      box-sizing: border-box;
+      position: relative;
+      width: var(--camera-capturing-button-scale);
+      height: var(--camera-capturing-button-scale);
+      border-radius: 50%;
+      border: var(--camera-capturing-button-border) solid #ffffff;
+      background-color: #000000
+    }
+
+      .camera-capturing-button::after {
+        display: block;
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: var(--camera-capturing-button-touchable-scale);
+        height: var(--camera-capturing-button-touchable-scale);
+        border-radius: 50%;
+        background-color: #ffffff;
+        transition: transform .2s ease;
+      }
+
+      .camera-capturing-button:active::after {
+        transform: translate(-50%, -50%) scale(.85);
+      }
+
+    .camera-rotation-button {
+      margin-left: auto;
+      width: var(--camera-rotation-button-scale);
+      height: var(--camera-rotation-button-scale);
+      background: url(data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjRkZGRkZGIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggZD0iTTMwMS44MTUsMzE4LjYwOGMtMTMuMTE0LDExLjAyOS0yOC45NTYsMTcuMzU2LTQ1LjgxNSwxNy4zNTZjLTM2LjM2LDAtNjYuMjg2LTI4Ljk2NS03MC44OS02MS45NjVoMzAuNjFsLTM4Ljg3LTUwICAgbC0zNy41MzQsNTBoMjkuNDc5YzQuNjk2LDQyLDQxLjcxNyw3OCw4Ny4yMDUsNzhjMjAuOSwwLDQxLjE3LTcuNTY2LDU3LjA3Ni0yMS4yMThsMi4zNy0yLjE1OWwtMTEuNTk5LTExLjY2MkwzMDEuODE1LDMxOC42MDh6Ij48L3BhdGg+PHBhdGggZD0iTTMxNS43MzYsMTk4Ljg4NWMtMTYuMTg4LTE0Ljc3NS0zNy40MDItMjIuODM5LTU5LjczNi0yMi44MzljLTIwLjksMC00MS4xNjksNy41NTYtNTcuMDc1LDIxLjIwNmwtMi4zNzEsMi4wNTIgICBsMTEuNTk5LDExLjYxbDIuMDMzLTEuNzA2YzEyLjkyNy0xMC44NzIsMjkuMTk3LTE3LjAwNSw0NS44MTQtMTcuMDA1YzM2LjM0MywwLDY2LjI3NCwyOC43OTcsNzAuODkxLDYzLjc5N2gtMzAuNjQ0bDM4Ljg0Niw1MS4yMjUgICBMMzcyLjcxOSwyNTZoLTI5LjUxMkMzNDAuOTY2LDIzNiwzMzEuMjc1LDIxMy4wNjQsMzE1LjczNiwxOTguODg1eiI+PC9wYXRoPjxwYXRoIGQ9Ik00MTcuNSwxNjBoLTYxLjcyNWMtMzIuMTA1LTM2LTQyLjIxOS00OC01NC41MjUtNDhoLTg4LjVjLTEyLjMxNCwwLTIyLjE2NywxMi01NC41MjEsNDhIMTQ1di0xNmgtMzR2MTZIOTcuNSAgIEM3OS44NTUsMTYwLDY0LDE3My4yMTcsNjQsMTkwLjY4NHYxNzYuMDE4QzY0LDM4NC4xNjksNzkuODU1LDQwMCw5Ny41LDQwMGgzMjBjMTcuNjQ1LDAsMzAuNS0xNS44MzEsMzAuNS0zMy4yOTlWMTkwLjY4NCAgIEM0NDgsMTczLjIxNyw0MzUuMTQ1LDE2MCw0MTcuNSwxNjB6IE00MzIsMzY2LjcwMWMwLDkuMjYzLTYuMjI5LDE3LjI5OS0xNC41LDE3LjI5OWgtMzIwYy04LjczOCwwLTE3LjUtOC42NjQtMTcuNS0xNy4yOTlWMTkwLjY4NCAgIEM4MCwxODIuNTE4LDg4LjEyNiwxNzYsOTcuNSwxNzZoNjAuNzI5YzAsMCw0LjEyNCwwLDYuMTMzLDBzMy4yMjUtMC4xOTksNS43NjgtMy4yczcuNzAyLTEwLjAwOCwxMS4wOC0xMy43OTUgICBjMTEuMjk2LTEyLjY2NiwxOS40NTctMjEuOTE1LDI1LjMxNi0yNy4xMzJjNC43NDYtNC4yMjUsNi4yMTEtMy44NzMsNi4yMjUtMy44NzNoODguNWMwLjAxNiwwLDEuNjExLTAuMzYzLDYuNzA5LDQuMjE5ICAgYzYuMTQxLDUuNTIxLDE0LjcwNSwxNi44NCwyNi41NTgsMzAuMTk4YzIuODg4LDMuMjU1LDcuMjE0LDguMTEsOS4zMTcsMTAuNDRzNC4yNTIsMy4xNDMsNS43NzEsMy4xNDNzNi4xNywwLDYuMTcsMEg0MTcuNSAgIGM4LjgzMiwwLDE0LjUsNS45NjUsMTQuNSwxNC42ODRWMzY2LjcwMXoiPjwvcGF0aD48L2c+PC9zdmc+) center / contain no-repeat transparent;
+      transition: opacity .2s ease;
+    }
+
+      .camera-rotation-button:active {
+        opacity: .5;
+      }

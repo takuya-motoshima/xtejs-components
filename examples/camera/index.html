@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+<body>
+  <xtejs-camera id="camera" style="width: 300px; height: 200px; background: #000000;"></xtejs-camera>
+  <footer>
+    <button action-open-front type="button">Front</button>
+    <button action-open-back type="button">Back</button>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+  <script type="module">
+    import * as components from '../../dist/build.esm.js';
+
+    (async () => {
+      const camera = $('#camera').get(0);
+      await camera.open('back');
+  
+      $('body')
+        .on('click', '[action-open-front]', async () => {
+          await camera.open('front');
+        })
+        .on('click', '[action-open-back]', async () => {
+          await camera.open('back');
+        });
+    })();
+  </script>
+</body>
+</html>
