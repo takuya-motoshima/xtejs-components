@@ -5,7 +5,7 @@ import { Misc, Geometry } from 'xtejs-utils';
 class ImageViewer extends ComponentBase {
 
   private image: HTMLImageElement = document.createElement('img');
-  private layer: Canvas = Canvas.createElement();
+  private canvas: Canvas = Canvas.createElement();
   private observer: MutationObserver;
 
   /**
@@ -32,9 +32,9 @@ class ImageViewer extends ComponentBase {
     this.image.style.width = '100%';
     this.image.style.height = '100%';
 
-    // Add layer
-    this.layer.style.position = 'absolute';
-    this.appendChild(this.layer);
+    // Add canvas
+    this.canvas.style.position = 'absolute';
+    this.appendChild(this.canvas);
 
     // Observe changes in base elements
     this.observer = new MutationObserver(mutations => {
@@ -75,7 +75,7 @@ class ImageViewer extends ComponentBase {
     // Redraw image
     this.image.style.objectFit = styles.objectFit;
 
-    // Redraw layer
+    // Redraw canvas
     const resolution = Geometry.getMediaDimensions(this.image);
     const dimensions = Geometry.calculateFitDimensions({
       objectFit: styles.objectFit,
@@ -86,12 +86,12 @@ class ImageViewer extends ComponentBase {
       actualWidth: resolution.width,
       actualHeight: resolution.height
     });
-    this.layer.width = resolution.width;
-    this.layer.height = resolution.height;
-    this.layer.style.top = `${dimensions.top}px`;
-    this.layer.style.left = `${dimensions.left}px`;
-    this.layer.style.width = `${dimensions.width}px`;
-    this.layer.style.height = `${dimensions.height}px`;
+    this.canvas.width = resolution.width;
+    this.canvas.height = resolution.height;
+    this.canvas.style.top = `${dimensions.top}px`;
+    this.canvas.style.left = `${dimensions.left}px`;
+    this.canvas.style.width = `${dimensions.width}px`;
+    this.canvas.style.height = `${dimensions.height}px`;
   }
 
   /**
