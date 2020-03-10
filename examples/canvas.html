@@ -11,20 +11,16 @@
 
   <main class="container mt-5">
 
-    <button action-clear class="btn btn-outline-dark">Clear Canvas</button>
-
-    <hr class="half-rule">
-
     <xtejs-canvas action-pointing id="canvas" class="bg-light"></xtejs-canvas>
 
     <hr class="half-rule">
 
     <p>Draw the selected image on the canvas</p>
 
-    <ul class="list-group list-group-horizontal">
-      <li class="list-group-item border-0"><img action-drawing src="images/bird-landscape-1.jpg"></li>
-      <li class="list-group-item border-0"><img action-drawing src="images/bird-portrait-1.jpg"></li>
-      <li class="list-group-item border-0"><img action-drawing src="images/bird-portrait-2.jpg"></li>
+    <ul class="image-list list-group list-group-horizontal">
+      <li action-select-image class="list-group-item"><img src="images/bird-landscape-1.jpg"></li>
+      <li action-select-image class="list-group-item"><img src="images/bird-portrait-1.jpg"></li>
+      <li action-select-image class="list-group-item"><img src="images/bird-portrait-2.jpg"></li>
     </ul>
 
   </main>

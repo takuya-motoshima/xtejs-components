@@ -1,10 +1,10 @@
 import * as components from '../../dist/build.esm.js';
 
-const canvas = document.querySelector('#canvas');
+const imageViewer = document.querySelector('#imageViewer');
 
 $('body').on('click', '[action-select-image]', event => {
   $('.image-list .selected').removeClass('selected');
   const $currentItem = $(event.currentTarget);
   $currentItem.addClass('selected');
-  canvas.clear().drawImageScaled($currentItem.find('img').get(0));
+  imageViewer.setAttribute('src', $currentItem.find('img').attr('src'));
 });

@@ -41,12 +41,14 @@ class ImageViewer extends ComponentBase {
       for (let mutation of mutations) {
         if (mutation.attributeName === 'style') {
           this.redraw()
+        } else if (mutation.attributeName === 'src') {
+          this.image.setAttribute('src', this.getAttribute('src') as string);
         }
       }
     });
 
     // Start observing base changes
-    this.observer.observe(this, { attributes: true, attributeFilter: [ 'style' ], attributeOldValue: true });
+    this.observer.observe(this, { attributes: true, attributeFilter: [ 'style', 'src' ], attributeOldValue: true });
 
     // Redraw
     this.redraw();
@@ -92,24 +94,6 @@ class ImageViewer extends ComponentBase {
     this.canvas.style.left = `${dimensions.left}px`;
     this.canvas.style.width = `${dimensions.width}px`;
     this.canvas.style.height = `${dimensions.height}px`;
-  }
-
-  /**
-   * Get src
-   * 
-   * @return {string}
-   */
-  public get src(): string {
-    return this.image.getAttribute('src') || '';
-  }
-
- /**
-  * Set src
-  *  
-  * @param {string} value
-  */
-  public set src(value: string) {
-    this.image.setAttribute('src', value);
   }
 }
 

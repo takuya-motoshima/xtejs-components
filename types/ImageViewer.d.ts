@@ -1,7 +1,7 @@
 import ComponentBase from '~/ComponentBase';
 declare class ImageViewer extends ComponentBase {
     private image;
-    private layer;
+    private canvas;
     private observer;
     /**
      * Constructor
@@ -19,17 +19,5 @@ declare class ImageViewer extends ComponentBase {
      * Redraw the base
      */
     private redraw;
-    /**
-     * Get src
-     *
-     * @return {string}
-     */
-    get src(): string;
-    /**
-     * Set src
-     *
-     * @param {string} value
-     */
-    set src(value: string);
 }
 export default ImageViewer;
