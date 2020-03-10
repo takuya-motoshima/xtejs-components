@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XteJS Components | Camera Example</title>
+  <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="styles/camera.css">
+</head>
+<body>
+
+  <main class="container mt-5">
+
+    <xtejs-camera id="camera" class="bg-light"></xtejs-camera>
+
+    <hr class="half-rule">
+
+    <button action-open-front-camera class="btn btn-outline-dark">Open front camera</button>
+    <button action-open-rear-camera class="btn btn-outline-dark">Open rear camera</button>
+    <button action-pause class="btn btn-outline-dark">Pause</button>
+
+  </main>
+
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="module" src="scripts/camera.js"></script>
+</body>
+</html>

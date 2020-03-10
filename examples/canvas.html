@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XteJS Components | Canvas Example</title>
+  <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="styles/canvas.css">
+</head>
+<body>
+
+  <main class="container mt-5">
+
+    <button action-clear class="btn btn-outline-dark">Clear Canvas</button>
+
+    <hr class="half-rule">
+
+    <xtejs-canvas action-pointing id="canvas" class="bg-light"></xtejs-canvas>
+
+    <hr class="half-rule">
+
+    <p>Draw the selected image on the canvas</p>
+
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item border-0"><img action-drawing src="images/bird-landscape-1.jpg"></li>
+      <li class="list-group-item border-0"><img action-drawing src="images/bird-portrait-1.jpg"></li>
+      <li class="list-group-item border-0"><img action-drawing src="images/bird-portrait-2.jpg"></li>
+    </ul>
+
+  </main>
+
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="module" src="scripts/canvas.js"></script>
+</body>
+</html>

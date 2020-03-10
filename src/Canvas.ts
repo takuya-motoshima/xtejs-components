@@ -11,30 +11,33 @@ class Canvas extends ComponentBase {
     super();
 
     // Set wrapper element style
+    const styles = getComputedStyle(this);
     this.style.boxSizing = 'border-box';
     this.style.display = 'block';
     this.style.overflow = 'hidden';
-    if (getComputedStyle(this).position === 'static') {
+    if (styles.position === 'static') {
       this.style.position =  'relative';
     }
 
     // Get the original size of the base
-    const definedWidth = parseFloat(getComputedStyle(this).width) > 0;
-    const definedHeight = parseFloat(getComputedStyle(this).height) > 0;
+    const originalWidth = parseFloat(styles.width);
+    const originalHeight = parseFloat(styles.height);
 
     // Add extends element
     this.appendChild(this.extends);
 
     // Set the default size of the canvas if the original size of the base element is 0
-    if (!definedWidth) {
+    if (!originalWidth) {
       this.style.width = getComputedStyle(this.extends).width;
     }
-    if (!definedHeight) {
+    if (!originalHeight) {
       this.style.height = getComputedStyle(this.extends).height;
     }
 
     // Set inherited element style
     this.extends.style.boxSizing = 'border-box';
+    this.extends.width = parseFloat(styles.width);
+    this.extends.height = parseFloat(styles.height);
     this.extends.style.width = '100%';
     this.extends.style.height = '100%';
 
@@ -108,7 +111,7 @@ class Canvas extends ComponentBase {
    const vRatio =  this.extends.height / imageDimensions.height;
    const ratio  = Math.min( hRatio, vRatio );
    const centerShiftX = ( this.extends.width - imageDimensions.width * ratio ) / 2;
-   const centerShiftY = ( this.extends.height - imageDimensions.height * ratio ) / 2;  
+   const centerShiftY = ( this.extends.height - imageDimensions.height * ratio ) / 2;
    this.drawImage(image,
        0, 0, imageDimensions.width, imageDimensions.height,
       centerShiftX, centerShiftY, imageDimensions.width * ratio, imageDimensions.height * ratio);  
