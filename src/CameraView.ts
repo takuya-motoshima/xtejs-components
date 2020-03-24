@@ -61,7 +61,33 @@ class CameraView extends ComponentBase {
 
     // Add camera controller
     if (this.getAttribute('controls') != null) {
-      this.insertAdjacentHTML('beforeend', '<div class="xj-camera-view-controls"><a class="xj-camera-view-capture"><img></a><button action-capture class="xj-camera-view-capture-button" type="button"></button><button action-rotation class="xj-camera-view-rotation-button" type="button"></button></div>');
+      this.insertAdjacentHTML('afterbegin', `
+        <input type="checkbox" id="xj-camera-view-gn-menustate">
+        <nav class="xj-camera-view-gn" class="touch" role="navigation" aria-label="グローバル" data-hires="false" lang="ja-JP" dir="ltr">
+          <div class="xj-camera-view-gn-content">
+            <ul class="xj-camera-view-gn-header">
+              <li class="xj-camera-view-gn-item xj-camera-view-gn-menuicon">
+                <label class="xj-camera-view-gn-menuicon-label" for="xj-camera-view-gn-menustate" aria-hidden="true">
+                  <span class="xj-camera-view-gn-menuicon-bread xj-camera-view-gn-menuicon-bread-top">
+                    <span class="xj-camera-view-gn-menuicon-bread-crust xj-camera-view-gn-menuicon-bread-crust-top"></span>
+                  </span>
+                  <span class="xj-camera-view-gn-menuicon-bread xj-camera-view-gn-menuicon-bread-bottom">
+                    <span class="xj-camera-view-gn-menuicon-bread-crust xj-camera-view-gn-menuicon-bread-crust-bottom"></span>
+                  </span>
+                </label>
+              </li>
+            </ul>
+            <div class="xj-camera-view-gn-body"></div>
+          </div>
+        </nav>`
+      );
+      this.insertAdjacentHTML('beforeend', `
+        <div class="xj-camera-view-controls">
+          <a class="xj-camera-view-capture"><img></a>
+          <button action-capture class="xj-camera-view-capture-button" type="button"></button>
+          <button action-rotation class="xj-camera-view-rotation-button" type="button"></button>
+        </div>
+      `);
       const image = this.querySelector('img')!;
       this.querySelector('[action-capture]')!.addEventListener(window.ontouchstart ? 'touchstart' : 'click', () => {
         image.setAttribute('src', this.camera.capture() as string);
