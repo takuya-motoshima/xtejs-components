@@ -1,5 +1,5 @@
 import ComponentBase from '~/ComponentBase';
-declare class ImageViewer extends ComponentBase {
+declare class ImageView extends ComponentBase {
     private image;
     private canvas;
     private observer;
@@ -20,4 +20,4 @@ declare class ImageViewer extends ComponentBase {
      */
     private redraw;
 }
-export default ImageViewer;
+export default ImageView;

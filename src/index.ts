@@ -1,13 +1,13 @@
 import { version } from '~/package';
 import Camera from '~/Camera';
 import Canvas from '~/Canvas';
-import ImageViewer from '~/ImageViewer';
-import CameraViewer from '~/CameraViewer';
+import ImageView from '~/ImageView';
+import CameraView from '~/CameraView';
 
 export {
   version,
   Camera,
   Canvas,
-  ImageViewer,
-  CameraViewer
+  ImageView,
+  CameraView
 }

@@ -1,6 +1,6 @@
 import ComponentBase from '~/ComponentBase';
-import './styles/camera-viewer.css';
-declare class CameraViewer extends ComponentBase {
+import './styles/camera-view.css';
+declare class CameraView extends ComponentBase {
     private camera;
     private canvas;
     private observer;
@@ -28,4 +28,4 @@ declare class CameraViewer extends ComponentBase {
      */
     private redraw;
 }
-export default CameraViewer;
+export default CameraView;

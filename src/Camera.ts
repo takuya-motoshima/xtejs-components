@@ -62,7 +62,7 @@ class Camera extends ComponentBase {
    * @return {string}
    */
   protected static get is(): string {
-    return 'xtejs-camera';
+    return 'xj-camera';
   }
 
   /**

@@ -60,7 +60,7 @@ class Canvas extends ComponentBase {
    * @return {string}
    */
   protected static get is(): string {
-    return 'xtejs-canvas';
+    return 'xj-canvas';
   }
 
   /**

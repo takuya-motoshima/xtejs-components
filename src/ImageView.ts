@@ -1,15 +1,12 @@
 import ComponentBase from '~/ComponentBase';
-import Camera from '~/Camera';
 import Canvas from '~/Canvas';
 import { Misc, Geometry } from 'xtejs-utils';
-import './styles/camera-viewer.css';
 
-class CameraViewer extends ComponentBase {
+class ImageView extends ComponentBase {
 
-  private camera: Camera = Camera.createElement();
+  private image: HTMLImageElement = document.createElement('img');
   private canvas: Canvas = Canvas.createElement();
   private observer: MutationObserver;
-  private controls!: boolean;
 
   /**
    * Constructor
@@ -20,19 +17,23 @@ class CameraViewer extends ComponentBase {
 
     super();
 
-
     // Set base style
-    this.classList.add('camera-viewer');
+    this.style.boxSizing = 'border-box';
+    this.style.display = 'block';
+    this.style.overflow = 'hidden';
     if (getComputedStyle(this).position === 'static') {
       this.style.position = 'relative';
     }
 
-    // Add camera
-    this.camera.classList.add('camera-viewer-camera');
-    this.appendChild(this.camera);
+    // Add image
+    this.appendChild(this.image);
+    this.image.style.boxSizing = 'border-box';
+    this.image.style.display = 'block';
+    this.image.style.width = '100%';
+    this.image.style.height = '100%';
 
     // Add canvas
-    this.canvas.classList.add('camera-viewer-canvas');
+    this.canvas.style.position = 'absolute';
     this.appendChild(this.canvas);
 
     // Observe changes in base elements
@@ -40,48 +41,17 @@ class CameraViewer extends ComponentBase {
       for (let mutation of mutations) {
         if (mutation.attributeName === 'style') {
           this.redraw()
+        } else if (mutation.attributeName === 'src') {
+          this.image.setAttribute('src', this.getAttribute('src') as string);
         }
       }
     });
 
     // Start observing base changes
-    this.observer.observe(this, { attributes: true, attributeFilter: [ 'style' ], attributeOldValue: true });
+    this.observer.observe(this, { attributes: true, attributeFilter: [ 'style', 'src' ], attributeOldValue: true });
 
     // Redraw
     this.redraw();
-  }
-
-  /**
-   * The element has been added to the document
-   * 
-   * @return {void}
-   */
-  public connectedCallback(): void {
-
-    super.connectedCallback();
-
-    // Add camera controller
-    if (this.getAttribute('controls') != null) {
-      this.insertAdjacentHTML('beforeend', 
-        `<div class="camera-controls">
-          <a class="camera-captured"><img element-captured></a>
-          <button action-capturing class="camera-capturing-button" type="button"></button>
-          <button action-rotation class="camera-rotation-button" type="button"></button>
-        </div>`);
-      const startEvent = window.ontouchstart ? 'touchstart' : 'click';
-      const captured = this.querySelector('[element-captured]')!;
-      this.querySelector('[action-capturing]')!.addEventListener(startEvent, () => {
-        captured.setAttribute('src', this.camera.capture() as string);
-      });
-      this.querySelector('[action-rotation]')!.addEventListener(startEvent, async () => {
-        await this.camera.open(this.camera.cameraFace === 'front' ? 'back' : 'front')
-      });
-    }
-
-    // Open camera automatically
-    if (this.getAttribute('autoplay') != null) {
-      this.camera.open(this.getAttribute('autoplay') === 'back' ? 'back' : 'front');
-    }
   }
 
   /**
@@ -90,7 +60,7 @@ class CameraViewer extends ComponentBase {
    * @return {string}
    */
   protected static get is(): string {
-    return 'xtejs-camera-viewer';
+    return 'xj-image-view';
   }
 
   /**
@@ -98,16 +68,19 @@ class CameraViewer extends ComponentBase {
    */
   private redraw(): void {
 
-     // Redraw base
+    // Redraw base
     const styles = getComputedStyle(this);
     if (styles.position === 'static') {
       this.style.position = 'relative';
     }
 
+    // Redraw image
+    this.image.style.objectFit = styles.objectFit;
+
     // Redraw canvas
-    const resolution = this.camera.resolution;
+    const resolution = Geometry.getMediaDimensions(this.image);
     const dimensions = Geometry.calculateFitDimensions({
-      objectFit: this.camera.extends.style.objectFit,
+      objectFit: styles.objectFit,
       intrinsicWidth: parseFloat(styles.width) - parseFloat(styles.paddingRight) - parseFloat(styles.borderRightWidth) - parseFloat(styles.paddingLeft) - parseFloat(styles.borderLeftWidth),
       intrinsicHeight: parseFloat(styles.height) - parseFloat(styles.paddingTop) - parseFloat(styles.borderTopWidth) - parseFloat(styles.paddingBottom) - parseFloat(styles.borderBottomWidth),
       intrinsicTop: parseFloat(styles.paddingTop) + parseFloat(styles.borderTopWidth) + parseFloat(styles.marginTop),
@@ -124,5 +97,5 @@ class CameraViewer extends ComponentBase {
   }
 }
 
-CameraViewer.define();
-export default CameraViewer;
+ImageView.define();
+export default ImageView;
