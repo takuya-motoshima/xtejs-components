@@ -1,7 +1,7 @@
 import ComponentBase from '~/ComponentBase';
 import Camera from '~/Camera';
 import Canvas from '~/Canvas';
-import { Misc, Geometry } from 'xtejs-utils';
+import { Misc, Graphics } from 'xtejs-utils';
 import './styles/camera-view.css';
 
 class CameraView extends ComponentBase {
@@ -77,7 +77,9 @@ class CameraView extends ComponentBase {
                 </label>
               </li>
             </ul>
-            <div class="xj-camera-view-gn-body"></div>
+            <div class="xj-camera-view-gn-body">
+              <slot name="xj-camera-view-gn-body-content"></slot> 
+            </div>
           </div>
         </nav>`
       );
@@ -125,7 +127,7 @@ class CameraView extends ComponentBase {
 
     // Redraw canvas
     const resolution = this.camera.resolution;
-    const dimensions = Geometry.calculateFitDimensions({
+    const dimensions = Graphics.calculateFitDimensions({
       objectFit: this.camera.extends.style.objectFit,
       intrinsicWidth: parseFloat(styles.width) - parseFloat(styles.paddingRight) - parseFloat(styles.borderRightWidth) - parseFloat(styles.paddingLeft) - parseFloat(styles.borderLeftWidth),
       intrinsicHeight: parseFloat(styles.height) - parseFloat(styles.paddingTop) - parseFloat(styles.borderTopWidth) - parseFloat(styles.paddingBottom) - parseFloat(styles.borderBottomWidth),

@@ -1,7 +1,7 @@
 import ComponentBase from '~/ComponentBase';
 import Canvas from '~/Canvas';
 import Stream from '~/Stream';
-import { Geometry } from 'xtejs-utils';
+import { Media } from 'xtejs-utils';
 
 class Camera extends ComponentBase {
 
@@ -245,7 +245,7 @@ class Camera extends ComponentBase {
    * @return {number}
    */
   public get resolution(): { width: number, height: number } {
-    return Geometry.getMediaDimensions(this.extends);
+    return Media.getMediaDimensions(this.extends);
   }
 }
 

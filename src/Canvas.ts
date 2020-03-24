@@ -1,5 +1,5 @@
 import ComponentBase from '~/ComponentBase';
-import { Misc, Geometry } from 'xtejs-utils';
+import { Misc, Graphics, Media } from 'xtejs-utils';
 
 class Canvas extends ComponentBase {
 
@@ -106,7 +106,7 @@ class Canvas extends ComponentBase {
    * @return {Canvas}
    */
   public drawImageScaled(image: HTMLImageElement|HTMLVideoElement|HTMLCanvasElement): Canvas {
-   const imageDimensions = Geometry.getMediaDimensions(image);
+   const imageDimensions = Media.getMediaDimensions(image);
    const hRatio = this.extends.width  / imageDimensions.width;
    const vRatio =  this.extends.height / imageDimensions.height;
    const ratio  = Math.min( hRatio, vRatio );
@@ -128,7 +128,7 @@ class Canvas extends ComponentBase {
    * @return {Canvas}
    */
   public drawPoint({ x, y, r = 3, color = 'aqua' }: { x: number, y: number, r?: number, color?: string }): Canvas {
-    Geometry.drawPoint(this.extends, { x, y, r, color });
+    Graphics.drawPoint(this.extends, { x, y, r, color });
     return this;
   }
 
@@ -141,7 +141,7 @@ class Canvas extends ComponentBase {
    * @return {Canvas}
    */
   public drawCenterPoint({ points, r = 3, color = 'aqua' }: { points: { x: number, y: number }[], r?: number, color?: string }): Canvas {
-    Geometry.drawCenterPoint(this.extends, { points, r, color });
+    Graphics.drawCenterPoint(this.extends, { points, r, color });
     return this;
   }
 
@@ -158,7 +158,7 @@ class Canvas extends ComponentBase {
    * @return {Canvas}
    */
   public drawRect({ x, y, width, height, degree = 0, lineWidth = 2, color = 'aqua' }: { x: number, y: number, width: number, height: number, degree?: number, lineWidth?: number, color?: string }): Canvas {
-    Geometry.drawRect(this.extends, { x, y, width, height, degree, lineWidth, color });
+    Graphics.drawRect(this.extends, { x, y, width, height, degree, lineWidth, color });
     return this;
   }
 
@@ -168,7 +168,7 @@ class Canvas extends ComponentBase {
    * @return {Canvas}
    */
   public flipHorizontal(): Canvas {
-    Geometry.flipHorizontal(this.extends);
+    Graphics.flipHorizontal(this.extends);
     return this;
   }
 

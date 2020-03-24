@@ -1,6 +1,6 @@
 import ComponentBase from '~/ComponentBase';
 import Canvas from '~/Canvas';
-import { Misc, Geometry } from 'xtejs-utils';
+import { Misc, Graphics, Media } from 'xtejs-utils';
 
 class ImageView extends ComponentBase {
 
@@ -78,8 +78,8 @@ class ImageView extends ComponentBase {
     this.image.style.objectFit = styles.objectFit;
 
     // Redraw canvas
-    const resolution = Geometry.getMediaDimensions(this.image);
-    const dimensions = Geometry.calculateFitDimensions({
+    const resolution = Media.getMediaDimensions(this.image);
+    const dimensions = Graphics.calculateFitDimensions({
       objectFit: styles.objectFit,
       intrinsicWidth: parseFloat(styles.width) - parseFloat(styles.paddingRight) - parseFloat(styles.borderRightWidth) - parseFloat(styles.paddingLeft) - parseFloat(styles.borderLeftWidth),
       intrinsicHeight: parseFloat(styles.height) - parseFloat(styles.paddingTop) - parseFloat(styles.borderTopWidth) - parseFloat(styles.paddingBottom) - parseFloat(styles.borderBottomWidth),
