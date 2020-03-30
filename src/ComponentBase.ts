@@ -110,7 +110,7 @@ export default class extends HTMLElement {
    */
   public css(name: string, value: string|number|undefined = undefined): string|undefined {
 
-    console.log(`CSS properties name=${name}, value=${value}`);
+    // console.log(`CSS properties name=${name}, value=${value}`);
 
     // Set or return property
     if (value === undefined) {
