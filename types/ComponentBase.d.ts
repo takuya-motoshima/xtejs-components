@@ -42,27 +42,19 @@ export default class extends HTMLElement {
      */
     on(event: string, handler: Function): any;
     /**
-     * Get width
+     * Get or set the value of an attribute
      *
-     * @return {number}
+     * @param  {string}                  name
+     * @param  {string|number|undefined} value
+     * @return {number|string|undefined}
      */
-    get width(): number;
+    attr(name: string, value?: string | number | undefined): number | string | undefined;
     /**
-     * Set width
+     * Get or set the value of a CSS property
      *
-     * @param {number} value
+     * @param  {string}                  name
+     * @param  {string|number|undefined} value
+     * @return {string|undefined}
      */
-    set width(value: number);
-    /**
-     * Get height
-     *
-     * @return {number}
-     */
-    get height(): number;
-    /**
-     * Set height
-     *
-     * @param {number} value
-     */
-    set height(value: number);
+    css(name: string, value?: string | number | undefined): string | undefined;
 }

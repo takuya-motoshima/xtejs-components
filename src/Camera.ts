@@ -227,13 +227,13 @@ class Camera extends ComponentBase {
    * @return {void}
    */
   public capture(width?: number): string {
-    this.canvas.width = width || this.resolution.width;
-    this.canvas.height = this.resolution.height * ( this.canvas.width / this.resolution.width );
+    this.canvas.attr('width', width || this.resolution.width);
+    const height = this.resolution.height * ( this.canvas.attr('width') as number / this.resolution.width );
+    this.canvas.attr('height', height);
     const dataURI = this.canvas
       .drawImage(
         this.extends, 0, 0, this.resolution.width, this.resolution.height,
-        0, 0, this.canvas.width, this.canvas.height
-      )
+        0, 0, this.canvas.attr('width') as number, this.canvas.attr('height') as number)
       .toDataURL(this.cameraFace === 'front');
     // console.log('dataURI format image:', dataURI.slice(0, 100));
     return dataURI;

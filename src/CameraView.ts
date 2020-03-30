@@ -135,8 +135,8 @@ class CameraView extends ComponentBase {
       actualWidth: resolution.width,
       actualHeight: resolution.height
     });
-    this.canvas.width = resolution.width;
-    this.canvas.height = resolution.height;
+    this.canvas.attr('width', resolution.width);
+    this.canvas.attr('height', resolution.height);
     this.canvas.style.top = `${dimensions.top}px`;
     this.canvas.style.left = `${dimensions.left}px`;
     this.canvas.style.width = `${dimensions.width}px`;

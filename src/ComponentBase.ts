@@ -81,38 +81,46 @@ export default class extends HTMLElement {
   }
 
   /**
-   * Get width
+   * Get or set the value of an attribute
    * 
-   * @return {number}
+   * @param  {string}                  name
+   * @param  {string|number|undefined} value
+   * @return {number|string|undefined}
    */
-  public get width(): number {
-    return this.getAttribute('width') ? parseInt(this.getAttribute('width') || '0', 10) : 0;
-  }
+  public attr(name: string, value: string|number|undefined = undefined): number|string|undefined {
 
- /**
-  * Set width
-  *  
-  * @param {number} value
-  */
-  public set width(value: number) {
-    this.setAttribute('width', value.toString());
+    // Set or return property
+    if (value === undefined) {
+      if (/^(cols|colspan|height|high|low|max|maxlength|minlength|min|rows|rowspan|size|start|step|tabindex|width)$/.test(name)) {
+        return parseInt(this.getAttribute(name)||'0', 10);
+      } else {
+        return this.getAttribute(name) !== null ? this.getAttribute(name) as string : undefined;
+      }
+    } else {
+      this.setAttribute(name, value.toString());
+    }
   }
 
   /**
-   * Get height
+   * Get or set the value of a CSS property
    * 
-   * @return {number}
+   * @param  {string}                  name
+   * @param  {string|number|undefined} value
+   * @return {string|undefined}
    */
-  public get height(): number {
-    return this.getAttribute('height') ? parseInt(this.getAttribute('height') || '0', 10) : 0;
-  }
+  public css(name: string, value: string|number|undefined = undefined): string|undefined {
 
- /**
-  * Set height
-  *  
-  * @param {number} value
-  */
-  public set height(value: number) {
-    this.setAttribute('height', value.toString());
+    // Set or return property
+    if (value === undefined) {
+
+      // Convert CSS property names to kebab case
+      name = name.replace(/([A-Z])/g, '-$1').toLowerCase();
+      return getComputedStyle(this, null).getPropertyValue(name);
+    } else {
+
+      // Convert CSS property names to camel case
+      name = name.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, char) => char.toUpperCase());
+      this.style.setProperty(name, value.toString());
+    }
   }
 }

@@ -6,5 +6,5 @@ $('body').on('click', '[action-select-image]', event => {
   $('.image-list .selected').removeClass('selected');
   const $currentItem = $(event.currentTarget);
   $currentItem.addClass('selected');
-  imageView.setAttribute('src', $currentItem.find('img').attr('src'));
+  imageView.attr('src', $currentItem.find('img').attr('src'));
 });
