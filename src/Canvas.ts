@@ -3,7 +3,7 @@ import { Misc, Graphics, Media } from 'xtejs-utils';
 
 class Canvas extends ComponentBase {
 
-  private readonly extends: HTMLCanvasElement = document.createElement('canvas');
+  public readonly extends: HTMLCanvasElement = document.createElement('canvas');
   private readonly observer: MutationObserver;
 
   /**

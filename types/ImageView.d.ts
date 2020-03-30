@@ -1,7 +1,8 @@
 import ComponentBase from '~/ComponentBase';
+import Canvas from '~/Canvas';
 declare class ImageView extends ComponentBase {
-    private readonly image;
-    private readonly canvas;
+    readonly image: HTMLImageElement;
+    readonly canvas: Canvas;
     private readonly observer;
     /**
      * Constructor

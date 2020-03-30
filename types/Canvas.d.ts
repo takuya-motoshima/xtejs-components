@@ -1,6 +1,6 @@
 import ComponentBase from '~/ComponentBase';
 declare class Canvas extends ComponentBase {
-    private readonly extends;
+    readonly extends: HTMLCanvasElement;
     private readonly observer;
     /**
      * Constructor
