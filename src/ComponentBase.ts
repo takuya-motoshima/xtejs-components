@@ -110,6 +110,8 @@ export default class extends HTMLElement {
    */
   public css(name: string, value: string|number|undefined = undefined): string|undefined {
 
+    console.log(`CSS properties name=${name}, value=${value}`);
+
     // Set or return property
     if (value === undefined) {
 
@@ -120,7 +122,7 @@ export default class extends HTMLElement {
 
       // Convert CSS property names to camel case
       name = name.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, char) => char.toUpperCase());
-      this.style.setProperty(name, value.toString());
+      (this.style as { [key: string]: any })[name] = value.toString();
     }
   }
 }
