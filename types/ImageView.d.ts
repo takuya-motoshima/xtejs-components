@@ -1,8 +1,8 @@
 import ComponentBase from '~/ComponentBase';
 declare class ImageView extends ComponentBase {
-    private image;
-    private canvas;
-    private observer;
+    private readonly image;
+    private readonly canvas;
+    private readonly observer;
     /**
      * Constructor
      *

@@ -4,9 +4,9 @@ import { Misc, Graphics, Media } from 'xtejs-utils';
 
 class ImageView extends ComponentBase {
 
-  private image: HTMLImageElement = document.createElement('img');
-  private canvas: Canvas = Canvas.createElement();
-  private observer: MutationObserver;
+  private readonly image: HTMLImageElement = document.createElement('img');
+  private readonly canvas: Canvas = Canvas.createElement();
+  private readonly observer: MutationObserver;
 
   /**
    * Constructor

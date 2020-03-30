@@ -1,6 +1,8 @@
 export default class extends HTMLElement {
-    private handlers;
-    private readonly global;
+    protected handles: {
+        [key: string]: Function;
+    };
+    protected readonly global: Window;
     /**
      * Constructor
      *

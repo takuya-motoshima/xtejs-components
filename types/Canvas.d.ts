@@ -1,7 +1,12 @@
 import ComponentBase from '~/ComponentBase';
 declare class Canvas extends ComponentBase {
-    private extends;
-    private observer;
+    private readonly extends;
+    private readonly observer;
+    /**
+     * Constructor
+     *
+     * @return {void}
+     */
     constructor();
     /**
      * is attribute

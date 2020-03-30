@@ -3,4 +3,6 @@ import Camera from '~/Camera';
 import Canvas from '~/Canvas';
 import ImageView from '~/ImageView';
 import CameraView from '~/CameraView';
-export { version, Camera, Canvas, ImageView, CameraView };
+import Test from '~/Test';
+import PasscodeAuth from '~/PasscodeAuth';
+export { version, Camera, Canvas, ImageView, CameraView, Test, PasscodeAuth };

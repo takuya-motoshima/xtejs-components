@@ -2,8 +2,8 @@ import { Misc } from 'xtejs-utils';
 
 export default class extends HTMLElement {
 
-  private handlers: { [key: string]: Function };
-  private readonly global: Window = Misc.getGlobal<Window>();
+  protected handles: { [key: string]: Function };
+  protected readonly global: Window = Misc.getGlobal<Window>();
 
   /**
    * Constructor
@@ -12,7 +12,7 @@ export default class extends HTMLElement {
    */
   constructor() {
     super();
-    this.handlers = {};
+    this.handles = {};
   }
 
   /**
@@ -76,7 +76,7 @@ export default class extends HTMLElement {
    * @return {void}
    */
    public on(event: string, handler: Function ): any {
-    this.handlers[event] = handler;
+    this.handles[event] = handler;
     return this;
   }
 

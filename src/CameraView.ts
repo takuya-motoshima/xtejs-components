@@ -6,10 +6,9 @@ import './styles/camera-view.css';
 
 class CameraView extends ComponentBase {
 
-  private camera: Camera = Camera.createElement();
-  private canvas: Canvas = Canvas.createElement();
-  private observer: MutationObserver;
-  private controls!: boolean;
+  public readonly camera: Camera = Camera.createElement();
+  public readonly canvas: Canvas = Canvas.createElement();
+  private readonly observer: MutationObserver;
 
   /**
    * Constructor

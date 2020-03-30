@@ -1,10 +1,11 @@
 import ComponentBase from '~/ComponentBase';
+import Camera from '~/Camera';
+import Canvas from '~/Canvas';
 import './styles/camera-view.css';
 declare class CameraView extends ComponentBase {
-    private camera;
-    private canvas;
-    private observer;
-    private controls;
+    readonly camera: Camera;
+    readonly canvas: Canvas;
+    private readonly observer;
     /**
      * Constructor
      *
