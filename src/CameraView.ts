@@ -59,7 +59,6 @@ class CameraView extends ComponentBase {
     super.connectedCallback();
 
     // Add camera controller
-console.log("this.attr('controls')=", this.attr('controls'));
     if (this.attr('controls')) {
       this.insertAdjacentHTML('afterbegin', `
         <input type="checkbox" id="xj-camera-view-gn-menustate">
