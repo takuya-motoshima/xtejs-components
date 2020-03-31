@@ -7,7 +7,7 @@ class Camera extends ComponentBase {
 
   public extends: HTMLVideoElement = document.createElement('video');
   private canvas: Canvas = Canvas.createElement();
-  public cameraFace: 'front'|'back'|undefined = undefined;
+  public face: 'front'|'back'|undefined = undefined;
   private observer: MutationObserver;
 
   /**
@@ -23,16 +23,16 @@ class Camera extends ComponentBase {
     this.appendChild(this.extends);
     
     // Set wrapper element style
-    this.style.boxSizing = 'border-box';
-    this.style.display = 'block';
-    if (getComputedStyle(this).position === 'static') {
-      this.style.position =  'relative';
+    this.css('box-sizing', 'border-box');
+    this.css('display', 'block');
+    if (this.css('position') === 'static') {
+      this.css('position', 'relative');
     }
-    if (!this.style.width) {
-      this.style.width = getComputedStyle(this.extends).width;
+    if (!this.css('width')) {
+      this.css('width', getComputedStyle(this.extends).width);
     }
     if (!this.style.height) {
-      this.style.height = getComputedStyle(this.extends).height;
+      this.css('height', getComputedStyle(this.extends).height);
     }
 
     // Set inherited element style
@@ -47,7 +47,7 @@ class Camera extends ComponentBase {
     this.observer = new MutationObserver(mutations => {
       for (let mutation of mutations) {
         if (/^width|height$/.test(mutation.attributeName!)) {
-          this.extends.setAttribute(mutation.attributeName!, this.getAttribute(mutation.attributeName!) as string);
+          this.extends.setAttribute(mutation.attributeName!, this.attr(mutation.attributeName!) as string);
         }
       }
     });
@@ -142,7 +142,7 @@ class Camera extends ComponentBase {
   }
 
   /**
-   * @param  {string} cameraFace front|back
+   * @param  {string} face front|back
    *                       front: Open front camera
    *                       back: Open rear camera
    * @param  {string} quality FHD|HD|VGA|HVGA|QVGA|
@@ -153,22 +153,22 @@ class Camera extends ComponentBase {
    *                          QVGA:  320 x  240
    * @return {Promise<void>}
    */
-  public async open(cameraFace: 'front'|'back' = 'back',  quality = 'HD') {
+  public async open(face: 'front'|'back' = 'back',  quality = 'HD') {
     try {
 
-      if (this.opened && this.cameraFace === cameraFace) {
-        console.log('Camera is already open');
+      if (this.opened && this.face === face) {
+        // console.log('Camera is already open');
         return void this.play();
       }
 
-      console.log('Open camera');
+      // console.log('Open camera');
 
       const permission = await this.getPermission();
       if (permission === 'denied') {
         await this.revokePermission();
       }
 
-      if (cameraFace === 'front') {
+      if (face === 'front') {
         this.extends.style.transform = 'scaleX(-1)';
         this.extends.style.filter = 'FlipH';
       } else {
@@ -178,14 +178,14 @@ class Camera extends ComponentBase {
 
       await Stream.open(this.extends, {
         video: {
-          facingMode: cameraFace === 'front' ? 'user' : 'environment',
-          // facingMode: cameraFace === 'front' ? 'user' : { exact: 'environment' },
+          facingMode: face === 'front' ? 'user' : 'environment',
+          // facingMode: face === 'front' ? 'user' : { exact: 'environment' },
           width: { ideal: Camera.resolutions[quality].width },
           height: { ideal: Camera.resolutions[quality].height }
         },
         audio: false 
       });
-      this.cameraFace = cameraFace;
+      this.face = face;
       this.play();
     } catch (e) {
       throw e;
@@ -199,7 +199,7 @@ class Camera extends ComponentBase {
    */
   public close() {
     Stream.close(this.extends);
-    this.cameraFace = undefined;
+    this.face = undefined;
   }
 
   /**
@@ -234,7 +234,7 @@ class Camera extends ComponentBase {
       .drawImage(
         this.extends, 0, 0, this.resolution.width, this.resolution.height,
         0, 0, this.canvas.attr('width') as number, this.canvas.attr('height') as number)
-      .toDataURL(this.cameraFace === 'front');
+      .toDataURL(this.face === 'front');
     // console.log('dataURI format image:', dataURI.slice(0, 100));
     return dataURI;
   }

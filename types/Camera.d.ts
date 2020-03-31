@@ -2,7 +2,7 @@ import ComponentBase from '~/ComponentBase';
 declare class Camera extends ComponentBase {
     extends: HTMLVideoElement;
     private canvas;
-    cameraFace: 'front' | 'back' | undefined;
+    face: 'front' | 'back' | undefined;
     private observer;
     /**
      * Constructor
@@ -58,7 +58,7 @@ declare class Camera extends ComponentBase {
      */
     constraints(): MediaTrackConstraints | undefined;
     /**
-     * @param  {string} cameraFace front|back
+     * @param  {string} face front|back
      *                       front: Open front camera
      *                       back: Open rear camera
      * @param  {string} quality FHD|HD|VGA|HVGA|QVGA|
@@ -69,7 +69,7 @@ declare class Camera extends ComponentBase {
      *                          QVGA:  320 x  240
      * @return {Promise<void>}
      */
-    open(cameraFace?: 'front' | 'back', quality?: string): Promise<undefined>;
+    open(face?: 'front' | 'back', quality?: string): Promise<undefined>;
     /**
      * Close camera
      *

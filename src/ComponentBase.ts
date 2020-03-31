@@ -85,16 +85,18 @@ export default class extends HTMLElement {
    * 
    * @param  {string}                  name
    * @param  {string|number|undefined} value
-   * @return {number|string|undefined}
+   * @return {number|string|boolean|undefined}
    */
-  public attr(name: string, value: string|number|undefined = undefined): number|string|undefined {
+  public attr(name: string, value: string|number|undefined = undefined): number|string|boolean|undefined {
 
     // Set or return property
     if (value === undefined) {
       if (/^(cols|colspan|height|high|low|max|maxlength|minlength|min|rows|rowspan|size|start|step|tabindex|width)$/.test(name)) {
         return parseInt(this.getAttribute(name)||'0', 10);
       } else {
-        return this.getAttribute(name) !== null ? this.getAttribute(name) as string : undefined;
+        return this.getAttribute(name) !== null 
+          ? ( this.getAttribute(name) !== '' ? this.getAttribute(name) as string : true )
+          : undefined;
       }
     } else {
       this.setAttribute(name, value.toString());

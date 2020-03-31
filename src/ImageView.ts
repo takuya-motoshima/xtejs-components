@@ -18,11 +18,11 @@ class ImageView extends ComponentBase {
     super();
 
     // Set base style
-    this.style.boxSizing = 'border-box';
-    this.style.display = 'block';
-    this.style.overflow = 'hidden';
+    this.css('box-sizing', 'border-box');
+    this.css('display', 'block');
+    this.css('overflow', 'hidden');
     if (getComputedStyle(this).position === 'static') {
-      this.style.position = 'relative';
+      this.css('position', 'relative');
     }
 
     // Add image
@@ -33,7 +33,7 @@ class ImageView extends ComponentBase {
     this.image.style.height = '100%';
 
     // Add canvas
-    this.canvas.style.position = 'absolute';
+    this.canvas.css('position', 'absolute');
     this.appendChild(this.canvas);
 
     // Observe changes in base elements
@@ -42,7 +42,7 @@ class ImageView extends ComponentBase {
         if (mutation.attributeName === 'style') {
           this.redraw()
         } else if (mutation.attributeName === 'src') {
-          this.image.setAttribute('src', this.getAttribute('src') as string);
+          this.image.setAttribute('src', this.attr('src') as string);
         }
       }
     });
@@ -69,31 +69,30 @@ class ImageView extends ComponentBase {
   private redraw(): void {
 
     // Redraw base
-    const styles = getComputedStyle(this);
-    if (styles.position === 'static') {
-      this.style.position = 'relative';
+    if (this.css('position') === 'static') {
+      this.css('position', 'relative');
     }
 
     // Redraw image
-    this.image.style.objectFit = styles.objectFit;
+    this.image.style.objectFit = this.css('object-fit') as string;
 
     // Redraw canvas
     const resolution = Media.getMediaDimensions(this.image);
     const dimensions = Graphics.calculateFitDimensions({
-      objectFit: styles.objectFit,
-      intrinsicWidth: parseFloat(styles.width) - parseFloat(styles.paddingRight) - parseFloat(styles.borderRightWidth) - parseFloat(styles.paddingLeft) - parseFloat(styles.borderLeftWidth),
-      intrinsicHeight: parseFloat(styles.height) - parseFloat(styles.paddingTop) - parseFloat(styles.borderTopWidth) - parseFloat(styles.paddingBottom) - parseFloat(styles.borderBottomWidth),
-      intrinsicTop: parseFloat(styles.paddingTop) + parseFloat(styles.borderTopWidth) + parseFloat(styles.marginTop),
-      intrinsicLeft: parseFloat(styles.paddingLeft) + parseFloat(styles.borderLeftWidth) + parseFloat(styles.marginLeft),
+      objectFit: this.css('object-fit'),
+      intrinsicWidth: Graphics.getIntrinsicWidth(this),
+      intrinsicHeight: Graphics.getIntrinsicHeight(this),
+      intrinsicTop: Graphics.getIntrinsicTop(this),
+      intrinsicLeft: Graphics.getIntrinsicLeft(this),
       actualWidth: resolution.width,
       actualHeight: resolution.height
     });
     this.canvas.attr('width', resolution.width);
     this.canvas.attr('height', resolution.height);
-    this.canvas.style.top = `${dimensions.top}px`;
-    this.canvas.style.left = `${dimensions.left}px`;
-    this.canvas.style.width = `${dimensions.width}px`;
-    this.canvas.style.height = `${dimensions.height}px`;
+    this.canvas.css('top', `${dimensions.top}px`);
+    this.canvas.css('left', `${dimensions.left}px`);
+    this.canvas.css('width', `${dimensions.width}px`);
+    this.canvas.css('height', `${dimensions.height}px`);
   }
 }
 

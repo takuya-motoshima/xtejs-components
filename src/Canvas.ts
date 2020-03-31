@@ -16,33 +16,32 @@ class Canvas extends ComponentBase {
     super();
 
     // Set wrapper element style
-    const styles = getComputedStyle(this);
-    this.style.boxSizing = 'border-box';
-    this.style.display = 'block';
-    this.style.overflow = 'hidden';
-    if (styles.position === 'static') {
-      this.style.position =  'relative';
+    this.css('boxSizing', 'border-box');
+    this.css('display', 'block');
+    this.css('overflow', 'hidden');
+    if (this.css('position') === 'static') {
+      this.css('position', 'relative');
     }
 
     // Get the original size of the base
-    const originalWidth = parseFloat(styles.width);
-    const originalHeight = parseFloat(styles.height);
+    const originalWidth = parseFloat(this.css('width') as string);
+    const originalHeight = parseFloat(this.css('height') as string);
 
     // Add extends element
     this.appendChild(this.extends);
 
     // Set the default size of the canvas if the original size of the base element is 0
     if (!originalWidth) {
-      this.style.width = getComputedStyle(this.extends).width;
+      this.css('width', getComputedStyle(this.extends).width);
     }
     if (!originalHeight) {
-      this.style.height = getComputedStyle(this.extends).height;
+      this.css('height', getComputedStyle(this.extends).height);
     }
 
     // Set inherited element style
     this.extends.style.boxSizing = 'border-box';
-    this.extends.width = parseFloat(styles.width);
-    this.extends.height = parseFloat(styles.height);
+    this.extends.width = parseFloat(this.css('width') as string);
+    this.extends.height = parseFloat(this.css('height') as string);
     this.extends.style.width = '100%';
     this.extends.style.height = '100%';
 
@@ -50,7 +49,7 @@ class Canvas extends ComponentBase {
     this.observer = new MutationObserver(mutations => {
       for (let mutation of mutations) {
         if (/^width|height$/.test(mutation.attributeName!)) {
-          this.extends.setAttribute(mutation.attributeName!, this.getAttribute(mutation.attributeName!) as string);
+          this.extends.setAttribute(mutation.attributeName!, this.attr(mutation.attributeName!) as string);
         }
       }
     });

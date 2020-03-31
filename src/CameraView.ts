@@ -22,7 +22,7 @@ class CameraView extends ComponentBase {
     // Set base style
     this.classList.add('xj-camera-view');
     if (getComputedStyle(this).position === 'static') {
-      this.style.position = 'relative';
+      this.css('position', 'relative');
     }
 
     // Add camera
@@ -59,7 +59,8 @@ class CameraView extends ComponentBase {
     super.connectedCallback();
 
     // Add camera controller
-    if (this.getAttribute('controls') != null) {
+console.log("this.attr('controls')=", this.attr('controls'));
+    if (this.attr('controls')) {
       this.insertAdjacentHTML('afterbegin', `
         <input type="checkbox" id="xj-camera-view-gn-menustate">
         <nav class="xj-camera-view-gn" class="touch" role="navigation" aria-label="グローバル" data-hires="false" lang="ja-JP" dir="ltr">
@@ -90,17 +91,17 @@ class CameraView extends ComponentBase {
         </div>
       `);
       const image = this.querySelector('img')!;
-      this.querySelector('[action-capture]')!.addEventListener(window.ontouchstart ? 'touchstart' : 'click', () => {
+      this.querySelector('[action-capture]')!.addEventListener('click', () => {
         image.setAttribute('src', this.camera.capture() as string);
       });
-      this.querySelector('[action-rotation]')!.addEventListener(window.ontouchstart ? 'touchstart' : 'click', async () => {
-        await this.camera.open(this.camera.cameraFace === 'front' ? 'back' : 'front')
+      this.querySelector('[action-rotation]')!.addEventListener('touchstart', async () => {
+        await this.camera.open(this.camera.face === 'front' ? 'back' : 'front')
       });
     }
 
     // Open camera automatically
-    if (this.getAttribute('autoplay') != null) {
-      this.camera.open(this.getAttribute('autoplay') === 'back' ? 'back' : 'front');
+    if (this.attr('autoplay')) {
+      this.camera.open(this.attr('face') as 'front'|'back' || 'back');
     }
   }
 
@@ -119,28 +120,27 @@ class CameraView extends ComponentBase {
   private redraw(): void {
 
      // Redraw base
-    const styles = getComputedStyle(this);
-    if (styles.position === 'static') {
-      this.style.position = 'relative';
+    if (this.css('position') === 'static') {
+      this.css('position', 'relative');
     }
 
     // Redraw canvas
     const resolution = this.camera.resolution;
     const dimensions = Graphics.calculateFitDimensions({
       objectFit: this.camera.extends.style.objectFit,
-      intrinsicWidth: parseFloat(styles.width) - parseFloat(styles.paddingRight) - parseFloat(styles.borderRightWidth) - parseFloat(styles.paddingLeft) - parseFloat(styles.borderLeftWidth),
-      intrinsicHeight: parseFloat(styles.height) - parseFloat(styles.paddingTop) - parseFloat(styles.borderTopWidth) - parseFloat(styles.paddingBottom) - parseFloat(styles.borderBottomWidth),
-      intrinsicTop: parseFloat(styles.paddingTop) + parseFloat(styles.borderTopWidth) + parseFloat(styles.marginTop),
-      intrinsicLeft: parseFloat(styles.paddingLeft) + parseFloat(styles.borderLeftWidth) + parseFloat(styles.marginLeft),
+      intrinsicWidth: Graphics.getIntrinsicWidth(this),
+      intrinsicHeight: Graphics.getIntrinsicHeight(this),
+      intrinsicTop: Graphics.getIntrinsicTop(this),
+      intrinsicLeft: Graphics.getIntrinsicLeft(this),
       actualWidth: resolution.width,
       actualHeight: resolution.height
     });
     this.canvas.attr('width', resolution.width);
     this.canvas.attr('height', resolution.height);
-    this.canvas.style.top = `${dimensions.top}px`;
-    this.canvas.style.left = `${dimensions.left}px`;
-    this.canvas.style.width = `${dimensions.width}px`;
-    this.canvas.style.height = `${dimensions.height}px`;
+    this.canvas.css('top', `${dimensions.top}px`);
+    this.canvas.css('left', `${dimensions.left}px`);
+    this.canvas.css('width', `${dimensions.width}px`);
+    this.canvas.css('height', `${dimensions.height}px`);
   }
 }
 
