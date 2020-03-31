@@ -60,28 +60,28 @@ class CameraView extends ComponentBase {
 
     // Add camera controller
     if (this.attr('controls')) {
-      this.insertAdjacentHTML('afterbegin', `
-        <input type="checkbox" id="xj-camera-view-gn-menustate">
-        <nav class="xj-camera-view-gn" class="touch" role="navigation" aria-label="グローバル" data-hires="false" lang="ja-JP" dir="ltr">
-          <div class="xj-camera-view-gn-content">
-            <ul class="xj-camera-view-gn-header">
-              <li class="xj-camera-view-gn-item xj-camera-view-gn-menuicon">
-                <label class="xj-camera-view-gn-menuicon-label" for="xj-camera-view-gn-menustate" aria-hidden="true">
-                  <span class="xj-camera-view-gn-menuicon-bread xj-camera-view-gn-menuicon-bread-top">
-                    <span class="xj-camera-view-gn-menuicon-bread-crust xj-camera-view-gn-menuicon-bread-crust-top"></span>
-                  </span>
-                  <span class="xj-camera-view-gn-menuicon-bread xj-camera-view-gn-menuicon-bread-bottom">
-                    <span class="xj-camera-view-gn-menuicon-bread-crust xj-camera-view-gn-menuicon-bread-crust-bottom"></span>
-                  </span>
-                </label>
-              </li>
-            </ul>
-            <div class="xj-camera-view-gn-body">
-              <slot name="xj-camera-view-gn-body-content"></slot> 
-            </div>
-          </div>
-        </nav>`
-      );
+      // this.insertAdjacentHTML('afterbegin', `
+      //   <input type="checkbox" id="xj-camera-view-gn-menustate">
+      //   <nav class="xj-camera-view-gn" class="touch" role="navigation" aria-label="グローバル" data-hires="false" lang="ja-JP" dir="ltr">
+      //     <div class="xj-camera-view-gn-content">
+      //       <ul class="xj-camera-view-gn-header">
+      //         <li class="xj-camera-view-gn-item xj-camera-view-gn-menuicon">
+      //           <label class="xj-camera-view-gn-menuicon-label" for="xj-camera-view-gn-menustate" aria-hidden="true">
+      //             <span class="xj-camera-view-gn-menuicon-bread xj-camera-view-gn-menuicon-bread-top">
+      //               <span class="xj-camera-view-gn-menuicon-bread-crust xj-camera-view-gn-menuicon-bread-crust-top"></span>
+      //             </span>
+      //             <span class="xj-camera-view-gn-menuicon-bread xj-camera-view-gn-menuicon-bread-bottom">
+      //               <span class="xj-camera-view-gn-menuicon-bread-crust xj-camera-view-gn-menuicon-bread-crust-bottom"></span>
+      //             </span>
+      //           </label>
+      //         </li>
+      //       </ul>
+      //       <div class="xj-camera-view-gn-body">
+      //         <slot name="xj-camera-view-gn-body-content"></slot> 
+      //       </div>
+      //     </div>
+      //   </nav>`
+      // );
       this.insertAdjacentHTML('beforeend', `
         <div class="xj-camera-view-controls">
           <a class="xj-camera-view-capture"><img></a>
