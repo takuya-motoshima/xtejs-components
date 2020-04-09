@@ -24,10 +24,10 @@ export default {
     resolve({
       mainFields: ['module', 'main']
     }),
-    obfuscatorPlugin({
-      compact: true,
-      sourceMap: false
-    })
+    // obfuscatorPlugin({
+    //   compact: true,
+    //   sourceMap: false
+    // })
   ],
   output: [
     // ES module (for bundlers) build.

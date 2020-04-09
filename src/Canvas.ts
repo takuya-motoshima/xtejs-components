@@ -131,7 +131,7 @@ class Canvas extends ComponentBase {
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawPoint(x: number, y: number, { r = 3, color = 'aqua' }: { r?: number, color?: string }): Canvas {
+  public drawPoint(x: number, y: number, { r = 3, color = 'aqua' }: { r?: number, color?: string } = {}): Canvas {
     Graphics.drawPoint(this.extends, x, y, { r, color });
     return this;
   }
@@ -144,7 +144,7 @@ class Canvas extends ComponentBase {
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawCenterPoint(coordinates: { x: number, y: number }[], { r = 3, color = 'aqua' }: { r?: number, color?: string }): Canvas {
+  public drawCenterPoint(coordinates: { x: number, y: number }[], { r = 3, color = 'aqua' }: { r?: number, color?: string } = {}): Canvas {
     Graphics.drawCenterPoint(this.extends, coordinates, { r, color });
     return this;
   }
@@ -161,8 +161,8 @@ class Canvas extends ComponentBase {
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawRectangle(x: number, y: number, width: number, height: number, { degree = 0, lineWidth = 2, color = 'aqua' }: { degree?: number, lineWidth?: number, color?: string }): Canvas {
-    Graphics.drawRectangle(this.extends, x, y, width, height, degree, { lineWidth, color });
+  public drawRectangle(x: number, y: number, width: number, height: number, { degree = 0, lineWidth = 2, color = 'aqua' }: { degree?: number, lineWidth?: number, color?: string } = {}): Canvas {
+    Graphics.drawRectangle(this.extends, x, y, width, height, { degree, lineWidth, color });
     return this;
   }
 
