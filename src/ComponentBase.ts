@@ -119,7 +119,7 @@ export default class extends HTMLElement {
 
       // Convert CSS property names to kebab case
       name = name.replace(/([A-Z])/g, '-$1').toLowerCase();
-      return getComputedStyle(this, null).getPropertyValue(name);
+      return getComputedStyle(this).getPropertyValue(name);
     } else {
 
       // Convert CSS property names to camel case

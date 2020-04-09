@@ -96,11 +96,11 @@ declare class Camera extends ComponentBase {
      */
     capture(width?: number): string;
     /**
-     * Get width
+     * Get dimensions
      *
-     * @return {number}
+     * @return {{ width: number, height: number }}
      */
-    get resolution(): {
+    get dimensions(): {
         width: number;
         height: number;
     };

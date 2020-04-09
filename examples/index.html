@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XteJS component example index</title>
+  <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="styles/index.css?<!--# config timefmt="%Y%m%d%H%I%M%S" --><!--# echo var="date_local" -->">
+</head>
+<body>
+
+  <div class="container-fluid">
+
+    <div class="row flex-xl-nowrap">
+
+      <div class="col-md-3 col-xl-2 sidebar">
+      
+        <button class="btn btn-link search-docs-toggle d-md-none" type="button" data-toggle="collapse" data-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" role="img" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg>
+        </button>
+
+        <nav class="collapse links" id="nav" aria-label="Main navigation">
+          <ul class="nav sidenav">
+            <li class="active"><a href="camera.html">Camera</a></li>
+            <li><a href="camera-view.html">Camera View</a></li>
+            <li><a href="canvas.html">Canvas</a></li>
+            <li><a href="image-view.html">Image View</a></li>
+            <li><a href="passcode-auth.html">Passcode Auth</a></li>
+            <li><a href="test.html">Test</a></li>
+          </ul>
+        </nav>
+
+      </div>
+
+      <main class="col-md-9 col-xl-10 p-0 content" role="main">
+      <!-- <main class="col-md-9 col-xl-10 py-md-3 pl-md-5 content" role="main"> -->
+        <iframe id="contentBody" class="content-body"></iframe>
+      </main>
+
+    </div>
+
+  </div>
+
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="module" src="scripts/index.js?<!--# config timefmt="%Y%m%d%H%I%M%S" --><!--# echo var="date_local" -->"></script>
+</body>
+</html>

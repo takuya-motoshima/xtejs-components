@@ -1,7 +1,7 @@
 import ComponentBase from '~/ComponentBase';
 import Canvas from '~/Canvas';
 import Stream from '~/Stream';
-import { Media } from 'xtejs-utils';
+import { Graphics } from 'xtejs-utils';
 
 class Camera extends ComponentBase {
 
@@ -29,10 +29,10 @@ class Camera extends ComponentBase {
       this.css('position', 'relative');
     }
     if (!this.css('width')) {
-      this.css('width', getComputedStyle(this.extends).width);
+      this.css('width', getComputedStyle(this.extends).getPropertyValue('width'));
     }
     if (!this.style.height) {
-      this.css('height', getComputedStyle(this.extends).height);
+      this.css('height', getComputedStyle(this.extends).getPropertyValue('height'));
     }
 
     // Set inherited element style
@@ -227,12 +227,12 @@ class Camera extends ComponentBase {
    * @return {void}
    */
   public capture(width?: number): string {
-    this.canvas.attr('width', width || this.resolution.width);
-    const height = this.resolution.height * ( this.canvas.attr('width') as number / this.resolution.width );
+    this.canvas.attr('width', width || this.dimensions.width);
+    const height = this.dimensions.height * ( this.canvas.attr('width') as number / this.dimensions.width );
     this.canvas.attr('height', height);
     const dataURI = this.canvas
       .drawImage(
-        this.extends, 0, 0, this.resolution.width, this.resolution.height,
+        this.extends, 0, 0, this.dimensions.width, this.dimensions.height,
         0, 0, this.canvas.attr('width') as number, this.canvas.attr('height') as number)
       .toDataURL(this.face === 'front');
     // console.log('dataURI format image:', dataURI.slice(0, 100));
@@ -240,12 +240,12 @@ class Camera extends ComponentBase {
   }
 
   /**
-   * Get width
+   * Get dimensions
    * 
-   * @return {number}
+   * @return {{ width: number, height: number }}
    */
-  public get resolution(): { width: number, height: number } {
-    return Media.getMediaDimensions(this.extends);
+  public get dimensions(): { width: number, height: number } {
+    return Graphics.getMediaDimensions(this.extends);
   }
 }
 

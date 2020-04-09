@@ -21,7 +21,7 @@ class CameraView extends ComponentBase {
 
     // Set base style
     this.classList.add('xj-camera-view');
-    if (getComputedStyle(this).position === 'static') {
+    if (getComputedStyle(this).getPropertyValue('position') === 'static') {
       this.css('position', 'relative');
     }
 
@@ -124,22 +124,13 @@ class CameraView extends ComponentBase {
     }
 
     // Redraw canvas
-    const resolution = this.camera.resolution;
-    const dimensions = Graphics.calculateFitDimensions({
-      objectFit: this.camera.extends.style.objectFit,
-      intrinsicWidth: Graphics.getIntrinsicWidth(this),
-      intrinsicHeight: Graphics.getIntrinsicHeight(this),
-      intrinsicTop: Graphics.getIntrinsicTop(this),
-      intrinsicLeft: Graphics.getIntrinsicLeft(this),
-      actualWidth: resolution.width,
-      actualHeight: resolution.height
-    });
-    this.canvas.attr('width', resolution.width);
-    this.canvas.attr('height', resolution.height);
-    this.canvas.css('top', `${dimensions.top}px`);
-    this.canvas.css('left', `${dimensions.left}px`);
-    this.canvas.css('width', `${dimensions.width}px`);
-    this.canvas.css('height', `${dimensions.height}px`);
+    const rect = Graphics.getRectToFitContainer(this, this.camera, this.camera.extends.style.objectFit);
+    this.canvas.attr('width', this.camera.dimensions.width);
+    this.canvas.attr('height', this.camera.dimensions.height);
+    this.canvas.css('left', `${rect.x}px`);
+    this.canvas.css('top', `${rect.y}px`);
+    this.canvas.css('width', `${rect.width}px`);
+    this.canvas.css('height', `${rect.height}px`);
   }
 }
 

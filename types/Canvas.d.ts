@@ -39,51 +39,44 @@ declare class Canvas extends ComponentBase {
     /**
      * Draw point
      *
-     * @param  {number} options.x
-     * @param  {number} options.y
+     * @param  {number} x
+     * @param  {number} y
      * @param  {number} options.r
      * @param  {string} options.color
      * @return {Canvas}
      */
-    drawPoint({ x, y, r, color }: {
-        x: number;
-        y: number;
+    drawPoint(x: number, y: number, { r, color }: {
         r?: number;
         color?: string;
     }): Canvas;
     /**
      * Draw center point
      *
-     * @param  {Object[]} options.points
+     * @param  {Object[]} coordinates
      * @param  {number} options.r
      * @param  {string} options.color
      * @return {Canvas}
      */
-    drawCenterPoint({ points, r, color }: {
-        points: {
-            x: number;
-            y: number;
-        }[];
+    drawCenterPoint(coordinates: {
+        x: number;
+        y: number;
+    }[], { r, color }: {
         r?: number;
         color?: string;
     }): Canvas;
     /**
-     * Draw rect
+     * Draw rectangle
      *
-     * @param  {number} options.x
-     * @param  {number} options.y
-     * @param  {number} options.width
-     * @param  {number} options.height
+     * @param  {number} x
+     * @param  {number} y
+     * @param  {number} width
+     * @param  {number} height
      * @param  {number} options.degree
      * @param  {number} options.lineWidth
      * @param  {string} options.color
      * @return {Canvas}
      */
-    drawRect({ x, y, width, height, degree, lineWidth, color }: {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
+    drawRectangle(x: number, y: number, width: number, height: number, { degree, lineWidth, color }: {
         degree?: number;
         lineWidth?: number;
         color?: string;

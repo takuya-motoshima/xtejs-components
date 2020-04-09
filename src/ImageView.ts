@@ -1,6 +1,6 @@
 import ComponentBase from '~/ComponentBase';
 import Canvas from '~/Canvas';
-import { Misc, Graphics, Media } from 'xtejs-utils';
+import { Misc, Graphics } from 'xtejs-utils';
 
 class ImageView extends ComponentBase {
 
@@ -21,7 +21,7 @@ class ImageView extends ComponentBase {
     this.css('box-sizing', 'border-box');
     this.css('display', 'block');
     this.css('overflow', 'hidden');
-    if (getComputedStyle(this).position === 'static') {
+    if (getComputedStyle(this).getPropertyValue('position') === 'static') {
       this.css('position', 'relative');
     }
 
@@ -77,22 +77,14 @@ class ImageView extends ComponentBase {
     this.image.style.objectFit = this.css('object-fit') as string;
 
     // Redraw canvas
-    const resolution = Media.getMediaDimensions(this.image);
-    const dimensions = Graphics.calculateFitDimensions({
-      objectFit: this.css('object-fit'),
-      intrinsicWidth: Graphics.getIntrinsicWidth(this),
-      intrinsicHeight: Graphics.getIntrinsicHeight(this),
-      intrinsicTop: Graphics.getIntrinsicTop(this),
-      intrinsicLeft: Graphics.getIntrinsicLeft(this),
-      actualWidth: resolution.width,
-      actualHeight: resolution.height
-    });
-    this.canvas.attr('width', resolution.width);
-    this.canvas.attr('height', resolution.height);
-    this.canvas.css('top', `${dimensions.top}px`);
-    this.canvas.css('left', `${dimensions.left}px`);
-    this.canvas.css('width', `${dimensions.width}px`);
-    this.canvas.css('height', `${dimensions.height}px`);
+    const rect = Graphics.getRectToFitContainer(this, this.image);
+    const dimensions = Graphics.getMediaDimensions(this.image);
+    this.canvas.attr('width', dimensions.width);
+    this.canvas.attr('height', dimensions.height);
+    this.canvas.css('left', `${rect.x}px`);
+    this.canvas.css('top', `${rect.y}px`);
+    this.canvas.css('width', `${rect.width}px`);
+    this.canvas.css('height', `${rect.height}px`);
   }
 }
 
