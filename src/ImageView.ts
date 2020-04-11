@@ -40,7 +40,7 @@ class ImageView extends ComponentBase {
     this.observer = new MutationObserver(mutations => {
       for (let mutation of mutations) {
         if (mutation.attributeName === 'style') {
-          this.redraw()
+          this.fitOverlayCanvasToView()
         } else if (mutation.attributeName === 'src') {
           this.image.setAttribute('src', this.attr('src') as string);
         }
@@ -50,8 +50,8 @@ class ImageView extends ComponentBase {
     // Start observing base changes
     this.observer.observe(this, { attributes: true, attributeFilter: [ 'style', 'src' ], attributeOldValue: true });
 
-    // Redraw
-    this.redraw();
+    // Fit overlay canvas to view
+    this.fitOverlayCanvasToView();
   }
 
   /**
@@ -64,19 +64,15 @@ class ImageView extends ComponentBase {
   }
 
   /**
-   * Redraw the base
+   * Fit overlay canvas to view
+   *
+   * @return {void}
    */
-  private redraw(): void {
-
-    // Redraw base
+  private fitOverlayCanvasToView(): void {
     if (this.css('position') === 'static') {
       this.css('position', 'relative');
     }
-
-    // Redraw image
     this.image.style.objectFit = this.css('object-fit') as string;
-
-    // Redraw canvas
     const rect = Graphics.getRectToFitContainer(this, this.image);
     const dimensions = Graphics.getMediaDimensions(this.image);
     this.canvas.attr('width', dimensions.width);

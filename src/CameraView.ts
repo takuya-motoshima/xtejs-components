@@ -27,6 +27,7 @@ class CameraView extends ComponentBase {
 
     // Add camera
     this.camera.classList.add('xj-camera-view-camera');
+    // this.camera.on('opened', () => this.fitOverlayCanvasToView());
     this.appendChild(this.camera);
 
     // Add canvas
@@ -37,7 +38,7 @@ class CameraView extends ComponentBase {
     this.observer = new MutationObserver(mutations => {
       for (let mutation of mutations) {
         if (mutation.attributeName === 'style') {
-          this.redraw()
+          this.fitOverlayCanvasToView()
         }
       }
     });
@@ -45,16 +46,16 @@ class CameraView extends ComponentBase {
     // Start observing base changes
     this.observer.observe(this, { attributes: true, attributeFilter: [ 'style' ], attributeOldValue: true });
 
-    // Redraw
-    this.redraw();
+    // Fit overlay canvas to view
+    this.fitOverlayCanvasToView();
   }
 
   /**
-   * The element has been added to the document
+   * Called every time the element is inserted into the DOM.
    * 
    * @return {void}
    */
-  public connectedCallback(): void {
+  protected connectedCallback(): void {
 
     super.connectedCallback();
 
@@ -114,19 +115,19 @@ class CameraView extends ComponentBase {
   }
 
   /**
-   * Redraw the base
+   * Fit overlay canvas to view
+   *
+   * @return {void}
    */
-  private redraw(): void {
-
-     // Redraw base
+  private fitOverlayCanvasToView(): void {
     if (this.css('position') === 'static') {
       this.css('position', 'relative');
     }
-
-    // Redraw canvas
-    const rect = Graphics.getRectToFitContainer(this, this.camera, this.camera.extends.style.objectFit);
-    this.canvas.attr('width', this.camera.dimensions.width);
-    this.canvas.attr('height', this.camera.dimensions.height);
+    const rect = Graphics.getRectToFitContainer(this, this.camera.extends);
+    const dimensions = this.camera.dimensions;
+    console.log('Media element dimensions: ', dimensions);
+    this.canvas.attr('width', dimensions.width);
+    this.canvas.attr('height', dimensions.height);
     this.canvas.css('left', `${rect.x}px`);
     this.canvas.css('top', `${rect.y}px`);
     this.canvas.css('width', `${rect.width}px`);

@@ -7,10 +7,10 @@ declare class Test extends ComponentBase {
      */
     protected static get is(): string;
     /**
-     * The element has been added to the document
+     * Called every time the element is inserted into the DOM.
      *
      * @return {void}
      */
-    connectedCallback(): void;
+    protected connectedCallback(): void;
 }
 export default Test;

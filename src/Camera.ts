@@ -102,7 +102,7 @@ class Camera extends ComponentBase {
       return undefined;
     }
     const result = await navigator.permissions.query({ name: 'camera' });
-    console.log(`Current permission: ${result.state}`);
+    // console.log(`Current permission: ${result.state}`);
     return result.state;
   }
 
@@ -187,6 +187,11 @@ class Camera extends ComponentBase {
       });
       this.face = face;
       this.play();
+
+      // Call camera open event
+      if (this.handles.opened) {
+        this.handles.opened();
+      }
     } catch (e) {
       throw e;
     }

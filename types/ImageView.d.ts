@@ -17,8 +17,10 @@ declare class ImageView extends ComponentBase {
      */
     protected static get is(): string;
     /**
-     * Redraw the base
+     * Fit overlay canvas to view
+     *
+     * @return {void}
      */
-    private redraw;
+    private fitOverlayCanvasToView;
 }
 export default ImageView;

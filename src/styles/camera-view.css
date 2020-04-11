@@ -46,8 +46,11 @@ body {
     display: block;
     position: absolute;
     z-index: 1002;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
-
 
   .xj-camera-view-controls {
     box-sizing: border-box;

@@ -49,11 +49,11 @@ class PasscodeAuth extends ComponentBase {
   // }
 
   /**
-   * The element has been added to the document
+   * Called every time the element is inserted into the DOM.
    * 
    * @return {void}
    */
-  public connectedCallback(): void {
+  protected connectedCallback(): void {
 
     super.connectedCallback();
 

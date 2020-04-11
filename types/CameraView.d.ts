@@ -13,11 +13,11 @@ declare class CameraView extends ComponentBase {
      */
     constructor();
     /**
-     * The element has been added to the document
+     * Called every time the element is inserted into the DOM.
      *
      * @return {void}
      */
-    connectedCallback(): void;
+    protected connectedCallback(): void;
     /**
      * is attribute
      *
@@ -25,8 +25,10 @@ declare class CameraView extends ComponentBase {
      */
     protected static get is(): string;
     /**
-     * Redraw the base
+     * Fit overlay canvas to view
+     *
+     * @return {void}
      */
-    private redraw;
+    private fitOverlayCanvasToView;
 }
 export default CameraView;
