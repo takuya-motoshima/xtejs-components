@@ -12,25 +12,25 @@
 
   <main class="container-fluid mt-3">
 
-    <h3>Manually open camera</h3>
-
-    <div class="example">
-
-      <xj-camera id="camera" class="camera bg-light"></xj-camera>
-
-      <hr class="half-rule">
-
-      <button action-open-front-camera class="btn btn-outline-dark">Open front camera</button>
-      <button action-open-rear-camera class="btn btn-outline-dark">Open rear camera</button>
-      <button action-pause class="btn btn-outline-dark">Pause</button>
-
-    </div>
-
     <h3 class="mt-4">Camera that opens automatically</h3>
 
     <div class="example">
 
-      <xj-camera autoplay class="camera bg-light"></xj-camera>
+      <xj-camera id="camera1" autoplay class="camera bg-light"></xj-camera>
+
+    </div>
+
+    <h3>Manually open camera</h3>
+
+    <div class="example">
+
+      <xj-camera id="camera2" class="camera bg-light"></xj-camera>
+
+      <hr class="half-rule">
+
+      <button action-open data-facing="front" class="btn btn-outline-dark">Open front camera</button>
+      <button action-open data-facing="back" class="btn btn-outline-dark">Open back camera</button>
+      <button action-pause class="btn btn-outline-dark" id="pause">Pause</button>
 
     </div>
 

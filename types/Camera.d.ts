@@ -1,10 +1,8 @@
 import ComponentBase from '~/ComponentBase';
 declare class Camera extends ComponentBase {
     extends: HTMLVideoElement;
-    facing: 'front' | 'back' | undefined;
-    protected handles: {
-        [key: string]: Function;
-    };
+    facing: 'nothing' | 'front' | 'back';
+    state: 'unopened' | 'loading' | 'opened';
     private readonly canvas;
     private observer;
     /**

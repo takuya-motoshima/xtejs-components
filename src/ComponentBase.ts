@@ -2,7 +2,7 @@ import { Misc } from 'xtejs-utils';
 
 export default class extends HTMLElement {
 
-  protected handles: { [key: string]: Function } = {};
+  protected handles: { [key: string]: ((...args: any[]) => any)[] } = {};
   protected readonly global: Window = Misc.getGlobal<Window>();
 
   /**
@@ -96,12 +96,28 @@ export default class extends HTMLElement {
    * Set event handler
    * 
    * @param  {string} event
-   * @param  {Function} handler
+   * @param  {(...args: any[]) => any} handler
    * @return {void}
    */
-   public on(event: string, handler: Function ): any {
-    this.handles[event] = handler;
+   public on(event: string, handler: (...args: any[]) => any ): any {
+    if (!this.handles[event]) {
+      this.handles[event] = [];
+    }
+    this.handles[event].push(handler);
     return this;
+  }
+
+  /**
+   * Call event handler
+   * 
+   * @param {string} event
+   */
+  public invoke(event: string, ...args: any[]): void {
+    if (this.handles[event]) {
+      for (let handle of this.handles[event]) {
+        handle.call(null, args);
+      }
+    }
   }
 
   /**

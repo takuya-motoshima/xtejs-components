@@ -7,8 +7,8 @@ import { Graphics } from 'xtejs-utils';
 class Camera extends ComponentBase {
 
   public extends!: HTMLVideoElement;
-  public facing: 'front'|'back'|undefined = undefined;
-  protected handles: { [key: string]: Function } = { opened: (): void => {} };
+  public facing: 'nothing'|'front'|'back' = 'nothing';
+  public state: 'unopened'|'loading'|'opened' = 'unopened';
   private readonly canvas: Canvas = Canvas.createElement();
   private observer!: MutationObserver;
 
@@ -68,7 +68,9 @@ class Camera extends ComponentBase {
    * @return {Promise<void>}
    */
   public async open(facing: 'front'|'back' = 'back', quality: 'FHD'|'HD'|'VGA'|'HVGA'|'QVGA' = 'HD'): Promise<void> {
+    this.state = 'loading';
     if (this.opened && this.facing === facing) {
+      this.state = 'opened';
       return void this.play();
     }
     // const permission = await this.permission();
@@ -95,8 +97,9 @@ class Camera extends ComponentBase {
       audio: false 
     });
     this.facing = facing;
+    this.state = 'opened';
     this.play();
-    this.handles.opened();
+    super.invoke('opened');
   }
 
   /**
@@ -106,7 +109,8 @@ class Camera extends ComponentBase {
    */
   public close() {
     Stream.close(this.extends);
-    this.facing = undefined;
+    this.facing = 'nothing';
+    this.state = 'unopened';
   }
 
   /**

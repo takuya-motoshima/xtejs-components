@@ -1,6 +1,6 @@
 export default class extends HTMLElement {
     protected handles: {
-        [key: string]: Function;
+        [key: string]: ((...args: any[]) => any)[];
     };
     protected readonly global: Window;
     /**
@@ -54,10 +54,16 @@ export default class extends HTMLElement {
      * Set event handler
      *
      * @param  {string} event
-     * @param  {Function} handler
+     * @param  {(...args: any[]) => any} handler
      * @return {void}
      */
-    on(event: string, handler: Function): any;
+    on(event: string, handler: (...args: any[]) => any): any;
+    /**
+     * Call event handler
+     *
+     * @param {string} event
+     */
+    invoke(event: string, ...args: any[]): void;
     /**
      * Get or set the value of an attribute
      *
