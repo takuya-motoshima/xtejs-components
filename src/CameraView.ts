@@ -6,48 +6,17 @@ import './styles/camera-view.css';
 
 class CameraView extends ComponentBase {
 
-  public readonly camera: Camera = Camera.createElement();
-  public readonly canvas: Canvas = Canvas.createElement();
-  private readonly observer: MutationObserver;
+  public camera!: Camera;
+  public canvas!: Canvas;
+  private observer!: MutationObserver;
 
   /**
-   * Constructor
+   * is attribute
    * 
-   * @return {void}
+   * @return {string}
    */
-  constructor() {
-
-    super();
-
-    // Set base style
-    this.classList.add('xj-camera-view');
-    if (getComputedStyle(this).getPropertyValue('position') === 'static') {
-      this.css('position', 'relative');
-    }
-
-    // Add camera
-    this.camera.classList.add('xj-camera-view-camera');
-    // this.camera.on('opened', () => this.fitOverlayCanvasToView());
-    this.appendChild(this.camera);
-
-    // Add canvas
-    this.canvas.classList.add('xj-camera-view-canvas');
-    this.appendChild(this.canvas);
-
-    // Observe changes in base elements
-    this.observer = new MutationObserver(mutations => {
-      for (let mutation of mutations) {
-        if (mutation.attributeName === 'style') {
-          this.fitOverlayCanvasToView()
-        }
-      }
-    });
-
-    // Start observing base changes
-    this.observer.observe(this, { attributes: true, attributeFilter: [ 'style' ], attributeOldValue: true });
-
-    // Fit overlay canvas to view
-    this.fitOverlayCanvasToView();
+  protected static get is(): string {
+    return 'xj-camera-view';
   }
 
   /**
@@ -56,10 +25,21 @@ class CameraView extends ComponentBase {
    * @return {void}
    */
   protected connectedCallback(): void {
-
     super.connectedCallback();
-
-    // Add camera controller
+    this.classList.add('xj-camera-view');
+    this.camera = Camera.createElement();
+    this.camera.classList.add('xj-camera-view-camera');
+    this.camera.on('opened', () => this.layout());
+    if (this.attr('autoplay')) {
+      this.camera.attr('autoplay', true);
+    }
+    if (this.attr('facing')) {
+      this.camera.attr('facing', this.attr('facing'));
+    }
+    this.appendChild(this.camera);
+    this.canvas = Canvas.createElement();
+    this.canvas.classList.add('xj-camera-view-canvas');
+    this.appendChild(this.canvas);
     if (this.attr('controls')) {
       // this.insertAdjacentHTML('afterbegin', `
       //   <input type="checkbox" id="xj-camera-view-gn-menustate">
@@ -95,39 +75,33 @@ class CameraView extends ComponentBase {
         image.setAttribute('src', this.camera.capture() as string);
       });
       this.querySelector('[action-rotation]')!.addEventListener('touchstart', async () => {
-        await this.camera.open(this.camera.face === 'front' ? 'back' : 'front')
+        await this.camera.open(this.camera.facing === 'front' ? 'back' : 'front')
       });
     }
-
-    // Open camera automatically
-    if (this.attr('autoplay')) {
-      this.camera.open(this.attr('face') as 'front'|'back' || 'back');
-    }
-  }
-
-  /**
-   * is attribute
-   * 
-   * @return {string}
-   */
-  protected static get is(): string {
-    return 'xj-camera-view';
-  }
+    this.observer = new MutationObserver(mutations => {
+      for (let { attributeName } of mutations) {
+        if (attributeName === 'style') {
+          this.layout()
+        }
+      }
+    });
+    this.observer.observe(this, { attributes: true, attributeFilter: [ 'style' ], attributeOldValue: true });
+    this.layout();
+   }
 
   /**
-   * Fit overlay canvas to view
+   * Set layout
    *
    * @return {void}
    */
-  private fitOverlayCanvasToView(): void {
+  private layout(): void {
     if (this.css('position') === 'static') {
       this.css('position', 'relative');
     }
     const rect = Graphics.getRectToFitContainer(this, this.camera.extends);
-    const dimensions = this.camera.dimensions;
-    console.log('Media element dimensions: ', dimensions);
-    this.canvas.attr('width', dimensions.width);
-    this.canvas.attr('height', dimensions.height);
+    console.log('Dimensions: ', this.camera.dimensions);
+    this.canvas.attr('width', this.camera.dimensions.width);
+    this.canvas.attr('height',this.camera.dimensions.height);
     this.canvas.css('left', `${rect.x}px`);
     this.canvas.css('top', `${rect.y}px`);
     this.canvas.css('width', `${rect.width}px`);

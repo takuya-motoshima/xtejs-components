@@ -1,15 +1,10 @@
 import ComponentBase from '~/ComponentBase';
 import Canvas from '~/Canvas';
+import './styles/image-view.css';
 declare class ImageView extends ComponentBase {
-    readonly image: HTMLImageElement;
-    readonly canvas: Canvas;
-    private readonly observer;
-    /**
-     * Constructor
-     *
-     * @return {void}
-     */
-    constructor();
+    image: HTMLImageElement;
+    canvas: Canvas;
+    private observer;
     /**
      * is attribute
      *
@@ -17,10 +12,16 @@ declare class ImageView extends ComponentBase {
      */
     protected static get is(): string;
     /**
-     * Fit overlay canvas to view
+     * Called every time the element is inserted into the DOM.
      *
      * @return {void}
      */
-    private fitOverlayCanvasToView;
+    protected connectedCallback(): void;
+    /**
+     * Set layout
+     *
+     * @return {void}
+     */
+    private layout;
 }
 export default ImageView;

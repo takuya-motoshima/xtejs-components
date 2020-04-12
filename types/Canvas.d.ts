@@ -1,19 +1,19 @@
 import ComponentBase from '~/ComponentBase';
 declare class Canvas extends ComponentBase {
-    readonly extends: HTMLCanvasElement;
-    private readonly observer;
-    /**
-     * Constructor
-     *
-     * @return {void}
-     */
-    constructor();
+    extends: HTMLCanvasElement;
+    private observer;
     /**
      * is attribute
      *
      * @return {string}
      */
     protected static get is(): string;
+    /**
+     * Called every time the element is inserted into the DOM.
+     *
+     * @return {void}
+     */
+    protected connectedCallback(): void;
     /**
      * Draw image
      *

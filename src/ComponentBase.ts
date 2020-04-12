@@ -2,7 +2,7 @@ import { Misc } from 'xtejs-utils';
 
 export default class extends HTMLElement {
 
-  protected handles: { [key: string]: Function };
+  protected handles: { [key: string]: Function } = {};
   protected readonly global: Window = Misc.getGlobal<Window>();
 
   /**
@@ -12,7 +12,6 @@ export default class extends HTMLElement {
    */
   constructor() {
     super();
-    this.handles = {};
   }
 
   /**
@@ -109,10 +108,10 @@ export default class extends HTMLElement {
    * Get or set the value of an attribute
    * 
    * @param  {string}                  name
-   * @param  {string|number|undefined} value
-   * @return {number|string|boolean|undefined}
+   * @param  {string|number|boolean/undefined} value
+   * @return {string|number|boolean|undefined}
    */
-  public attr(name: string, value: string|number|undefined = undefined): number|string|boolean|undefined {
+  public attr(name: string, value: string|number|boolean|undefined = undefined): string|number|boolean|undefined {
 
     // Set or return property
     if (value === undefined) {

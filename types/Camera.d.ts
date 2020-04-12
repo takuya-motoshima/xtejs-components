@@ -1,15 +1,12 @@
 import ComponentBase from '~/ComponentBase';
 declare class Camera extends ComponentBase {
     extends: HTMLVideoElement;
-    private canvas;
-    face: 'front' | 'back' | undefined;
+    facing: 'front' | 'back' | undefined;
+    protected handles: {
+        [key: string]: Function;
+    };
+    private readonly canvas;
     private observer;
-    /**
-     * Constructor
-     *
-     * @return {void}
-     */
-    constructor();
     /**
      * is attribute
      *
@@ -17,59 +14,19 @@ declare class Camera extends ComponentBase {
      */
     protected static get is(): string;
     /**
-     * Get media tracks
-     *
-     * @return {MediaStreamTrack[]}
-     */
-    get tracks(): MediaStreamTrack[];
-    /**
-     * Camera resolution list
-     *
-     * @return {Object}
-     */
-    private static get resolutions();
-    /**
-     * Returns the permission status of the requested feature, either granted, denied or - in case the user was not yet asked - prompt.
-     *
-     * @return {string} granted|denied|prompt|
-     *                  - granted: caller will be able to successfuly access the feature without having the user agent asking the user’s permission.
-     *                  - denied: caller will not be able to access the feature.
-     *                  - prompt: user agent will be asking the user’s permission if the caller tries to access the feature. The user might grant, deny or dismiss the request.
-     */
-    getPermission(): Promise<"denied" | "granted" | "prompt" | undefined>;
-    /**
-     * Revoke camera access settings
-     *
-     * typescript doesn't support "navigator.permissions.revoke", so don't use it now
+     * Called every time the element is inserted into the DOM.
      *
      * @return {void}
      */
-    revokePermission(): Promise<void>;
+    protected connectedCallback(): void;
     /**
-     * Is the camera open?
+     * Open camera
      *
-     * @return {boolean}
-     */
-    get opened(): boolean;
-    /**
-     * Get current camera constraints
-     *
-     * @return {Object}
-     */
-    constraints(): MediaTrackConstraints | undefined;
-    /**
-     * @param  {string} face front|back
-     *                       front: Open front camera
-     *                       back: Open rear camera
-     * @param  {string} quality FHD|HD|VGA|HVGA|QVGA|
-     *                          FHD:  1920 x 1080
-     *                          HD:   1280 x  720
-     *                          VGA:   640 x  480
-     *                          HVGA:  480 x  320
-     *                          QVGA:  320 x  240
+     * @param  {'front'|'back'} facing|back
+     * @param  {'FHD'|'HD'|'VGA'|'HVGA'|'QVGA'} quality
      * @return {Promise<void>}
      */
-    open(face?: 'front' | 'back', quality?: string): Promise<undefined>;
+    open(facing?: 'front' | 'back', quality?: 'FHD' | 'HD' | 'VGA' | 'HVGA' | 'QVGA'): Promise<void>;
     /**
      * Close camera
      *
@@ -77,26 +34,37 @@ declare class Camera extends ComponentBase {
      */
     close(): void;
     /**
-     * Start shooting
+     * Play camera
      *
      * @return {void}
      */
     play(): void;
     /**
-     * Pause shooting
+     * Pause camera
      *
      * @return {void}
      */
     pause(): void;
     /**
-     * Take a capture of the shooting scene
+     * Is the camera open?
      *
-     * @param  {number} width
-     * @return {void}
+     * @return {boolean}
      */
-    capture(width?: number): string;
+    get opened(): boolean;
     /**
-     * Get dimensions
+     * Is the camera paused?
+     *
+     * @return {boolean}
+     */
+    get paused(): boolean;
+    /**
+     * Get media tracks
+     *
+     * @return {MediaStreamTrack[]}
+     */
+    get tracks(): MediaStreamTrack[];
+    /**
+     * Get camera dimensions
      *
      * @return {{ width: number, height: number }}
      */
@@ -104,5 +72,18 @@ declare class Camera extends ComponentBase {
         width: number;
         height: number;
     };
+    /**
+     * Get current camera constraints
+     *
+     * @return {MediaTrackConstraints|undefined}
+     */
+    get constraints(): MediaTrackConstraints | undefined;
+    /**
+     * Capture a single frame
+     *
+     * @param  {number} width
+     * @return {void}
+     */
+    capture(width?: number): string;
 }
 export default Camera;

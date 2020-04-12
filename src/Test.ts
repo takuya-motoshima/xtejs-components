@@ -18,7 +18,7 @@ class Test extends ComponentBase {
    */
   protected connectedCallback(): void {
     super.connectedCallback();
-    this.innerHTML = `<h1>Hello, World!</h1>`;
+    this.innerHTML = `Hello, World`;
   }
 }
 

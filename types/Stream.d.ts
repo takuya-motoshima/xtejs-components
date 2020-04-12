@@ -1,15 +1,17 @@
 export default class {
     /**
+     * Open video stream
+     *
      * @param  {HTMLVideoElement} video
      * @param  {Object} constraints
-     * @return {Void}
+     * @return {void}
      */
     static open(video: HTMLVideoElement, constraints: Object): Promise<void>;
     /**
-     * Stop all tracks that make up the stream
+     * Close video stream
      *
      * @param  {HTMLVideoElement} video
-     * @return {Void}
+     * @return {void}
      */
     static close(video: HTMLVideoElement): void;
 }

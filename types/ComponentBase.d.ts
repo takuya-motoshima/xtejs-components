@@ -62,10 +62,10 @@ export default class extends HTMLElement {
      * Get or set the value of an attribute
      *
      * @param  {string}                  name
-     * @param  {string|number|undefined} value
-     * @return {number|string|boolean|undefined}
+     * @param  {string|number|boolean/undefined} value
+     * @return {string|number|boolean|undefined}
      */
-    attr(name: string, value?: string | number | undefined): number | string | boolean | undefined;
+    attr(name: string, value?: string | number | boolean | undefined): string | number | boolean | undefined;
     /**
      * Get or set the value of a CSS property
      *

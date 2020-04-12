@@ -1,60 +1,16 @@
 import ComponentBase from '~/ComponentBase';
 import Canvas from '~/Canvas';
 import Stream from '~/Stream';
+import CameraResolutions from '~/environments/CameraResolutions';
 import { Graphics } from 'xtejs-utils';
 
 class Camera extends ComponentBase {
 
-  public extends: HTMLVideoElement = document.createElement('video');
-  private canvas: Canvas = Canvas.createElement();
-  public face: 'front'|'back'|undefined = undefined;
-  private observer: MutationObserver;
-
-  /**
-   * Constructor
-   * 
-   * @return {void}
-   */
-  constructor() {
-
-    super();
-
-    // Add extends element
-    this.appendChild(this.extends);
-    
-    // Set wrapper element style
-    this.css('box-sizing', 'border-box');
-    this.css('display', 'block');
-    if (this.css('position') === 'static') {
-      this.css('position', 'relative');
-    }
-    if (!this.css('width')) {
-      this.css('width', getComputedStyle(this.extends).getPropertyValue('width'));
-    }
-    if (!this.style.height) {
-      this.css('height', getComputedStyle(this.extends).getPropertyValue('height'));
-    }
-
-    // Set inherited element style
-    this.extends.setAttribute('playsinline', 'true');
-    this.extends.setAttribute('muted', 'true');
-    this.extends.style.boxSizing = 'border-box';
-    this.extends.style.width = '100%';
-    this.extends.style.height = '100%';
-    this.extends.style.objectFit = 'cover';
-
-    // Observe changes in base elements
-    this.observer = new MutationObserver(mutations => {
-      for (let mutation of mutations) {
-        if (/^width|height$/.test(mutation.attributeName!)) {
-          this.extends.setAttribute(mutation.attributeName!, this.attr(mutation.attributeName!) as string);
-        }
-      }
-    });
-
-    // Start observing base changes
-    this.observer.observe(this, { attributes: true, attributeFilter: [ 'width', 'height' ], attributeOldValue: true });
-  }
+  public extends!: HTMLVideoElement;
+  public facing: 'front'|'back'|undefined = undefined;
+  protected handles: { [key: string]: Function } = { opened: (): void => {} };
+  private readonly canvas: Canvas = Canvas.createElement();
+  private observer!: MutationObserver;
 
   /**
    * is attribute
@@ -66,58 +22,112 @@ class Camera extends ComponentBase {
   }
 
   /**
-   * Get media tracks
-   * 
-   * @return {MediaStreamTrack[]}
-   */
-  public get tracks(): MediaStreamTrack[] {
-    return this.extends.srcObject ? (<MediaStream>this.extends.srcObject).getTracks() : [];
-  }
-
-  /**
-   * Camera resolution list
-   * 
-   * @return {Object}
-   */
-  private static get resolutions(): { [key: string]: { width: number, height: number } } {
-    return {
-      FHD: { width: 1920, height: 1080 },
-      HD: { width: 1280, height: 720 },
-      VGA: { width: 640, height: 480 },
-      HVGA: { width: 480, height: 320 },
-      QVGA: { width: 320, height: 240 }
-    };
-  }
-
-  /**
-   * Returns the permission status of the requested feature, either granted, denied or - in case the user was not yet asked - prompt.
-   * 
-   * @return {string} granted|denied|prompt|
-   *                  - granted: caller will be able to successfuly access the feature without having the user agent asking the user’s permission.
-   *                  - denied: caller will not be able to access the feature.
-   *                  - prompt: user agent will be asking the user’s permission if the caller tries to access the feature. The user might grant, deny or dismiss the request.
-   */
-  public async getPermission() {
-    if (!navigator.permissions || !navigator.permissions.query) {
-      return undefined;
-    }
-    const result = await navigator.permissions.query({ name: 'camera' });
-    // console.log(`Current permission: ${result.state}`);
-    return result.state;
-  }
-
-  /**
-   * Revoke camera access settings
-   * 
-   * typescript doesn't support "navigator.permissions.revoke", so don't use it now
+   * Called every time the element is inserted into the DOM.
    * 
    * @return {void}
    */
-  public async revokePermission() {
-    // if (!navigator.permissions || !navigator.permissions.revoke) {
-    //   return;
+  protected connectedCallback(): void {
+    super.connectedCallback();
+    this.extends = document.createElement('video');
+    this.appendChild(this.extends);
+    this.css('box-sizing', 'border-box');
+    this.css('display', 'block');
+    if (this.css('position') === 'static') {
+      this.css('position', 'relative');
+    }
+    if (!this.css('width')) {
+      this.css('width', getComputedStyle(this.extends).getPropertyValue('width'));
+    }
+    if (!this.style.height) {
+      this.css('height', getComputedStyle(this.extends).getPropertyValue('height'));
+    }
+    this.extends.setAttribute('playsinline', 'true');
+    this.extends.setAttribute('muted', 'true');
+    this.extends.style.boxSizing = 'border-box';
+    this.extends.style.width = '100%';
+    this.extends.style.height = '100%';
+    this.extends.style.objectFit = 'cover';
+    this.observer = new MutationObserver(mutations => {
+      for (let { attributeName } of mutations) {
+        if (/^width|height$/.test(attributeName!)) {
+          this.extends.setAttribute(attributeName!, this.attr(attributeName!) as string);
+        }
+      }
+    });
+    this.observer.observe(this, { attributes: true, attributeFilter: [ 'width', 'height' ] });
+    if (this.attr('autoplay')) {
+      this.open(this.attr('facing') as 'front'|'back' || 'back');
+    }
+  }
+
+  /**
+   * Open camera
+   * 
+   * @param  {'front'|'back'} facing|back
+   * @param  {'FHD'|'HD'|'VGA'|'HVGA'|'QVGA'} quality
+   * @return {Promise<void>}
+   */
+  public async open(facing: 'front'|'back' = 'back', quality: 'FHD'|'HD'|'VGA'|'HVGA'|'QVGA' = 'HD'): Promise<void> {
+    console.log(`State before opening: ${this.extends.readyState}`);
+    if (this.opened && this.facing === facing) {
+      // console.log('Camera is already open');
+      return void this.play();
+    }
+    // const permission = await this.permission();
+    // if (permission === 'denied') {
+    //   await this.revokePermission();
     // }
-    // await navigator.permissions.revoke({name: 'camera'});
+    if (facing === 'front') {
+      this.extends.style.transform = 'scaleX(-1)';
+      this.extends.style.filter = 'FlipH';
+    } else {
+      this.extends.style.transform = 'scaleX(1)';
+      this.extends.style.filter = '';
+    }
+    await Stream.open(this.extends, {
+      video: {
+        facingMode: facing === 'front' ? 'user' : 'environment',
+        width: {
+          ideal: CameraResolutions[quality].width
+        },
+        height: {
+          ideal: CameraResolutions[quality].height
+        }
+      },
+      audio: false 
+    });
+    this.facing = facing;
+    this.play();
+    console.log(`State after opening: ${this.extends.readyState}`);
+    this.handles.opened();
+  }
+
+  /**
+   * Close camera
+   * 
+   * @return {void}
+   */
+  public close() {
+    Stream.close(this.extends);
+    this.facing = undefined;
+  }
+
+  /**
+   * Play camera
+   * 
+   * @return {void}
+   */
+  public play() {
+    this.extends.play();
+  }
+
+  /**
+   * Pause camera
+   * 
+   * @return {void}
+   */
+  public pause() {
+    this.extends.pause();
   }
 
   /**
@@ -130,11 +140,38 @@ class Camera extends ComponentBase {
   }
 
   /**
+   * Is the camera paused?
+   * 
+   * @return {boolean}
+   */
+  public get paused(): boolean {
+    return this.extends.paused;
+  }
+
+  /**
+   * Get media tracks
+   * 
+   * @return {MediaStreamTrack[]}
+   */
+  public get tracks(): MediaStreamTrack[] {
+    return this.extends.srcObject ? (<MediaStream>this.extends.srcObject).getTracks() : [];
+  }
+
+  /**
+   * Get camera dimensions
+   * 
+   * @return {{ width: number, height: number }}
+   */
+  public get dimensions(): { width: number, height: number } {
+    return Graphics.getMediaDimensions(this.extends);
+  }
+
+  /**
    * Get current camera constraints
    * 
-   * @return {Object}
+   * @return {MediaTrackConstraints|undefined}
    */
-  constraints() {
+  public get constraints(): MediaTrackConstraints|undefined {
     if (!this.tracks.length) {
       return undefined;
     }
@@ -142,91 +179,7 @@ class Camera extends ComponentBase {
   }
 
   /**
-   * @param  {string} face front|back
-   *                       front: Open front camera
-   *                       back: Open rear camera
-   * @param  {string} quality FHD|HD|VGA|HVGA|QVGA|
-   *                          FHD:  1920 x 1080
-   *                          HD:   1280 x  720
-   *                          VGA:   640 x  480
-   *                          HVGA:  480 x  320
-   *                          QVGA:  320 x  240
-   * @return {Promise<void>}
-   */
-  public async open(face: 'front'|'back' = 'back',  quality = 'HD') {
-    try {
-
-      if (this.opened && this.face === face) {
-        // console.log('Camera is already open');
-        return void this.play();
-      }
-
-      // console.log('Open camera');
-
-      const permission = await this.getPermission();
-      if (permission === 'denied') {
-        await this.revokePermission();
-      }
-
-      if (face === 'front') {
-        this.extends.style.transform = 'scaleX(-1)';
-        this.extends.style.filter = 'FlipH';
-      } else {
-        this.extends.style.transform = 'scaleX(1)';
-        this.extends.style.filter = '';
-      }
-
-      await Stream.open(this.extends, {
-        video: {
-          facingMode: face === 'front' ? 'user' : 'environment',
-          // facingMode: face === 'front' ? 'user' : { exact: 'environment' },
-          width: { ideal: Camera.resolutions[quality].width },
-          height: { ideal: Camera.resolutions[quality].height }
-        },
-        audio: false 
-      });
-      this.face = face;
-      this.play();
-
-      // Call camera open event
-      if (this.handles.opened) {
-        this.handles.opened();
-      }
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  /**
-   * Close camera
-   * 
-   * @return {void}
-   */
-  public close() {
-    Stream.close(this.extends);
-    this.face = undefined;
-  }
-
-  /**
-   * Start shooting
-   * 
-   * @return {void}
-   */
-  public play() {
-    this.extends.play();
-  }
-
-  /**
-   * Pause shooting
-   * 
-   * @return {void}
-   */
-  public pause() {
-    this.extends.pause();
-  }
-
-  /**
-   * Take a capture of the shooting scene
+   * Capture a single frame
    * 
    * @param  {number} width
    * @return {void}
@@ -239,19 +192,39 @@ class Camera extends ComponentBase {
       .drawImage(
         this.extends, 0, 0, this.dimensions.width, this.dimensions.height,
         0, 0, this.canvas.attr('width') as number, this.canvas.attr('height') as number)
-      .toDataURL(this.face === 'front');
-    // console.log('dataURI format image:', dataURI.slice(0, 100));
+      .toDataURL(this.facing === 'front');
     return dataURI;
   }
 
-  /**
-   * Get dimensions
-   * 
-   * @return {{ width: number, height: number }}
-   */
-  public get dimensions(): { width: number, height: number } {
-    return Graphics.getMediaDimensions(this.extends);
-  }
+  // /**
+  //  * Returns the permission status of the requested feature, either granted, denied or - in case the user was not yet asked - prompt.
+  //  * 
+  //  * @return {Promise<string|undefined>} granted|denied|prompt|
+  //  *                  - granted: caller will be able to successfuly access the feature without having the user agent asking the user’s permission.
+  //  *                  - denied: caller will not be able to access the feature.
+  //  *                  - prompt: user agent will be asking the user’s permission if the caller tries to access the feature. The user might grant, deny or dismiss the request.
+  //  */
+  // public async permission(): Promise<string|undefined> {
+  //   if (!navigator.permissions || !navigator.permissions.query) {
+  //     return undefined;
+  //   }
+  //   const result = await navigator.permissions.query({ name: 'camera' });
+  //   return result.state;
+  // }
+
+  // /**
+  //  * Revoke camera access settings
+  //  * 
+  //  * typescript doesn't support "navigator.permissions.revoke", so don't use it now
+  //  * 
+  //  * @return {Promise<void>}
+  //  */
+  // public async revokePermission(): Promise<void> {
+  //   if (!navigator.permissions || !navigator.permissions.revoke) {
+  //     return;
+  //   }
+  //   await navigator.permissions.revoke({name: 'camera'});
+  // }
 }
 
 Camera.define();

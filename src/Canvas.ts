@@ -3,60 +3,8 @@ import { Misc, Graphics } from 'xtejs-utils';
 
 class Canvas extends ComponentBase {
 
-  public readonly extends: HTMLCanvasElement = document.createElement('canvas');
-  private readonly observer: MutationObserver;
-
-  /**
-   * Constructor
-   * 
-   * @return {void}
-   */
-  constructor() {
-
-    super();
-
-    // Set wrapper element style
-    this.css('boxSizing', 'border-box');
-    this.css('display', 'block');
-    this.css('overflow', 'hidden');
-    if (this.css('position') === 'static') {
-      this.css('position', 'relative');
-    }
-
-    // Get the original size of the base
-    const originalWidth = parseFloat(this.css('width') as string);
-    const originalHeight = parseFloat(this.css('height') as string);
-
-    // Add extends element
-    this.appendChild(this.extends);
-
-    // Set the default size of the canvas if the original size of the base element is 0
-    if (!originalWidth) {
-      this.css('width', getComputedStyle(this.extends).getPropertyValue('width'));
-    }
-    if (!originalHeight) {
-      this.css('height', getComputedStyle(this.extends).getPropertyValue('height'));
-    }
-
-    // Set inherited element style
-    this.extends.style.boxSizing = 'border-box';
-    this.extends.width = parseFloat(this.css('width') as string);
-    this.extends.height = parseFloat(this.css('height') as string);
-    this.extends.style.width = '100%';
-    this.extends.style.height = '100%';
-
-    // Observe changes in base elements
-    this.observer = new MutationObserver(mutations => {
-      for (let mutation of mutations) {
-        if (/^width|height$/.test(mutation.attributeName!)) {
-          this.extends.setAttribute(mutation.attributeName!, this.attr(mutation.attributeName!) as string);
-        }
-      }
-    });
-
-    // Start observing base changes
-    this.observer.observe(this, { attributes: true, attributeFilter: [ 'width', 'height' ], attributeOldValue: true });
-  }
+  public extends!: HTMLCanvasElement;
+  private observer!: MutationObserver;
 
   /**
    * is attribute
@@ -65,6 +13,44 @@ class Canvas extends ComponentBase {
    */
   protected static get is(): string {
     return 'xj-canvas';
+  }
+
+  /**
+   * Called every time the element is inserted into the DOM.
+   * 
+   * @return {void}
+   */
+  protected connectedCallback(): void {
+    super.connectedCallback();
+    this.css('boxSizing', 'border-box');
+    this.css('display', 'block');
+    this.css('overflow', 'hidden');
+    if (this.css('position') === 'static') {
+      this.css('position', 'relative');
+    }
+    const width = parseFloat(this.css('width') as string);
+    const height = parseFloat(this.css('height') as string);
+    this.extends = document.createElement('canvas');
+    this.appendChild(this.extends);
+    if (!width) {
+      this.css('width', getComputedStyle(this.extends).getPropertyValue('width'));
+    }
+    if (!height) {
+      this.css('height', getComputedStyle(this.extends).getPropertyValue('height'));
+    }
+    this.extends.style.boxSizing = 'border-box';
+    this.extends.width = parseFloat(this.css('width')!);
+    this.extends.height = parseFloat(this.css('height')!);
+    this.extends.style.width = '100%';
+    this.extends.style.height = '100%';
+    this.observer = new MutationObserver(mutations => {
+      for (let { attributeName } of mutations) {
+        if (/^width|height$/.test(attributeName!)) {
+          this.extends.setAttribute(attributeName!, this.attr(attributeName!) as string);
+        }
+      }
+    });
+    this.observer.observe(this, { attributes: true, attributeFilter: [ 'width', 'height' ] });
   }
 
   /**
@@ -99,7 +85,6 @@ class Canvas extends ComponentBase {
     } else  {
       this.extends.getContext('2d')!.drawImage(image, sx, sy);
     }
-    // this.extends.getContext('2d')!.drawImage(image, sx, sy, swidth!, sheight!, dx!, dy!, dwidth!, dheight!);
     return this;
   }
 

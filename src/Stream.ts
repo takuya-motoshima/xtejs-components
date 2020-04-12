@@ -1,9 +1,11 @@
 export default class {
 
   /**
+   * Open video stream
+   * 
    * @param  {HTMLVideoElement} video
    * @param  {Object} constraints
-   * @return {Void}
+   * @return {void}
    */
   public static async open(video: HTMLVideoElement, constraints: Object): Promise<void> {
     await new Promise(async (resolve, reject) => {
@@ -17,25 +19,21 @@ export default class {
         video.srcObject = await navigator.mediaDevices.getUserMedia(constraints);
 
         // Wait for completion of loading metadata
-        video.addEventListener('loadedmetadata', () => {
-          resolve();
-        }, { once: true });
+        video.addEventListener('loadedmetadata', () => resolve(), { once: true });
 
         // Resources could not be loaded due to errors
-        video.addEventListener('error', () => {
-          reject(video.error);
-        }, { once: true });
-      } catch (e) {
-        reject(e);
+        video.addEventListener('error', () => reject(video.error), { once: true });
+      } catch (error) {
+        reject(error);
       }
     });
   }
 
   /**
-   * Stop all tracks that make up the stream
+   * Close video stream
    * 
    * @param  {HTMLVideoElement} video
-   * @return {Void}
+   * @return {void}
    */
   public static close(video: HTMLVideoElement): void {
     if (!video.srcObject) {

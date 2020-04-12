@@ -3,21 +3,9 @@ import Camera from '~/Camera';
 import Canvas from '~/Canvas';
 import './styles/camera-view.css';
 declare class CameraView extends ComponentBase {
-    readonly camera: Camera;
-    readonly canvas: Canvas;
-    private readonly observer;
-    /**
-     * Constructor
-     *
-     * @return {void}
-     */
-    constructor();
-    /**
-     * Called every time the element is inserted into the DOM.
-     *
-     * @return {void}
-     */
-    protected connectedCallback(): void;
+    camera: Camera;
+    canvas: Canvas;
+    private observer;
     /**
      * is attribute
      *
@@ -25,10 +13,16 @@ declare class CameraView extends ComponentBase {
      */
     protected static get is(): string;
     /**
-     * Fit overlay canvas to view
+     * Called every time the element is inserted into the DOM.
      *
      * @return {void}
      */
-    private fitOverlayCanvasToView;
+    protected connectedCallback(): void;
+    /**
+     * Set layout
+     *
+     * @return {void}
+     */
+    private layout;
 }
 export default CameraView;

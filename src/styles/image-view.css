@@ -1,0 +1,17 @@
+.xj-image-view {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+  .xj-image-view-image {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .xj-image-view-canvas {
+    position: absolute;
+  }

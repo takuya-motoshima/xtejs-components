@@ -41,12 +41,6 @@ class PasscodeAuth extends ComponentBase {
     this.passcode = passcode;
     this.resolve = resolve;
   }
-  // public authenticate(passcode: string): Promise<boolean> {
-  //   this.passcode = passcode;
-  //   return new Promise<boolean>((resolve: (success: boolean) => void) => {
-  //     this.resolve = resolve;
-  //   });
-  // }
 
   /**
    * Called every time the element is inserted into the DOM.
@@ -54,11 +48,8 @@ class PasscodeAuth extends ComponentBase {
    * @return {void}
    */
   protected connectedCallback(): void {
-
     super.connectedCallback();
-
     this.classList.add('passcode-auth');
-
     this.innerHTML = `
       <div class="passcode-auth-dots">
         <div class="passcode-auth-dot"></div>
@@ -79,7 +70,6 @@ class PasscodeAuth extends ComponentBase {
         <div class="passcode-auth-number"><span>9</span></div>
         <div class="passcode-auth-number"><span>0</span></div>
       </div>`;
-
       let input = '';
       const dots = Array.from(this.querySelectorAll('.passcode-auth-dot'));
       const numbers = Array.from(this.querySelectorAll('.passcode-auth-number'));
