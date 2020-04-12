@@ -41,27 +41,27 @@ declare class Canvas extends ComponentBase {
      *
      * @param  {number} x
      * @param  {number} y
-     * @param  {number} options.r
+     * @param  {number} options.radius
      * @param  {string} options.color
      * @return {Canvas}
      */
-    drawPoint(x: number, y: number, { r, color }?: {
-        r?: number;
+    drawPoint(x: number, y: number, { radius, color }?: {
+        radius?: number;
         color?: string;
     }): Canvas;
     /**
      * Draw center point
      *
      * @param  {Object[]} coordinates
-     * @param  {number} options.r
+     * @param  {number} options.radius
      * @param  {string} options.color
      * @return {Canvas}
      */
     drawCenterPoint(coordinates: {
         x: number;
         y: number;
-    }[], { r, color }?: {
-        r?: number;
+    }[], { radius, color }?: {
+        radius?: number;
         color?: string;
     }): Canvas;
     /**
@@ -78,6 +78,21 @@ declare class Canvas extends ComponentBase {
      */
     drawRectangle(x: number, y: number, width: number, height: number, { degree, lineWidth, color }?: {
         degree?: number;
+        lineWidth?: number;
+        color?: string;
+    }): Canvas;
+    /**
+     * Draw rectangle corners
+     *
+     * @param  {number} x
+     * @param  {number} y
+     * @param  {number} width
+     * @param  {number} height
+     * @param  {number} options.lineWidth
+     * @param  {string} options.color
+     * @return {Canvas}
+     */
+    drawRectangleCorners(x: number, y: number, width: number, height: number, { lineWidth, color }?: {
         lineWidth?: number;
         color?: string;
     }): Canvas;

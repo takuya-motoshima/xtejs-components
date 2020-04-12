@@ -1,5 +1,5 @@
 import ComponentBase from '~/ComponentBase';
-import { Misc, Graphics } from 'xtejs-utils';
+import { Misc, Graphics, Color } from 'xtejs-utils';
 
 class Canvas extends ComponentBase {
 
@@ -112,12 +112,12 @@ class Canvas extends ComponentBase {
    * 
    * @param  {number} x
    * @param  {number} y
-   * @param  {number} options.r
+   * @param  {number} options.radius
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawPoint(x: number, y: number, { r = 3, color = 'aqua' }: { r?: number, color?: string } = {}): Canvas {
-    Graphics.drawPoint(this.extends, x, y, { r, color });
+  public drawPoint(x: number, y: number, { radius = 3, color = Color.accessibleDarkBlue }: { radius?: number, color?: string } = {}): Canvas {
+    Graphics.drawPoint(this.extends, x, y, { radius, color });
     return this;
   }
 
@@ -125,12 +125,12 @@ class Canvas extends ComponentBase {
    * Draw center point
    * 
    * @param  {Object[]} coordinates
-   * @param  {number} options.r
+   * @param  {number} options.radius
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawCenterPoint(coordinates: { x: number, y: number }[], { r = 3, color = 'aqua' }: { r?: number, color?: string } = {}): Canvas {
-    Graphics.drawCenterPoint(this.extends, coordinates, { r, color });
+  public drawCenterPoint(coordinates: { x: number, y: number }[], { radius = 3, color = Color.accessibleDarkBlue }: { radius?: number, color?: string } = {}): Canvas {
+    Graphics.drawCenterPoint(this.extends, coordinates, { radius, color });
     return this;
   }
 
@@ -146,8 +146,24 @@ class Canvas extends ComponentBase {
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawRectangle(x: number, y: number, width: number, height: number, { degree = 0, lineWidth = 2, color = 'aqua' }: { degree?: number, lineWidth?: number, color?: string } = {}): Canvas {
+  public drawRectangle(x: number, y: number, width: number, height: number, { degree = 0, lineWidth = 2, color = Color.accessibleDarkBlue }: { degree?: number, lineWidth?: number, color?: string } = {}): Canvas {
     Graphics.drawRectangle(this.extends, x, y, width, height, { degree, lineWidth, color });
+    return this;
+  }
+
+  /**
+   * Draw rectangle corners
+   * 
+   * @param  {number} x
+   * @param  {number} y
+   * @param  {number} width
+   * @param  {number} height
+   * @param  {number} options.lineWidth
+   * @param  {string} options.color
+   * @return {Canvas}
+   */
+  public drawRectangleCorners(x: number, y: number, width: number, height: number, { lineWidth = 2, color = Color.accessibleDarkBlue }: { lineWidth?: number, color?: string } = {}): Canvas {
+    Graphics.drawRectangleCorners(this.extends, x, y, width, height, { lineWidth, color });
     return this;
   }
 
