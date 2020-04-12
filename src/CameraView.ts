@@ -36,10 +36,10 @@ class CameraView extends ComponentBase {
     if (this.attr('facing')) {
       this.camera.attr('facing', this.attr('facing'));
     }
-    this.appendChild(this.camera);
+    this.append(this.camera);
     this.canvas = Canvas.createElement();
     this.canvas.classList.add('xj-camera-view-canvas');
-    this.appendChild(this.canvas);
+    this.append(this.canvas);
     if (this.attr('controls')) {
       // this.insertAdjacentHTML('afterbegin', `
       //   <input type="checkbox" id="xj-camera-view-gn-menustate">

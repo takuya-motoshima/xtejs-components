@@ -80,4 +80,32 @@ export default class extends HTMLElement {
      * @return {string|undefined}
      */
     css(name: string, value?: string | number | undefined): string | undefined;
+    /**
+     *  Insert content, specified by the parameter, to the end of each element in the set of matched elements.
+     *
+     * @param  {HTMLElement} element
+     * @return {this}
+     */
+    append(element: HTMLElement): any;
+    /**
+     * Insert content, specified by the parameter, to the beginning of each element in the set of matched elements.
+     *
+     * @param  {HTMLElement} element
+     * @return {this}
+     */
+    prepend(element: HTMLElement): any;
+    /**
+     * Insert content, specified by the parameter, before each element in the set of matched elements
+     *
+     * @param  {HTMLElement} element
+     * @return {this}
+     */
+    before(element: HTMLElement): any;
+    /**
+     * Insert content, specified by the parameter, after each element in the set of matched elements.
+     *
+     * @param  {HTMLElement} element
+     * @return {this}
+     */
+    after(element: HTMLElement): any;
 }

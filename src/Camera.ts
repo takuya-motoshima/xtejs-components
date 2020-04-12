@@ -29,7 +29,7 @@ class Camera extends ComponentBase {
   protected connectedCallback(): void {
     super.connectedCallback();
     this.extends = document.createElement('video');
-    this.appendChild(this.extends);
+    this.append(this.extends);
     this.css('box-sizing', 'border-box');
     this.css('display', 'block');
     if (this.css('position') === 'static') {

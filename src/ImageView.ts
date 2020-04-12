@@ -28,10 +28,10 @@ class ImageView extends ComponentBase {
     this.classList.add('xj-image-view');
     this.image = document.createElement('img');
     this.image.classList.add('xj-image-view-image');
-    this.appendChild(this.image);
+    this.append(this.image);
     this.canvas = Canvas.createElement();
     this.canvas.classList.add('xj-image-view-canvas');
-    this.appendChild(this.canvas);
+    this.append(this.canvas);
     this.observer = new MutationObserver(mutations => {
       for (let { attributeName } of mutations) {
         if (attributeName === 'style') {

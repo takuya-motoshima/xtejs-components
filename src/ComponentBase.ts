@@ -165,4 +165,48 @@ export default class extends HTMLElement {
       (this.style as { [key: string]: any })[name] = value.toString();
     }
   }
+
+  /**
+   *  Insert content, specified by the parameter, to the end of each element in the set of matched elements.
+   *
+   * @param  {HTMLElement} element
+   * @return {this}
+   */
+  public append(element: HTMLElement): any {
+    this.appendChild(element);
+    return this;
+  }
+
+  /**
+   * Insert content, specified by the parameter, to the beginning of each element in the set of matched elements.
+   *
+   * @param  {HTMLElement} element
+   * @return {this}
+   */
+  public prepend(element: HTMLElement): any {
+    this.insertBefore(element, this.firstElementChild);
+    return this;
+  }
+
+  /**
+   * Insert content, specified by the parameter, before each element in the set of matched elements
+   *
+   * @param  {HTMLElement} element
+   * @return {this}
+   */
+  public before(element: HTMLElement): any {
+    this.parentElement!.insertBefore(element, this);
+    return this;
+  }
+
+  /**
+   * Insert content, specified by the parameter, after each element in the set of matched elements.
+   *
+   * @param  {HTMLElement} element
+   * @return {this}
+   */
+  public after(element: HTMLElement): any {
+    this.parentElement!.insertBefore(element, this.nextElementSibling);
+    return this;
+  }
 }

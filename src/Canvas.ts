@@ -31,7 +31,7 @@ class Canvas extends ComponentBase {
     const width = parseFloat(this.css('width') as string);
     const height = parseFloat(this.css('height') as string);
     this.extends = document.createElement('canvas');
-    this.appendChild(this.extends);
+    this.append(this.extends);
     if (!width) {
       this.css('width', getComputedStyle(this.extends).getPropertyValue('width'));
     }
