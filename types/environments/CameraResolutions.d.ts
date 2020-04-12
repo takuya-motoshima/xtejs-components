@@ -1,31 +1,51 @@
 declare const _default: {
     FHD: {
-        width: number;
-        height: number;
+        width: {
+            ideal: number;
+        };
+        height: {
+            ideal: number;
+        };
     };
     HD: {
-        width: number;
-        height: number;
+        width: {
+            ideal: number;
+        };
+        height: {
+            ideal: number;
+        };
     };
     VGA: {
-        width: number;
-        height: number;
+        width: {
+            ideal: number;
+        };
+        height: {
+            ideal: number;
+        };
     };
     HVGA: {
-        width: number;
-        height: number;
+        width: {
+            ideal: number;
+        };
+        height: {
+            ideal: number;
+        };
     };
     QVGA: {
-        width: number;
-        height: number;
+        width: {
+            ideal: number;
+        };
+        height: {
+            ideal: number;
+        };
     };
 };
 /**
  * Camera resolution list
- * FHD  : 1920 x 1080
- * HD   : 1280 x  720
- * VGA  :  640 x  480
- * HVGA :  480 x  320
- * QVGA :  320 x  240
+ * FHD  : 1920px x 1080px resolution
+ * HD   : 1280px x 720px resolution
+ * VGA  : 640px x 480px resolution
+ * HVGA : 480px x 320px resolution
+ * QVGA : 320px x 240px resolution
  */
 export default _default;

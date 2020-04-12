@@ -87,14 +87,9 @@ class Camera extends ComponentBase {
     await Stream.open(this.extends, {
       video: {
         facingMode: facing === 'front' ? 'user' : 'environment',
-        width: {
-          ideal: CameraResolutions[quality].width
-        },
-        height: {
-          ideal: CameraResolutions[quality].height
-        }
+        ...CameraResolutions[quality]
       },
-      audio: false 
+      audio: false
     });
     this.facing = facing;
     this.state = 'opened';
@@ -193,6 +188,21 @@ class Camera extends ComponentBase {
       this.extends, 0, 0, dimensions.width, dimensions.height,
       0, 0, this.canvas.attr('width') as number, this.canvas.attr('height') as number);
     return this.canvas.toDataURL(this.facing === 'front');
+  }
+
+  /**
+   * Wait for camera to open
+   * 
+   * @return {Promise<void>}
+   */
+  public async waitOpened(): Promise<void> {
+    return new Promise(resolve => {
+      if (this.state === 'loading') {
+        this.on('opened', resolve, { once: true });
+      } else {
+        resolve();
+      }
+    });
   }
 
   // /**

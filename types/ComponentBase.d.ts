@@ -1,6 +1,11 @@
 export default class extends HTMLElement {
     protected handles: {
-        [key: string]: ((...args: any[]) => any)[];
+        [key: string]: {
+            handler: (...params: any[]) => any;
+            option: {
+                once: boolean;
+            };
+        }[];
     };
     protected readonly global: Window;
     /**
@@ -51,19 +56,32 @@ export default class extends HTMLElement {
      */
     static createElement(): any;
     /**
-     * Set event handler
+     * Add event handler
      *
-     * @param  {string} event
-     * @param  {(...args: any[]) => any} handler
+     * @param  {string}          event
+     * @param  {any[]) => any}   handler
+     * @param  {boolean = false} once
      * @return {void}
      */
-    on(event: string, handler: (...args: any[]) => any): any;
+    on(event: string, handler: (...params: any[]) => any, option?: {
+        once: boolean;
+    }): any;
+    /**
+     * Remove event handler
+     *
+     * @param  {string} event
+     * @param  {(...params: any[]) => any} handler
+     * @return {void}
+     */
+    off(event: string, handler: (...params: any[]) => any): any;
     /**
      * Call event handler
      *
-     * @param {string} event
+     * @param  {string} event
+     * @param  {any[]}  ...params
+     * @return {void}
      */
-    invoke(event: string, ...args: any[]): void;
+    invoke(event: string, ...params: any[]): void;
     /**
      * Get or set the value of an attribute
      *

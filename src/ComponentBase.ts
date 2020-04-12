@@ -2,7 +2,7 @@ import { Misc } from 'xtejs-utils';
 
 export default class extends HTMLElement {
 
-  protected handles: { [key: string]: ((...args: any[]) => any)[] } = {};
+  protected handles: { [key: string]: { handler: (...params: any[]) => any, option: { once: boolean } }[] } = {};
   protected readonly global: Window = Misc.getGlobal<Window>();
 
   /**
@@ -93,29 +93,52 @@ export default class extends HTMLElement {
   }
 
   /**
-   * Set event handler
+   * Add event handler
    * 
-   * @param  {string} event
-   * @param  {(...args: any[]) => any} handler
+   * @param  {string}          event
+   * @param  {any[]) => any}   handler
+   * @param  {boolean = false} once
    * @return {void}
    */
-   public on(event: string, handler: (...args: any[]) => any ): any {
+   public on(event: string, handler: (...params: any[]) => any, option: { once: boolean} = { once: false }): any {
     if (!this.handles[event]) {
       this.handles[event] = [];
     }
-    this.handles[event].push(handler);
+    this.handles[event].push({ handler, option });
+    return this;
+  }
+
+  /**
+   * Remove event handler
+   * 
+   * @param  {string} event
+   * @param  {(...params: any[]) => any} handler
+   * @return {void}
+   */
+   public off(event: string, handler: (...params: any[]) => any ): any {
+    const i = this.handles[event] && this.handles[event].findIndex(handleObj => handleObj.handler === handler);
+    if (i > -1) {
+      this.handles[event].splice(i, 1);
+    }
     return this;
   }
 
   /**
    * Call event handler
    * 
-   * @param {string} event
+   * @param  {string} event
+   * @param  {any[]}  ...params
+   * @return {void}
    */
-  public invoke(event: string, ...args: any[]): void {
+  public invoke(event: string, ...params: any[]): void {
     if (this.handles[event]) {
-      for (let handle of this.handles[event]) {
-        handle.call(null, args);
+      let i = this.handles[event].length;
+      while (i--) {
+        const { handler, option } = this.handles[event][i];
+        handler.call(null, params);
+        if (option.once) {
+          this.handles[event].splice(i, 1);
+        }
       }
     }
   }

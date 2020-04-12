@@ -83,5 +83,11 @@ declare class Camera extends ComponentBase {
      * @return {void}
      */
     capture(width?: number): string;
+    /**
+     * Wait for camera to open
+     *
+     * @return {Promise<void>}
+     */
+    waitOpened(): Promise<void>;
 }
 export default Camera;
