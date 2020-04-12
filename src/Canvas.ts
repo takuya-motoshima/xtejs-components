@@ -146,7 +146,7 @@ class Canvas extends ComponentBase {
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawRectangle(x: number, y: number, width: number, height: number, { degree = 0, lineWidth = 2, color = Color.accessibleDarkBlue }: { degree?: number, lineWidth?: number, color?: string } = {}): Canvas {
+  public drawRectangle(x: number, y: number, width: number, height: number, { degree = 0, lineWidth = 3, color = Color.accessibleDarkBlue }: { degree?: number, lineWidth?: number, color?: string } = {}): Canvas {
     Graphics.drawRectangle(this.extends, x, y, width, height, { degree, lineWidth, color });
     return this;
   }
@@ -162,7 +162,7 @@ class Canvas extends ComponentBase {
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawRectangleCorners(x: number, y: number, width: number, height: number, { lineWidth = 2, color = Color.accessibleDarkBlue }: { lineWidth?: number, color?: string } = {}): Canvas {
+  public drawRectangleCorners(x: number, y: number, width: number, height: number, { lineWidth = 3, color = Color.accessibleDarkBlue }: { lineWidth?: number, color?: string } = {}): Canvas {
     Graphics.drawRectangleCorners(this.extends, x, y, width, height, { lineWidth, color });
     return this;
   }
