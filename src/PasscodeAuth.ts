@@ -16,33 +16,6 @@ class PasscodeAuth extends ComponentBase {
   }
 
   /**
-   * Authenticate with passcode
-   *
-   * @example
-   * <xj-passcode-auth id="passcodeAuth"></xj-passcode-auth>
-   * 
-   * <script type="module">
-   *   import 'xtejs-components';
-   * 
-   *   const passcodeAuth = document.querySelector('#passcodeAuth');
-   *   passcodeAuth.authenticate('1234', success => {
-   *     if (success) {
-   *       alert('Authenticated Successfully');
-   *     } else {
-   *       alert('Authentication Failed');
-   *     }
-   *   });
-   * </script>
-   * 
-   * @param {string}            passcode
-   * @param {(boolean) => void} resolve
-   */
-  public authenticate(passcode: string, resolve: (success: boolean) => void): void {
-    this.passcode = passcode;
-    this.resolve = resolve;
-  }
-
-  /**
    * Called every time the element is inserted into the DOM.
    * 
    * @return {void}
@@ -105,6 +78,33 @@ class PasscodeAuth extends ComponentBase {
           }, 1000);
         });
       }
+  }
+
+  /**
+   * Authenticate with passcode
+   *
+   * @example
+   * <xj-passcode-auth id="passcodeAuth"></xj-passcode-auth>
+   * 
+   * <script type="module">
+   *   import 'xtejs-components';
+   * 
+   *   const passcodeAuth = document.querySelector('#passcodeAuth');
+   *   passcodeAuth.authenticate('1234', success => {
+   *     if (success) {
+   *       alert('Authenticated Successfully');
+   *     } else {
+   *       alert('Authentication Failed');
+   *     }
+   *   });
+   * </script>
+   * 
+   * @param {string}            passcode
+   * @param {(boolean) => void} resolve
+   */
+  public authenticate(passcode: string, resolve: (success: boolean) => void): void {
+    this.passcode = passcode;
+    this.resolve = resolve;
   }
 }
 

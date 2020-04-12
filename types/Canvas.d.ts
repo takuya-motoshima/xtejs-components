@@ -1,7 +1,7 @@
 import ComponentBase from '~/ComponentBase';
 declare class Canvas extends ComponentBase {
-    extends: HTMLCanvasElement;
-    private observer;
+    readonly extends: HTMLCanvasElement;
+    private readonly observer;
     /**
      * is attribute
      *
@@ -9,11 +9,11 @@ declare class Canvas extends ComponentBase {
      */
     protected static get is(): string;
     /**
-     * Called every time the element is inserted into the DOM.
+     * Constructor
      *
      * @return {void}
      */
-    protected connectedCallback(): void;
+    constructor();
     /**
      * Draw image
      *
@@ -28,7 +28,7 @@ declare class Canvas extends ComponentBase {
      * @param  {number}                                              h
      * @return {Canvas}
      */
-    drawImage(image: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement, sx?: number, sy?: number, swidth?: number, sheight?: number, dx?: number, dy?: number, dwidth?: number, dheight?: number): Canvas;
+    drawImage(image: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement, sx?: number, sy?: number, sw?: number, sh?: number, dx?: number, dy?: number, dw?: number, dh?: number): Canvas;
     /**
      * Draw and scale the image to fit the canvas
      *

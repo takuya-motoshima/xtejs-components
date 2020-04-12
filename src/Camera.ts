@@ -38,7 +38,7 @@ class Camera extends ComponentBase {
     if (!this.css('width')) {
       this.css('width', getComputedStyle(this.extends).getPropertyValue('width'));
     }
-    if (!this.style.height) {
+    if (!this.css('height')) {
       this.css('height', getComputedStyle(this.extends).getPropertyValue('height'));
     }
     this.extends.setAttribute('playsinline', 'true');
@@ -68,9 +68,7 @@ class Camera extends ComponentBase {
    * @return {Promise<void>}
    */
   public async open(facing: 'front'|'back' = 'back', quality: 'FHD'|'HD'|'VGA'|'HVGA'|'QVGA' = 'HD'): Promise<void> {
-    console.log(`State before opening: ${this.extends.readyState}`);
     if (this.opened && this.facing === facing) {
-      // console.log('Camera is already open');
       return void this.play();
     }
     // const permission = await this.permission();
@@ -98,7 +96,6 @@ class Camera extends ComponentBase {
     });
     this.facing = facing;
     this.play();
-    console.log(`State after opening: ${this.extends.readyState}`);
     this.handles.opened();
   }
 
@@ -185,15 +182,13 @@ class Camera extends ComponentBase {
    * @return {void}
    */
   public capture(width?: number): string {
-    this.canvas.attr('width', width || this.dimensions.width);
-    const height = this.dimensions.height * ( this.canvas.attr('width') as number / this.dimensions.width );
-    this.canvas.attr('height', height);
-    const dataURI = this.canvas
-      .drawImage(
-        this.extends, 0, 0, this.dimensions.width, this.dimensions.height,
-        0, 0, this.canvas.attr('width') as number, this.canvas.attr('height') as number)
-      .toDataURL(this.facing === 'front');
-    return dataURI;
+    const dimensions = this.dimensions;
+    this.canvas.attr('width', width || dimensions.width);
+    this.canvas.attr('height', dimensions.height * (this.canvas.attr('width') as number / dimensions.width));
+    this.canvas.drawImage(
+      this.extends, 0, 0, dimensions.width, dimensions.height,
+      0, 0, this.canvas.attr('width') as number, this.canvas.attr('height') as number);
+    return this.canvas.toDataURL(this.facing === 'front');
   }
 
   // /**

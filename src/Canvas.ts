@@ -3,8 +3,8 @@ import { Misc, Graphics } from 'xtejs-utils';
 
 class Canvas extends ComponentBase {
 
-  public extends!: HTMLCanvasElement;
-  private observer!: MutationObserver;
+  public readonly extends: HTMLCanvasElement;
+  private readonly observer: MutationObserver;
 
   /**
    * is attribute
@@ -16,12 +16,12 @@ class Canvas extends ComponentBase {
   }
 
   /**
-   * Called every time the element is inserted into the DOM.
+   * Constructor
    * 
    * @return {void}
    */
-  protected connectedCallback(): void {
-    super.connectedCallback();
+  constructor() {
+    super();
     this.css('boxSizing', 'border-box');
     this.css('display', 'block');
     this.css('overflow', 'hidden');
@@ -71,17 +71,17 @@ class Canvas extends ComponentBase {
     image: HTMLImageElement|HTMLVideoElement|HTMLCanvasElement,
     sx: number = 0,
     sy: number = 0,
-    swidth?: number,
-    sheight?: number,
+    sw?: number,
+    sh?: number,
     dx?: number,
     dy?: number,
-    dwidth?: number,
-    dheight?: number
+    dw?: number,
+    dh?: number
   ): Canvas {
-    if (swidth !== undefined && sheight !== undefined && dx !== undefined && dy !== undefined && dwidth !== undefined && dheight !== undefined) {
-      this.extends.getContext('2d')!.drawImage(image, sx, sy, swidth, sheight, dx, dy, dwidth, dheight);
-    } else if (swidth !== undefined && sheight !== undefined) {
-      this.extends.getContext('2d')!.drawImage(image, sx, sy, swidth, sheight);
+    if (sw !== undefined && sh !== undefined && dx !== undefined && dy !== undefined && dw !== undefined && dh !== undefined) {
+      this.extends.getContext('2d')!.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
+    } else if (sw !== undefined && sh !== undefined) {
+      this.extends.getContext('2d')!.drawImage(image, sx, sy, sw, sh);
     } else  {
       this.extends.getContext('2d')!.drawImage(image, sx, sy);
     }

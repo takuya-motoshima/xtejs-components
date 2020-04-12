@@ -10,6 +10,12 @@ declare class PasscodeAuth extends ComponentBase {
      */
     protected static get is(): string;
     /**
+     * Called every time the element is inserted into the DOM.
+     *
+     * @return {void}
+     */
+    protected connectedCallback(): void;
+    /**
      * Authenticate with passcode
      *
      * @example
@@ -32,11 +38,5 @@ declare class PasscodeAuth extends ComponentBase {
      * @param {(boolean) => void} resolve
      */
     authenticate(passcode: string, resolve: (success: boolean) => void): void;
-    /**
-     * Called every time the element is inserted into the DOM.
-     *
-     * @return {void}
-     */
-    protected connectedCallback(): void;
 }
 export default PasscodeAuth;

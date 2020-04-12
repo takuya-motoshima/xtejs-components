@@ -99,7 +99,6 @@ class CameraView extends ComponentBase {
       this.css('position', 'relative');
     }
     const rect = Graphics.getRectToFitContainer(this, this.camera.extends);
-    console.log('Dimensions: ', this.camera.dimensions);
     this.canvas.attr('width', this.camera.dimensions.width);
     this.canvas.attr('height',this.camera.dimensions.height);
     this.canvas.css('left', `${rect.x}px`);
