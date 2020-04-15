@@ -1,4 +1,4 @@
-import * as components from '../../dist/build.esm.js';
+import '../../dist/build.esm.js';
 
 const canvas = document.querySelector('#canvas');
 

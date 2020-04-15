@@ -1,3 +1,6 @@
+/**
+ * The base of all components.
+ */
 import { Misc } from 'xtejs-utils';
 
 export default class extends HTMLElement {
@@ -135,7 +138,7 @@ export default class extends HTMLElement {
       let i = this.handles[event].length;
       while (i--) {
         const { handler, option } = this.handles[event][i];
-        handler.call(null, params);
+        handler.apply(null, params);
         if (option.once) {
           this.handles[event].splice(i, 1);
         }
@@ -145,22 +148,22 @@ export default class extends HTMLElement {
 
   /**
    * Get or set the value of an attribute
+   * Numeric attributes are returned as Int type. (Cols, colspan, height, high, low, max, maxlength, minlength, min, rows, rowspan, size, start, step, tabindex, width).
+   * If the attribute value is empty, it returns a boolean type true.
+   * Attribute values ​​true and false are returned as boolean type.
    * 
    * @param  {string}                  name
    * @param  {string|number|boolean/undefined} value
    * @return {string|number|boolean|undefined}
    */
   public attr(name: string, value: string|number|boolean|undefined = undefined): string|number|boolean|undefined {
-
-    // Set or return property
-    if (value === undefined) {
-      if (/^(cols|colspan|height|high|low|max|maxlength|minlength|min|rows|rowspan|size|start|step|tabindex|width)$/.test(name)) {
-        return parseInt(this.getAttribute(name)||'0', 10);
-      } else {
-        return this.getAttribute(name) !== null 
-          ? ( this.getAttribute(name) !== '' ? this.getAttribute(name) as string : true )
-          : undefined;
-      }
+      if (value === undefined) {
+      const value = this.getAttribute(name);
+      return value === null ? undefined
+        : /^(cols|colspan|height|high|low|max|maxlength|minlength|min|rows|rowspan|size|start|step|tabindex|width)$/.test(name) ? parseInt(value || '0', 10)
+        : /^(true|false)$/i.test(value) ? value.toLowerCase() === 'true'
+        : value === '' ? true
+        : value.toString();
     } else {
       this.setAttribute(name, value.toString());
     }
@@ -174,15 +177,11 @@ export default class extends HTMLElement {
    * @return {string|undefined}
    */
   public css(name: string, value: string|number|undefined = undefined): string|undefined {
-
-    // Set or return property
     if (value === undefined) {
-
       // Convert CSS property names to kebab case
       name = name.replace(/([A-Z])/g, '-$1').toLowerCase();
       return getComputedStyle(this).getPropertyValue(name);
     } else {
-
       // Convert CSS property names to camel case
       name = name.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, char) => char.toUpperCase());
       (this.style as { [key: string]: any })[name] = value.toString();

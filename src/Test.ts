@@ -1,3 +1,6 @@
+/**
+ * It's just a component for my personal testing
+ */
 import ComponentBase from '~/ComponentBase';
 
 class Test extends ComponentBase {

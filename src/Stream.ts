@@ -1,3 +1,6 @@
+/**
+ * Video input / output stream.
+ */
 export default class {
 
   /**

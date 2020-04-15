@@ -84,6 +84,9 @@ export default class extends HTMLElement {
     invoke(event: string, ...params: any[]): void;
     /**
      * Get or set the value of an attribute
+     * Numeric attributes are returned as Int type. (Cols, colspan, height, high, low, max, maxlength, minlength, min, rows, rowspan, size, start, step, tabindex, width).
+     * If the attribute value is empty, it returns a boolean type true.
+     * Attribute values ​​true and false are returned as boolean type.
      *
      * @param  {string}                  name
      * @param  {string|number|boolean/undefined} value

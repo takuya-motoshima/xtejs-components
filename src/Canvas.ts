@@ -1,3 +1,6 @@
+/**
+ * Canvas component.
+ */
 import ComponentBase from '~/ComponentBase';
 import { Misc, Graphics, Color } from 'xtejs-utils';
 
@@ -43,6 +46,8 @@ class Canvas extends ComponentBase {
     this.extends.height = parseFloat(this.css('height')!);
     this.extends.style.width = '100%';
     this.extends.style.height = '100%';
+
+    // Watch for changes to this component attribute
     this.observer = new MutationObserver(mutations => {
       for (let { attributeName } of mutations) {
         if (/^width|height$/.test(attributeName!)) {

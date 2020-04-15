@@ -1,9 +1,12 @@
+/**
+ * Camera component.
+ */
 import ComponentBase from '~/ComponentBase';
 declare class Camera extends ComponentBase {
     extends: HTMLVideoElement;
     facing: 'nothing' | 'front' | 'back';
     state: 'unopened' | 'loading' | 'opened';
-    private readonly canvas;
+    private captured;
     private observer;
     /**
      * is attribute
@@ -79,10 +82,9 @@ declare class Camera extends ComponentBase {
     /**
      * Capture a single frame
      *
-     * @param  {number} width
      * @return {void}
      */
-    capture(width?: number): string;
+    capture(): string;
     /**
      * Wait for camera to open
      *

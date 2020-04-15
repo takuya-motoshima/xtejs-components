@@ -1,7 +1,48 @@
+/**
+ * Camera component with controller, menu and overlay canvas.
+ * 
+ * Optional Attributes:
+ * autoplay:Specify to open the camera when ready. The default is not to open automatically.
+ * control: Specifies to display the camera control. (Camera shooting button, camera face switching button, etc.) The default is to display.The default is back.
+ * menu: Specifies to display the camera menu. The default is to display.
+ * facing: Specify the camera face. The front is "front" and the back is "back".
+ * 
+ * @example
+ * 
+ * CSS:
+ * .xj-camera-view {
+ *   position: absolute;
+ *   top: 50%;
+ *   left: 50%;
+ *   width: 414px !important;
+ *   height: 736px !important;
+ *   transform: translate(-50%, -50%);
+ * }
+ *
+ * HTML:
+ * <xj-camera-view id="cameraView" control menu autoplay facing="back">
+ *   <xj-camera-view-menu>
+ *     <xj-camera-view-menu-item href="#">Home</xj-camera-view-menu-item>
+ *     <xj-camera-view-menu-item href="#">About</xj-camera-view-menu-item>
+ *     <xj-camera-view-menu-item href="#">Events</xj-camera-view-menu-item>
+ *   </xj-camera-view-menu>
+ * </xj-camera-view>
+ *
+ * JS:
+ * import 'xtejs-components';
+ * 
+ * const cameraView = document.querySelector('#cameraView');
+ * 
+ * // Get a photo taken
+ * cameraView.on('capture', base64Image => {
+ *   // Photos taken can be received in base64 format.
+ * });
+ * 
+ */
 import ComponentBase from '~/ComponentBase';
 import Camera from '~/Camera';
 import Canvas from '~/Canvas';
-import { Misc, Graphics } from 'xtejs-utils';
+import { Misc, Graphics, Template } from 'xtejs-utils';
 import './styles/camera-view.css';
 
 class CameraView extends ComponentBase {
@@ -26,58 +67,97 @@ class CameraView extends ComponentBase {
    */
   protected connectedCallback(): void {
     super.connectedCallback();
+
     this.classList.add('xj-camera-view');
+
+    // Add camera to this component
     this.camera = Camera.createElement();
     this.camera.classList.add('xj-camera-view-camera');
     this.camera.on('opened', () => this.layout());
+
+    // Check for the option to open the camera automatically
     if (this.attr('autoplay')) {
       this.camera.attr('autoplay', true);
     }
+
+    // Check for camera facing options
     if (this.attr('facing')) {
       this.camera.attr('facing', this.attr('facing'));
     }
     this.append(this.camera);
+
+    // Add overlay canvas to this component
     this.canvas = Canvas.createElement();
     this.canvas.classList.add('xj-camera-view-canvas');
     this.append(this.canvas);
-    if (this.attr('controls')) {
-      // this.insertAdjacentHTML('afterbegin', `
-      //   <input type="checkbox" id="xj-camera-view-gn-menustate">
-      //   <nav class="xj-camera-view-gn" class="touch" role="navigation" aria-label="グローバル" data-hires="false" lang="ja-JP" dir="ltr">
-      //     <div class="xj-camera-view-gn-content">
-      //       <ul class="xj-camera-view-gn-header">
-      //         <li class="xj-camera-view-gn-item xj-camera-view-gn-menuicon">
-      //           <label class="xj-camera-view-gn-menuicon-label" for="xj-camera-view-gn-menustate" aria-hidden="true">
-      //             <span class="xj-camera-view-gn-menuicon-bread xj-camera-view-gn-menuicon-bread-top">
-      //               <span class="xj-camera-view-gn-menuicon-bread-crust xj-camera-view-gn-menuicon-bread-crust-top"></span>
-      //             </span>
-      //             <span class="xj-camera-view-gn-menuicon-bread xj-camera-view-gn-menuicon-bread-bottom">
-      //               <span class="xj-camera-view-gn-menuicon-bread-crust xj-camera-view-gn-menuicon-bread-crust-bottom"></span>
-      //             </span>
-      //           </label>
-      //         </li>
-      //       </ul>
-      //       <div class="xj-camera-view-gn-body">
-      //         <slot name="xj-camera-view-gn-body-content"></slot> 
-      //       </div>
-      //     </div>
-      //   </nav>`
-      // );
+
+
+    // Adds a menu to this component if the menu option is on
+    if (this.attr('menu') !== false) {
+
+      // Create a menu object if the menu is embedded
+      const menu = Array.from(this.querySelectorAll('xj-camera-view-menu-item')).map(menu => ({ content: menu.innerHTML, url: menu.getAttribute('href') }));
+      if (this.querySelector('xj-camera-view-menu') !== null) {
+        this.querySelector('xj-camera-view-menu')!.remove();
+      }
+
+      // Add a menu to this component
+      this.insertAdjacentHTML('afterbegin', Template.render(`
+        <input type="checkbox" id="xj-camera-view-nav-menustate">
+        <nav class="xj-camera-view-nav" class="touch" role="navigation" aria-label="Camera view navigation" dir="ltr">
+          <div class="xj-camera-view-nav-content">
+            <ul class="xj-camera-view-nav-header">
+              <li class="xj-camera-view-nav-item xj-camera-view-nav-menuicon">
+                <label class="xj-camera-view-nav-menuicon-label" for="xj-camera-view-nav-menustate" aria-hidden="true">
+                  <span class="xj-camera-view-nav-menuicon-bread xj-camera-view-nav-menuicon-bread-top">
+                    <span class="xj-camera-view-nav-menuicon-bread-crust xj-camera-view-nav-menuicon-bread-crust-top"></span>
+                  </span>
+                  <span class="xj-camera-view-nav-menuicon-bread xj-camera-view-nav-menuicon-bread-bottom">
+                    <span class="xj-camera-view-nav-menuicon-bread-crust xj-camera-view-nav-menuicon-bread-crust-bottom"></span>
+                  </span>
+                </label>
+              </li>
+            </ul>
+            {{#if menu}}
+              <ul class="xj-camera-view-nav-list">
+                {{#each menu}}
+                  <li class="xj-camera-view-nav-item xj-camera-view-nav-item-menu">
+                    <a class="xj-camera-view-nav-link" href="{{url}}">{{content}}</a>
+                  </li>
+                {{/each}}
+              </ul>
+            {{/if}}
+          </div>
+        </nav>`, { menu }));
+    }
+
+    // Add camera control to this component if the control option is on
+    if (this.attr('control') !== false) {
+
+      // Add a camera controller to this component
       this.insertAdjacentHTML('beforeend', `
-        <div class="xj-camera-view-controls">
-          <a class="xj-camera-view-capture"><img></a>
-          <button action-capture class="xj-camera-view-capture-button" type="button"></button>
-          <button action-rotation class="xj-camera-view-rotation-button" type="button"></button>
-        </div>
-      `);
-      const image = this.querySelector('img')!;
-      this.querySelector('[action-capture]')!.addEventListener('click', () => {
-        image.setAttribute('src', this.camera.capture() as string);
+        <div class="xj-camera-view-control">
+          <div class="xj-camera-view-control-content">
+            <a class="xj-camera-view-captured"><img></a>
+            <button action-camera-capture class="xj-camera-view-capture-button" type="button"></button>
+            <button action-switch-camera-face class="xj-camera-view-switch-face-button" type="button"></button>
+          </div>
+        </div>`);
+
+      // Get a capture of the current frame if the take a picture button is pressed
+      this.querySelector('[action-camera-capture]')!.addEventListener('click', () => {
+        const data = this.camera.capture();
+        this.querySelector('.xj-camera-view-captured img')!.setAttribute('src', data);
+        super.invoke('capture', data);
       });
-      this.querySelector('[action-rotation]')!.addEventListener('touchstart', async () => {
-        await this.camera.open(this.camera.facing === 'front' ? 'back' : 'front')
+
+      // Switch camera face when facing button is pressed
+      this.querySelector('[action-switch-camera-face]')!.addEventListener('touchstart', async () => {
+        await this.camera.open(this.camera.facing === 'front' ? 'back' : 'front');
       });
     }
+
+    // Watch for changes to this component attribute
     this.observer = new MutationObserver(mutations => {
       for (let { attributeName } of mutations) {
         if (attributeName === 'style') {
@@ -86,11 +166,13 @@ class CameraView extends ComponentBase {
       }
     });
     this.observer.observe(this, { attributes: true, attributeFilter: [ 'style' ], attributeOldValue: true });
+
+    // Arrange the layout of this component
     this.layout();
    }
 
   /**
-   * Set layout
+   * Arrange the layout of this component
    *
    * @return {void}
    */
@@ -98,7 +180,7 @@ class CameraView extends ComponentBase {
     if (this.css('position') === 'static') {
       this.css('position', 'relative');
     }
-    const rect = Graphics.getRectToFitContainer(this, this.camera.extends);
+    const rect = Graphics.getOverlayRect(this, this.camera.extends);
     this.canvas.attr('width', this.camera.dimensions.width);
     this.canvas.attr('height',this.camera.dimensions.height);
     this.canvas.css('left', `${rect.x}px`);

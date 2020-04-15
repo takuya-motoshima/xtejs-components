@@ -1,7 +1,7 @@
 {
   "name": "xtejs-components",
   "version": "1.0.0",
-  "description": "JS extension components",
+  "description": "This package is a component developed based on custom element v1.",
   "main": "dist/build.common.js",
   "module": "dist/build.esm.js",
   "browser": "dist/build.js",
@@ -50,7 +50,6 @@
     "json2module": "0.0.3",
     "rollup": "^1.27.2",
     "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-javascript-obfuscator": "^1.0.4",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^2.2.0",

@@ -1,3 +1,6 @@
+/**
+ * Camera component.
+ */
 import ComponentBase from '~/ComponentBase';
 import Canvas from '~/Canvas';
 import Stream from '~/Stream';
@@ -9,7 +12,7 @@ class Camera extends ComponentBase {
   public extends!: HTMLVideoElement;
   public facing: 'nothing'|'front'|'back' = 'nothing';
   public state: 'unopened'|'loading'|'opened' = 'unopened';
-  private readonly canvas: Canvas = Canvas.createElement();
+  private captured!: Canvas;
   private observer!: MutationObserver;
 
   /**
@@ -47,6 +50,7 @@ class Camera extends ComponentBase {
     this.extends.style.width = '100%';
     this.extends.style.height = '100%';
     this.extends.style.objectFit = 'cover';
+    this.captured = Canvas.createElement();
     this.observer = new MutationObserver(mutations => {
       for (let { attributeName } of mutations) {
         if (/^width|height$/.test(attributeName!)) {
@@ -54,7 +58,11 @@ class Camera extends ComponentBase {
         }
       }
     });
+
+    // Watch for changes to this component attribute
     this.observer.observe(this, { attributes: true, attributeFilter: [ 'width', 'height' ] });
+
+    // Check for the option to open the camera automatically
     if (this.attr('autoplay')) {
       this.open(this.attr('facing') as 'front'|'back' || 'back');
     }
@@ -177,17 +185,14 @@ class Camera extends ComponentBase {
   /**
    * Capture a single frame
    * 
-   * @param  {number} width
    * @return {void}
    */
-  public capture(width?: number): string {
+  public capture(): string {
     const dimensions = this.dimensions;
-    this.canvas.attr('width', width || dimensions.width);
-    this.canvas.attr('height', dimensions.height * (this.canvas.attr('width') as number / dimensions.width));
-    this.canvas.drawImage(
-      this.extends, 0, 0, dimensions.width, dimensions.height,
-      0, 0, this.canvas.attr('width') as number, this.canvas.attr('height') as number);
-    return this.canvas.toDataURL(this.facing === 'front');
+    this.captured.extends.setAttribute('width', dimensions.width.toString());
+    this.captured.extends.setAttribute('height', dimensions.height.toString());
+    this.captured.drawImage(this.extends, 0, 0, dimensions.width, dimensions.height);
+    return this.captured.toDataURL(this.facing === 'front');
   }
 
   /**

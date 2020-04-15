@@ -1,3 +1,6 @@
+/**
+ * Canvas component.
+ */
 import ComponentBase from '~/ComponentBase';
 declare class Canvas extends ComponentBase {
     readonly extends: HTMLCanvasElement;

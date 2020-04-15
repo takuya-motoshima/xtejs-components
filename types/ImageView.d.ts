@@ -1,3 +1,6 @@
+/**
+ * Image component with overlay canvas.
+ */
 import ComponentBase from '~/ComponentBase';
 import Canvas from '~/Canvas';
 import './styles/image-view.css';
@@ -18,7 +21,7 @@ declare class ImageView extends ComponentBase {
      */
     protected connectedCallback(): void;
     /**
-     * Set layout
+     * Arrange the layout of this component
      *
      * @return {void}
      */

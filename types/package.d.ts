@@ -34,7 +34,6 @@ export declare var devDependencies: {
     json2module: string;
     rollup: string;
     "rollup-plugin-commonjs": string;
-    "rollup-plugin-javascript-obfuscator": string;
     "rollup-plugin-json": string;
     "rollup-plugin-node-resolve": string;
     "rollup-plugin-postcss": string;

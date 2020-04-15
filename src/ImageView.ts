@@ -1,3 +1,6 @@
+/**
+ * Image component with overlay canvas.
+ */
 import ComponentBase from '~/ComponentBase';
 import Canvas from '~/Canvas';
 import { Misc, Graphics } from 'xtejs-utils';
@@ -32,6 +35,8 @@ class ImageView extends ComponentBase {
     this.canvas = Canvas.createElement();
     this.canvas.classList.add('xj-image-view-canvas');
     this.append(this.canvas);
+
+    // Watch for changes to this component attribute
     this.observer = new MutationObserver(mutations => {
       for (let { attributeName } of mutations) {
         if (attributeName === 'style') {
@@ -42,22 +47,27 @@ class ImageView extends ComponentBase {
       }
     });
     this.observer.observe(this, { attributes: true, attributeFilter: [ 'style', 'src' ] });
+
+    // Arrange the layout of this component
     this.layout();
   }
 
   /**
-   * Set layout
+   * Arrange the layout of this component
    *
    * @return {void}
    */
   private layout(): void {
+    console.log('Start image view layout');
+    console.log(`Image ObjectFit before change: ${getComputedStyle(this.image).getPropertyValue('object-fit')}`);
     if (getComputedStyle(this.image).getPropertyValue('object-fit') !== this.css('object-fit') as string) {
       this.image.style.objectFit = this.css('object-fit') as string;
     }
+    console.log(`Image ObjectFit after change: ${getComputedStyle(this.image).getPropertyValue('object-fit')}`);
     if (this.css('position') === 'static') {
       this.css('position', 'relative');
     }
-    const rect = Graphics.getRectToFitContainer(this, this.image);
+    const rect = Graphics.getOverlayRect(this, this.image);
     const dimensions = Graphics.getMediaDimensions(this.image);
     this.canvas.attr('width', dimensions.width);
     this.canvas.attr('height', dimensions.height);
@@ -65,6 +75,7 @@ class ImageView extends ComponentBase {
     this.canvas.css('top', `${rect.y}px`);
     this.canvas.css('width', `${rect.width}px`);
     this.canvas.css('height', `${rect.height}px`);
+    console.log('End image view layout');
   }
 }
 
