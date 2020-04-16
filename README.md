@@ -96,6 +96,34 @@ passcodeAuth.authenticate(correctPasscode, success => {
 });
 ```
 
+### Camera component.
+
+HTML:
+
+```html
+<xj-camera id="camera" autoplay facing="back"></xj-camera>
+```
+
+JS:
+
+```js
+import 'xtejs-components';
+
+const camera = document.querySelector('#camera');
+
+// Wait until the camera opens
+await camera.waitOpened();
+
+// Pause camera
+camera.pause();
+
+// Open camera in front mode
+await camera.open('front');
+
+// Open camera in back mode
+await camera.open('back');
+```
+
 ## Examples
 
 There are some examples in "./examples" in this package.Here is the first one to get you started.

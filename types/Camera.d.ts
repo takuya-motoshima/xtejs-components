@@ -1,5 +1,31 @@
 /**
  * Camera component.
+ *
+ * Optional Attributes:
+ * autoplay:Specify to open the camera when ready. The default is not to open automatically.
+ * facing: Specify the camera face. The front is "front" and the back is "back".
+ *
+ * @example
+ *
+ * HTML:
+ * <xj-camera id="camera" autoplay facing="back"></xj-camera>
+ *
+ * JS:
+ * import 'xtejs-components';
+ *
+ * const camera = document.querySelector('#camera');
+ *
+ * // Wait until the camera opens
+ * await camera.waitOpened();
+ *
+ * // Pause camera
+ * camera.pause();
+ *
+ * // Open camera in front mode
+ * await camera.open('front');
+ *
+ * // Open camera in back mode
+ * await camera.open('back');
  */
 import ComponentBase from '~/ComponentBase';
 declare class Camera extends ComponentBase {
