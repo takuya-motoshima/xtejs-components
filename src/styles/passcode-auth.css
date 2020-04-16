@@ -1,0 +1,180 @@
+:root {
+  --passcode-auth-numbers-columns: 3;
+  --passcode-auth-numbers-gap: 1px;
+}
+
+body.passcode-auth-wrong {
+  animation: passcode-auth-bg-red 1s ease-in;
+}
+
+body.passcode-auth-correct {
+  animation: passcode-auth-bg-green 1s ease-in;
+}
+
+.passcode-auth {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+  min-width: 20em;
+  /*width: 20em;*/
+  /*border-radius: .3em;*/
+  /*box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);*/
+  background: #212121;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+  .passcode-auth-dots {
+    display: flex;
+    justify-content: space-around;
+    padding: 3em 1em 1em;
+    width: 50%;
+  }
+
+    .passcode-auth-dot {
+      position: relative;
+      width: 0.8em;
+      height: 0.8em;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale3d(0.7, 0.7, 0.7);
+    }
+
+    .passcode-auth-dot.passcode-auth-dot-active {
+      animation: passcode-auth-grow-dot .5s ease;
+      animation-fill-mode: forwards;
+    }
+
+    .passcode-auth-dot.passcode-auth-wrong {
+      animation: passcode-auth-wrong .9s ease;
+    }
+
+    .passcode-auth-dot.passcode-auth-correct {
+      animation: passcode-auth-correct .9s ease;
+    }
+
+  .passcode-auth p {
+    font-size: .8em;
+  }
+
+  .passcode-auth-numbers {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-around;
+    align-content: flex-end;
+    width: 100%;
+    margin: 2em 0;
+  }
+
+    .passcode-auth-number {
+      box-sizing: border-box;
+      position: relative;
+      margin: var(--passcode-auth-numbers-gap);
+      width: calc(100% / var(--passcode-auth-numbers-columns) - var(--passcode-auth-numbers-gap) * 2 * 3);
+      user-select: none;
+      transition: all .5s ease;
+    }
+
+    .passcode-auth-number:hover {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+      .passcode-auth-number span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-weight: 400;
+        font-size: 1.8em;
+      }
+
+      .passcode-auth-number::before {
+        content: '';
+        box-sizing: border-box;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: calc(100% * 0.7550168885356646);
+        height: calc(100% * 0.7550168885356646);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transition: all .5s ease;
+      }
+
+      .passcode-auth-number:hover::before {
+        border: 2px solid rgba(255, 255, 255, 0.5);
+      }
+
+      .passcode-auth-number.passcode-auth-number-grow::before {
+        animation: passcode-auth-grow-number .6s ease;
+      }
+
+      .passcode-auth-number::after {
+        content: '';
+        display: inline-block;
+        padding-bottom: 100%;
+        width: 0;
+        vertical-align: top;
+      }
+
+@keyframes passcode-auth-grow-dot {
+  100% {
+    background: white;
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+}
+
+@keyframes passcode-auth-grow-number {
+  50% {
+    transform: translate(-50%, -50%) scale3d(1.5, 1.5, 1.5);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+  }
+}
+
+@keyframes passcode-auth-wrong {
+  20% {
+    background: crimson;
+  }
+  40% {
+    transform: translate(-15px, 0);
+  }
+  60% {
+    transform: translate(10px, 0);
+  }
+  80% {
+    transform: translate(-5px, 0);
+  }
+}
+
+@keyframes passcode-auth-correct {
+  20% {
+    background: limegreen;
+  }
+  40% {
+    transform: translate(0, -15px);
+  }
+  60% {
+    transform: translate(0, 10px);
+  }
+  80% {
+    transform: translate(0, -5px);
+  }
+}
+
+@keyframes passcode-auth-bg-red {
+  50% {
+    background: crimson;
+  }
+}
+
+@keyframes passcode-auth-bg-green {
+  50% {
+    background: limegreen;
+  }
+}

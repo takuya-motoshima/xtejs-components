@@ -1,6 +1,13 @@
 export default class extends HTMLElement {
-    private handlers;
-    private readonly global;
+    protected handles: {
+        [key: string]: {
+            handler: (...params: any[]) => any;
+            option: {
+                once: boolean;
+            };
+        }[];
+    };
+    protected readonly global: Window;
     /**
      * Constructor
      *
@@ -8,11 +15,28 @@ export default class extends HTMLElement {
      */
     constructor();
     /**
-     * The element has been added to the document
+     * Attributes of custom elements for which you want to monitor changes
+     *
+     * @return {string[]}
+     */
+    static get observedAttributes(): string[];
+    /**
+     * Called every time the element is inserted into the DOM.
      *
      * @return {void}
      */
-    connectedCallback(): void;
+    protected connectedCallback(): void;
+    /**
+     * Called when an observed attribute has been added, removed, updated, or replaced.
+     * Also called for initial values when an element is created by the parser, or upgraded.
+     * Note: only attributes listed in the observedAttributes property will receive this callback.
+     *
+     * @param {string}      attributeName
+     * @param {string|null} oldValue
+     * @param {string|null} newValue
+     * @return {void}
+     */
+    protected attributeChangedCallback(attributeName: string, oldValue: string | null, newValue: string | null): void;
     /**
      * is attribute
      *
@@ -32,35 +56,77 @@ export default class extends HTMLElement {
      */
     static createElement(): any;
     /**
-     * Set event handler
+     * Add event handler
      *
-     * @param  {string} event
-     * @param  {Function} handler
+     * @param  {string}          event
+     * @param  {any[]) => any}   handler
+     * @param  {boolean = false} once
      * @return {void}
      */
-    on(event: string, handler: Function): any;
+    on(event: string, handler: (...params: any[]) => any, option?: {
+        once: boolean;
+    }): any;
     /**
-     * Get width
+     * Remove event handler
      *
-     * @return {number}
+     * @param  {string} event
+     * @param  {(...params: any[]) => any} handler
+     * @return {void}
      */
-    get width(): number;
+    off(event: string, handler: (...params: any[]) => any): any;
     /**
-     * Set width
+     * Call event handler
      *
-     * @param {number} value
+     * @param  {string} event
+     * @param  {any[]}  ...params
+     * @return {void}
      */
-    set width(value: number);
+    invoke(event: string, ...params: any[]): void;
     /**
-     * Get height
+     * Get or set the value of an attribute
+     * Numeric attributes are returned as Int type. (Cols, colspan, height, high, low, max, maxlength, minlength, min, rows, rowspan, size, start, step, tabindex, width).
+     * If the attribute value is empty, it returns a boolean type true.
+     * Attribute values ​​true and false are returned as boolean type.
      *
-     * @return {number}
+     * @param  {string}                  name
+     * @param  {string|number|boolean/undefined} value
+     * @return {string|number|boolean|undefined}
      */
-    get height(): number;
+    attr(name: string, value?: string | number | boolean | undefined): string | number | boolean | undefined;
     /**
-     * Set height
+     * Get or set the value of a CSS property
      *
-     * @param {number} value
+     * @param  {string}                  name
+     * @param  {string|number|undefined} value
+     * @return {string|undefined}
      */
-    set height(value: number);
+    css(name: string, value?: string | number | undefined): string | undefined;
+    /**
+     *  Insert content, specified by the parameter, to the end of each element in the set of matched elements.
+     *
+     * @param  {HTMLElement} element
+     * @return {this}
+     */
+    append(element: HTMLElement): any;
+    /**
+     * Insert content, specified by the parameter, to the beginning of each element in the set of matched elements.
+     *
+     * @param  {HTMLElement} element
+     * @return {this}
+     */
+    prepend(element: HTMLElement): any;
+    /**
+     * Insert content, specified by the parameter, before each element in the set of matched elements
+     *
+     * @param  {HTMLElement} element
+     * @return {this}
+     */
+    before(element: HTMLElement): any;
+    /**
+     * Insert content, specified by the parameter, after each element in the set of matched elements.
+     *
+     * @param  {HTMLElement} element
+     * @return {this}
+     */
+    after(element: HTMLElement): any;
 }

@@ -1,0 +1,10 @@
+.xj-camera-view {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 320px !important;
+  height: 568px !important;
+  /*width: 414px !important;
+  height: 736px !important;*/
+  transform: translate(-50%, -50%);
+}

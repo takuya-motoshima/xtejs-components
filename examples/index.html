@@ -3,135 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>XteJS Components Examples</title>
-  <link rel="stylesheet" type="text/css" href="node_modules/w3-css/w3.css">
-  <link rel="stylesheet" type="text/css" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
-  <style>
-    :root {
-      --sidenav-width: 200px;
-    }
-
-    body {
-      position: relative;
-      min-height: 100%;
-      top: 0px;
-    }
-
-    #sidenav {
-      width: var(--sidenav-width);
-    }
-
-      #leftmenuinnerinner {
-        height: 100%;
-        width: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding-top: 20px;
-      }
-
-        #sidenav h2 {
-          font-size: 21px;
-          padding-left: 16px;
-          margin: -4px 0 4px 0;
-          width: 204px;
-        }
-
-        #sidenav a {
-          font-family: "Segoe UI",Arial,sans-serif;
-          text-decoration: none;
-          display: block;
-          padding: 2px 1px 1px 16px;
-        }
-
-        #sidenav a:hover,
-        #sidenav a:focus {
-          color: #000000;
-          background-color: #cccccc;
-        }
-
-        #sidenav a.active {
-          background-color: #4CAF50;
-          color: #ffffff;
-        }
-
-    #belowtopnav {
-      position: relative;
-      margin-left: var(--sidenav-width);
-      /*margin-left: var(--sidenav-width) !important;*/
-    }
-
-      #toggle {
-        position: absolute;
-        right: 0;
-        top: 0;
-        font-size: 22px !important;
-      }
-
-      #main {
-        padding: 16px 32px 32px 32px;
-        border-right: 1px solid #f1f1f1;
-      }
-
-        .w3-example {
-          padding: 8px 20px;
-          margin: 24px -20px;
-          background-color: #f1f1f1;
-          box-shadow: none!important;
-        }
-
-          .ifrtest, .ifrtestcoll {
-            height: 600px;
-            /*height: 255px;*/
-            width: 100%;
-            border: 1px solid #ddd;
-          }
-  </style>
+  <title>XteJS components | Example index</title>
+  <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="styles/index.css?<!--# config timefmt="%Y%m%d%H%I%M%S" --><!--# echo var="date_local" -->">
 </head>
 <body>
 
-  <div class="w3-sidebar w3-collapse -w3-bar-block" id="sidenav">
+  <div class="container-fluid">
 
-    <div class="w3-light-grey" id="leftmenuinnerinner">
-      <h2 class="left">XteJS.Components</h2>
-      <a href="home/index.html" class="active">HOME</a>
-      <a href="canvas/index.html">Canvas</a>
-      <a href="camera-viewer" target="_self">Camera Viewer</a>
+    <div class="row flex-xl-nowrap">
+
+      <div class="col-md-3 col-xl-2 sidebar">
+      
+        <button class="btn btn-link search-docs-toggle d-md-none" type="button" data-toggle="collapse" data-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle docs navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" role="img" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg>
+        </button>
+
+        <nav class="collapse links" id="nav" aria-label="Main navigation">
+          <ul class="nav sidenav">
+            <li class="active"><a href="camera.html">Camera</a></li>
+            <li><a href="camera-view.html">Camera View</a></li>
+            <li><a href="canvas.html">Canvas</a></li>
+            <li><a href="image-view.html">Image View</a></li>
+            <li><a href="passcode-auth.html">Passcode Auth</a></li>
+            <li><a href="test.html">Test</a></li>
+          </ul>
+        </nav>
+
+      </div>
+
+      <main class="col-md-9 col-xl-10 p-0 content" role="main">
+      <!-- <main class="col-md-9 col-xl-10 py-md-3 pl-md-5 content" role="main"> -->
+        <iframe id="content" class="content-body"></iframe>
+      </main>
+
     </div>
+
   </div>
 
-  <div class="w3-main w3-light-grey" id="belowtopnav">
-
-    <a class="w3-hide-large w3-button w3-white" id="toggle" onclick="const sidenav=document.querySelector('#sidenav');sidenav.style.display=getComputedStyle(sidenav).display==='none'?'block':'none'"><i class="fas fa-bars"></i></a>
-
-    <div class="w3-row w3-white">
-      <div class="w3-col m12" id="main"></div>
-    </div>
-  </div>
-  
   <script src="node_modules/jquery/dist/jquery.min.js"></script>
-  <script>
-  (async () => {
-
-    async function loadContent(url) {
-      console.log(`URL: ${url}`);
-      const html = await (await fetch(url)).text();
-      $main.html(html);
-    }
-
-    const $main = $('#main');
-    const $menuItems = $('#leftmenuinnerinner a');
-
-    $('body').on('click', '#leftmenuinnerinner a', async event => {
-      const $menuItem = $(event.currentTarget);
-      if ($menuItem.attr('target')) {
-        return;
-      }
-      event.preventDefault();
-      $menuItems.removeClass('active');
-      await loadContent($(event.currentTarget).addClass('active').attr('href'));
-    });
-    await loadContent($menuItems.filter('.active').attr('href'));
-  })();
-  </script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="node_modules/js-cookie/src/js.cookie.js"></script>
+  <script type="module" src="scripts/index.js?<!--# config timefmt="%Y%m%d%H%I%M%S" --><!--# echo var="date_local" -->"></script>
 </body>
 </html>

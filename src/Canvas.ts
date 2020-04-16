@@ -1,55 +1,13 @@
+/**
+ * Canvas component.
+ */
 import ComponentBase from '~/ComponentBase';
-import { Misc, Geometry } from 'xtejs-utils';
+import { Misc, Graphics, Color } from 'xtejs-utils';
 
 class Canvas extends ComponentBase {
 
-  private extends: HTMLCanvasElement = document.createElement('canvas');
-  private observer: MutationObserver;
-
-  constructor() {
-
-    super();
-
-    // Set wrapper element style
-    this.style.boxSizing = 'border-box';
-    this.style.display = 'block';
-    this.style.overflow = 'hidden';
-    if (getComputedStyle(this).position === 'static') {
-      this.style.position =  'relative';
-    }
-
-    // Get the original size of the base
-    const definedWidth = parseFloat(getComputedStyle(this).width) > 0;
-    const definedHeight = parseFloat(getComputedStyle(this).height) > 0;
-
-    // Add extends element
-    this.appendChild(this.extends);
-
-    // Set the default size of the canvas if the original size of the base element is 0
-    if (!definedWidth) {
-      this.style.width = getComputedStyle(this.extends).width;
-    }
-    if (!definedHeight) {
-      this.style.height = getComputedStyle(this.extends).height;
-    }
-
-    // Set inherited element style
-    this.extends.style.boxSizing = 'border-box';
-    this.extends.style.width = '100%';
-    this.extends.style.height = '100%';
-
-    // Observe changes in base elements
-    this.observer = new MutationObserver(mutations => {
-      for (let mutation of mutations) {
-        if (/^width|height$/.test(mutation.attributeName!)) {
-          this.extends.setAttribute(mutation.attributeName!, this.getAttribute(mutation.attributeName!) as string);
-        }
-      }
-    });
-
-    // Start observing base changes
-    this.observer.observe(this, { attributes: true, attributeFilter: [ 'width', 'height' ], attributeOldValue: true });
-  }
+  public readonly extends: HTMLCanvasElement;
+  private readonly observer: MutationObserver;
 
   /**
    * is attribute
@@ -57,7 +15,47 @@ class Canvas extends ComponentBase {
    * @return {string}
    */
   protected static get is(): string {
-    return 'xtejs-canvas';
+    return 'xj-canvas';
+  }
+
+  /**
+   * Constructor
+   * 
+   * @return {void}
+   */
+  constructor() {
+    super();
+    this.css('boxSizing', 'border-box');
+    this.css('display', 'block');
+    this.css('overflow', 'hidden');
+    if (this.css('position') === 'static') {
+      this.css('position', 'relative');
+    }
+    const width = parseFloat(this.css('width') as string);
+    const height = parseFloat(this.css('height') as string);
+    this.extends = document.createElement('canvas');
+    this.append(this.extends);
+    if (!width) {
+      this.css('width', getComputedStyle(this.extends).getPropertyValue('width'));
+    }
+    if (!height) {
+      this.css('height', getComputedStyle(this.extends).getPropertyValue('height'));
+    }
+    this.extends.style.boxSizing = 'border-box';
+    this.extends.width = parseFloat(this.css('width')!);
+    this.extends.height = parseFloat(this.css('height')!);
+    this.extends.style.width = '100%';
+    this.extends.style.height = '100%';
+
+    // Watch for changes to this component attribute
+    this.observer = new MutationObserver(mutations => {
+      for (let { attributeName } of mutations) {
+        if (/^width|height$/.test(attributeName!)) {
+          this.extends.setAttribute(attributeName!, this.attr(attributeName!) as string);
+        }
+      }
+    });
+    this.observer.observe(this, { attributes: true, attributeFilter: [ 'width', 'height' ] });
   }
 
   /**
@@ -78,21 +76,20 @@ class Canvas extends ComponentBase {
     image: HTMLImageElement|HTMLVideoElement|HTMLCanvasElement,
     sx: number = 0,
     sy: number = 0,
-    swidth?: number,
-    sheight?: number,
+    sw?: number,
+    sh?: number,
     dx?: number,
     dy?: number,
-    dwidth?: number,
-    dheight?: number
+    dw?: number,
+    dh?: number
   ): Canvas {
-    if (swidth !== undefined && sheight !== undefined && dx !== undefined && dy !== undefined && dwidth !== undefined && dheight !== undefined) {
-      this.extends.getContext('2d')!.drawImage(image, sx, sy, swidth, sheight, dx, dy, dwidth, dheight);
-    } else if (swidth !== undefined && sheight !== undefined) {
-      this.extends.getContext('2d')!.drawImage(image, sx, sy, swidth, sheight);
+    if (sw !== undefined && sh !== undefined && dx !== undefined && dy !== undefined && dw !== undefined && dh !== undefined) {
+      this.extends.getContext('2d')!.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
+    } else if (sw !== undefined && sh !== undefined) {
+      this.extends.getContext('2d')!.drawImage(image, sx, sy, sw, sh);
     } else  {
       this.extends.getContext('2d')!.drawImage(image, sx, sy);
     }
-    // this.extends.getContext('2d')!.drawImage(image, sx, sy, swidth!, sheight!, dx!, dy!, dwidth!, dheight!);
     return this;
   }
 
@@ -103,59 +100,75 @@ class Canvas extends ComponentBase {
    * @return {Canvas}
    */
   public drawImageScaled(image: HTMLImageElement|HTMLVideoElement|HTMLCanvasElement): Canvas {
-   const imageDimensions = Geometry.getMediaDimensions(image);
-   const hRatio = this.extends.width  / imageDimensions.width;
-   const vRatio =  this.extends.height / imageDimensions.height;
+   const dimensions = Graphics.getMediaDimensions(image);
+   const hRatio = this.extends.width  / dimensions.width;
+   const vRatio =  this.extends.height / dimensions.height;
    const ratio  = Math.min( hRatio, vRatio );
-   const centerShiftX = ( this.extends.width - imageDimensions.width * ratio ) / 2;
-   const centerShiftY = ( this.extends.height - imageDimensions.height * ratio ) / 2;  
+   const centerShiftX = ( this.extends.width - dimensions.width * ratio ) / 2;
+   const centerShiftY = ( this.extends.height - dimensions.height * ratio ) / 2;
    this.drawImage(image,
-       0, 0, imageDimensions.width, imageDimensions.height,
-      centerShiftX, centerShiftY, imageDimensions.width * ratio, imageDimensions.height * ratio);  
+      0, 0, dimensions.width, dimensions.height,
+      centerShiftX, centerShiftY, dimensions.width * ratio, dimensions.height * ratio);  
     return this;
   }
 
   /**
    * Draw point
    * 
-   * @param  {number} options.x
-   * @param  {number} options.y
-   * @param  {number} options.r
+   * @param  {number} x
+   * @param  {number} y
+   * @param  {number} options.radius
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawPoint({ x, y, r = 3, color = 'aqua' }: { x: number, y: number, r?: number, color?: string }): Canvas {
-    Geometry.drawPoint(this.extends, { x, y, r, color });
+  public drawPoint(x: number, y: number, { radius = 3, color = Color.accessibleDarkBlue }: { radius?: number, color?: string } = {}): Canvas {
+    Graphics.drawPoint(this.extends, x, y, { radius, color });
     return this;
   }
 
   /**
    * Draw center point
    * 
-   * @param  {Object[]} options.points
-   * @param  {number} options.r
+   * @param  {Object[]} coordinates
+   * @param  {number} options.radius
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawCenterPoint({ points, r = 3, color = 'aqua' }: { points: { x: number, y: number }[], r?: number, color?: string }): Canvas {
-    Geometry.drawCenterPoint(this.extends, { points, r, color });
+  public drawCenterPoint(coordinates: { x: number, y: number }[], { radius = 3, color = Color.accessibleDarkBlue }: { radius?: number, color?: string } = {}): Canvas {
+    Graphics.drawCenterPoint(this.extends, coordinates, { radius, color });
     return this;
   }
 
   /**
-   * Draw rect
+   * Draw rectangle
    * 
-   * @param  {number} options.x
-   * @param  {number} options.y
-   * @param  {number} options.width
-   * @param  {number} options.height
+   * @param  {number} x
+   * @param  {number} y
+   * @param  {number} width
+   * @param  {number} height
    * @param  {number} options.degree
    * @param  {number} options.lineWidth
    * @param  {string} options.color
    * @return {Canvas}
    */
-  public drawRect({ x, y, width, height, degree = 0, lineWidth = 2, color = 'aqua' }: { x: number, y: number, width: number, height: number, degree?: number, lineWidth?: number, color?: string }): Canvas {
-    Geometry.drawRect(this.extends, { x, y, width, height, degree, lineWidth, color });
+  public drawRectangle(x: number, y: number, width: number, height: number, { degree = 0, lineWidth = 3, color = Color.accessibleDarkBlue }: { degree?: number, lineWidth?: number, color?: string } = {}): Canvas {
+    Graphics.drawRectangle(this.extends, x, y, width, height, { degree, lineWidth, color });
+    return this;
+  }
+
+  /**
+   * Draw rectangle corners
+   * 
+   * @param  {number} x
+   * @param  {number} y
+   * @param  {number} width
+   * @param  {number} height
+   * @param  {number} options.lineWidth
+   * @param  {string} options.color
+   * @return {Canvas}
+   */
+  public drawRectangleCorners(x: number, y: number, width: number, height: number, { lineWidth = 3, color = Color.accessibleDarkBlue }: { lineWidth?: number, color?: string } = {}): Canvas {
+    Graphics.drawRectangleCorners(this.extends, x, y, width, height, { lineWidth, color });
     return this;
   }
 
@@ -165,7 +178,7 @@ class Canvas extends ComponentBase {
    * @return {Canvas}
    */
   public flipHorizontal(): Canvas {
-    Geometry.flipHorizontal(this.extends);
+    Graphics.flipHorizontal(this.extends);
     return this;
   }
 
@@ -189,7 +202,7 @@ class Canvas extends ComponentBase {
     if (flip) {
       this.flipHorizontal();
     }
-    return this.extends.toDataURL('image/png', 1.0);
+    return this.extends.toDataURL('image/png', 1.);
   }
 }
 

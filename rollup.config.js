@@ -4,7 +4,6 @@ import json from 'rollup-plugin-json';
 import commonjs from 'rollup-plugin-commonjs'
 import resolve from 'rollup-plugin-node-resolve';
 import postcss from 'rollup-plugin-postcss';
-import obfuscatorPlugin from 'rollup-plugin-javascript-obfuscator'
 import pkg from './package.json';
 
 export default {
@@ -23,10 +22,6 @@ export default {
     commonjs(),
     resolve({
       mainFields: ['module', 'main']
-    }),
-    obfuscatorPlugin({
-      compact: true,
-      sourceMap: false
     })
   ],
   output: [

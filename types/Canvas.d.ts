@@ -1,14 +1,22 @@
+/**
+ * Canvas component.
+ */
 import ComponentBase from '~/ComponentBase';
 declare class Canvas extends ComponentBase {
-    private extends;
-    private observer;
-    constructor();
+    readonly extends: HTMLCanvasElement;
+    private readonly observer;
     /**
      * is attribute
      *
      * @return {string}
      */
     protected static get is(): string;
+    /**
+     * Constructor
+     *
+     * @return {void}
+     */
+    constructor();
     /**
      * Draw image
      *
@@ -23,7 +31,7 @@ declare class Canvas extends ComponentBase {
      * @param  {number}                                              h
      * @return {Canvas}
      */
-    drawImage(image: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement, sx?: number, sy?: number, swidth?: number, sheight?: number, dx?: number, dy?: number, dwidth?: number, dheight?: number): Canvas;
+    drawImage(image: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement, sx?: number, sy?: number, sw?: number, sh?: number, dx?: number, dy?: number, dw?: number, dh?: number): Canvas;
     /**
      * Draw and scale the image to fit the canvas
      *
@@ -34,52 +42,60 @@ declare class Canvas extends ComponentBase {
     /**
      * Draw point
      *
-     * @param  {number} options.x
-     * @param  {number} options.y
-     * @param  {number} options.r
+     * @param  {number} x
+     * @param  {number} y
+     * @param  {number} options.radius
      * @param  {string} options.color
      * @return {Canvas}
      */
-    drawPoint({ x, y, r, color }: {
-        x: number;
-        y: number;
-        r?: number;
+    drawPoint(x: number, y: number, { radius, color }?: {
+        radius?: number;
         color?: string;
     }): Canvas;
     /**
      * Draw center point
      *
-     * @param  {Object[]} options.points
-     * @param  {number} options.r
+     * @param  {Object[]} coordinates
+     * @param  {number} options.radius
      * @param  {string} options.color
      * @return {Canvas}
      */
-    drawCenterPoint({ points, r, color }: {
-        points: {
-            x: number;
-            y: number;
-        }[];
-        r?: number;
+    drawCenterPoint(coordinates: {
+        x: number;
+        y: number;
+    }[], { radius, color }?: {
+        radius?: number;
         color?: string;
     }): Canvas;
     /**
-     * Draw rect
+     * Draw rectangle
      *
-     * @param  {number} options.x
-     * @param  {number} options.y
-     * @param  {number} options.width
-     * @param  {number} options.height
+     * @param  {number} x
+     * @param  {number} y
+     * @param  {number} width
+     * @param  {number} height
      * @param  {number} options.degree
      * @param  {number} options.lineWidth
      * @param  {string} options.color
      * @return {Canvas}
      */
-    drawRect({ x, y, width, height, degree, lineWidth, color }: {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
+    drawRectangle(x: number, y: number, width: number, height: number, { degree, lineWidth, color }?: {
         degree?: number;
+        lineWidth?: number;
+        color?: string;
+    }): Canvas;
+    /**
+     * Draw rectangle corners
+     *
+     * @param  {number} x
+     * @param  {number} y
+     * @param  {number} width
+     * @param  {number} height
+     * @param  {number} options.lineWidth
+     * @param  {string} options.color
+     * @return {Canvas}
+     */
+    drawRectangleCorners(x: number, y: number, width: number, height: number, { lineWidth, color }?: {
         lineWidth?: number;
         color?: string;
     }): Canvas;

@@ -1,7 +1,7 @@
 {
   "name": "xtejs-components",
   "version": "1.0.0",
-  "description": "JS extension components",
+  "description": "This package is a component developed based on custom element v1.",
   "main": "dist/build.common.js",
   "module": "dist/build.esm.js",
   "browser": "dist/build.js",
@@ -36,7 +36,7 @@
     "esm",
     "es6"
   ],
-  "author": "Takuya Motoshima <developer.takuyamotoshima@gmail.com> (https://twitter.com/taaaaaaakuya)",
+  "author": "Takuya Motoshima <developer.takuyamotoshima@gmail.com> (https://twitter.com/TakuyaMotoshima)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/takuya-motoshima/xtejs-components/issues",
@@ -50,7 +50,6 @@
     "json2module": "0.0.3",
     "rollup": "^1.27.2",
     "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-javascript-obfuscator": "^1.0.4",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^2.2.0",
@@ -62,6 +61,6 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "xtejs-utils": "github:takuya-motoshima/xtejs-utils"
+    "xtejs-utils": "github:takuya-motoshima/xtejs-utils#develop"
   }
 }

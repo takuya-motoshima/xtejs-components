@@ -7,11 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "Takuya Motoshima <developer.takuyamotoshima@gmail.com> (https://github.com/takuya-motoshima)",
+  "author": "Takuya Motoshima <developer.takuyamotoshima@gmail.com> (https://twitter.com/TakuyaMotoshima)",
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
+    "bootstrap": "^4.4.1",
     "jquery": "^3.4.1",
-    "w3-css": "^4.1.0"
+    "js-cookie": "^2.2.1"
   }
 }

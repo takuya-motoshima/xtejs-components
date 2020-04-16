@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XteJS components | Canvas example</title>
+  <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="styles/shared.css?<!--# config timefmt="%Y%m%d%H%I%M%S" --><!--# echo var="date_local" -->">
+  <link rel="stylesheet" type="text/css" href="styles/canvas.css?<!--# config timefmt="%Y%m%d%H%I%M%S" --><!--# echo var="date_local" -->">
+</head>
+<body>
+
+  <main class="container-fluid mt-3">
+
+    <h3>Draw selected image on canvas component</h3>
+
+    <div class="example">
+
+      <xj-canvas action-pointing id="canvas" class="bg-light"></xj-canvas>
+
+      <hr class="half-rule">
+
+      <p>Draw the selected image on the canvas</p>
+
+      <ul class="image-list list-group list-group-horizontal">
+        <li action-select-image class="list-group-item"><img src="images/bird-landscape-1.jpg"></li>
+        <li action-select-image class="list-group-item"><img src="images/bird-portrait-1.jpg"></li>
+        <li action-select-image class="list-group-item"><img src="images/bird-portrait-2.jpg"></li>
+      </ul>
+
+    </div>
+
+  </main>
+
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="module" src="scripts/canvas.js?<!--# config timefmt="%Y%m%d%H%I%M%S" --><!--# echo var="date_local" -->"></script>
+</body>
+</html>

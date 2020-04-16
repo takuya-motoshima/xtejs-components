@@ -1,9 +1,12 @@
+/**
+ * The base of all components.
+ */
 import { Misc } from 'xtejs-utils';
 
 export default class extends HTMLElement {
 
-  private handlers: { [key: string]: Function };
-  private readonly global: Window = Misc.getGlobal<Window>();
+  protected handles: { [key: string]: { handler: (...params: any[]) => any, option: { once: boolean } }[] } = {};
+  protected readonly global: Window = Misc.getGlobal<Window>();
 
   /**
    * Constructor
@@ -12,15 +15,39 @@ export default class extends HTMLElement {
    */
   constructor() {
     super();
-    this.handlers = {};
   }
 
   /**
-   * The element has been added to the document
+   * Attributes of custom elements for which you want to monitor changes
+   * 
+   * @return {string[]}
+   */
+  public static get observedAttributes(): string[] {
+    return [];
+  }
+
+  /**
+   * Called every time the element is inserted into the DOM.
    * 
    * @return {void}
    */
-  public connectedCallback(): void {}
+  protected connectedCallback(): void {
+    // super.connectedCallback();
+  }
+
+  /**
+   * Called when an observed attribute has been added, removed, updated, or replaced.
+   * Also called for initial values when an element is created by the parser, or upgraded.
+   * Note: only attributes listed in the observedAttributes property will receive this callback.
+   * 
+   * @param {string}      attributeName
+   * @param {string|null} oldValue
+   * @param {string|null} newValue
+   * @return {void}
+   */
+  protected attributeChangedCallback(attributeName: string, oldValue: string|null, newValue: string|null): void {
+    // super.attributeChangedCallback(attributeName, oldValue, newValue);
+  }
 
   /**
    * is attribute
@@ -69,50 +96,139 @@ export default class extends HTMLElement {
   }
 
   /**
-   * Set event handler
+   * Add event handler
    * 
-   * @param  {string} event
-   * @param  {Function} handler
+   * @param  {string}          event
+   * @param  {any[]) => any}   handler
+   * @param  {boolean = false} once
    * @return {void}
    */
-   public on(event: string, handler: Function ): any {
-    this.handlers[event] = handler;
+   public on(event: string, handler: (...params: any[]) => any, option: { once: boolean} = { once: false }): any {
+    if (!this.handles[event]) {
+      this.handles[event] = [];
+    }
+    this.handles[event].push({ handler, option });
     return this;
   }
 
   /**
-   * Get width
+   * Remove event handler
    * 
-   * @return {number}
+   * @param  {string} event
+   * @param  {(...params: any[]) => any} handler
+   * @return {void}
    */
-  public get width(): number {
-    return this.getAttribute('width') ? parseInt(this.getAttribute('width') || '0', 10) : 0;
-  }
-
- /**
-  * Set width
-  *  
-  * @param {number} value
-  */
-  public set width(value: number) {
-    this.setAttribute('width', value.toString());
+   public off(event: string, handler: (...params: any[]) => any ): any {
+    const i = this.handles[event] && this.handles[event].findIndex(handleObj => handleObj.handler === handler);
+    if (i > -1) {
+      this.handles[event].splice(i, 1);
+    }
+    return this;
   }
 
   /**
-   * Get height
+   * Call event handler
    * 
-   * @return {number}
+   * @param  {string} event
+   * @param  {any[]}  ...params
+   * @return {void}
    */
-  public get height(): number {
-    return this.getAttribute('height') ? parseInt(this.getAttribute('height') || '0', 10) : 0;
+  public invoke(event: string, ...params: any[]): void {
+    if (this.handles[event]) {
+      let i = this.handles[event].length;
+      while (i--) {
+        const { handler, option } = this.handles[event][i];
+        handler.apply(null, params);
+        if (option.once) {
+          this.handles[event].splice(i, 1);
+        }
+      }
+    }
   }
 
- /**
-  * Set height
-  *  
-  * @param {number} value
-  */
-  public set height(value: number) {
-    this.setAttribute('height', value.toString());
+  /**
+   * Get or set the value of an attribute
+   * Numeric attributes are returned as Int type. (Cols, colspan, height, high, low, max, maxlength, minlength, min, rows, rowspan, size, start, step, tabindex, width).
+   * If the attribute value is empty, it returns a boolean type true.
+   * Attribute values ​​true and false are returned as boolean type.
+   * 
+   * @param  {string}                  name
+   * @param  {string|number|boolean/undefined} value
+   * @return {string|number|boolean|undefined}
+   */
+  public attr(name: string, value: string|number|boolean|undefined = undefined): string|number|boolean|undefined {
+      if (value === undefined) {
+      const value = this.getAttribute(name);
+      return value === null ? undefined
+        : /^(cols|colspan|height|high|low|max|maxlength|minlength|min|rows|rowspan|size|start|step|tabindex|width)$/.test(name) ? parseInt(value || '0', 10)
+        : /^(true|false)$/i.test(value) ? value.toLowerCase() === 'true'
+        : value === '' ? true
+        : value.toString();
+    } else {
+      this.setAttribute(name, value.toString());
+    }
+  }
+
+  /**
+   * Get or set the value of a CSS property
+   * 
+   * @param  {string}                  name
+   * @param  {string|number|undefined} value
+   * @return {string|undefined}
+   */
+  public css(name: string, value: string|number|undefined = undefined): string|undefined {
+    if (value === undefined) {
+      // Convert CSS property names to kebab case
+      name = name.replace(/([A-Z])/g, '-$1').toLowerCase();
+      return getComputedStyle(this).getPropertyValue(name);
+    } else {
+      // Convert CSS property names to camel case
+      name = name.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, char) => char.toUpperCase());
+      (this.style as { [key: string]: any })[name] = value.toString();
+    }
+  }
+
+  /**
+   *  Insert content, specified by the parameter, to the end of each element in the set of matched elements.
+   *
+   * @param  {HTMLElement} element
+   * @return {this}
+   */
+  public append(element: HTMLElement): any {
+    this.appendChild(element);
+    return this;
+  }
+
+  /**
+   * Insert content, specified by the parameter, to the beginning of each element in the set of matched elements.
+   *
+   * @param  {HTMLElement} element
+   * @return {this}
+   */
+  public prepend(element: HTMLElement): any {
+    this.insertBefore(element, this.firstElementChild);
+    return this;
+  }
+
+  /**
+   * Insert content, specified by the parameter, before each element in the set of matched elements
+   *
+   * @param  {HTMLElement} element
+   * @return {this}
+   */
+  public before(element: HTMLElement): any {
+    this.parentElement!.insertBefore(element, this);
+    return this;
+  }
+
+  /**
+   * Insert content, specified by the parameter, after each element in the set of matched elements.
+   *
+   * @param  {HTMLElement} element
+   * @return {this}
+   */
+  public after(element: HTMLElement): any {
+    this.parentElement!.insertBefore(element, this.nextElementSibling);
+    return this;
   }
 }

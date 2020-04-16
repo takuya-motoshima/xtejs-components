@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XteJS components | Test example</title>
+  <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="styles/shared.css?<!--# config timefmt="%Y%m%d%H%I%M%S" --><!--# echo var="date_local" -->">
+</head>
+<body>
+
+  <main class="container-fluid mt-3">
+
+    <h3>Test component that only displays the hello world</h3>
+
+    <div class="example">
+      <xj-test></xj-test>
+    </div>
+
+  </main>
+
+  <script type="module">
+    import * as components from '../dist/build.esm.js';
+  </script>
+</body>
+</html>

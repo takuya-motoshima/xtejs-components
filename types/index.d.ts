@@ -1,6 +1,8 @@
 import { version } from '~/package';
 import Camera from '~/Camera';
 import Canvas from '~/Canvas';
-import ImageViewer from '~/ImageViewer';
-import CameraViewer from '~/CameraViewer';
-export { version, Camera, Canvas, ImageViewer, CameraViewer };
+import ImageView from '~/ImageView';
+import CameraView from '~/CameraView';
+import Test from '~/Test';
+import PasscodeAuth from '~/PasscodeAuth';
+export { version, Camera, Canvas, ImageView, CameraView, Test, PasscodeAuth };
