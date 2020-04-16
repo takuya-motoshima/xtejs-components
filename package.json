@@ -61,6 +61,6 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "xtejs-utils": "github:takuya-motoshima/xtejs-utils#develop"
+    "xtejs-utils": "^1.0.5"
   }
 }
