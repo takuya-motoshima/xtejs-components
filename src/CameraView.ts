@@ -49,7 +49,6 @@ class CameraView extends ComponentBase {
 
   public camera!: Camera;
   public canvas!: Canvas;
-  private observer!: MutationObserver;
 
   /**
    * is attribute
@@ -158,25 +157,18 @@ class CameraView extends ComponentBase {
     }
 
     // Watch for changes to this component attribute
-    this.observer = new MutationObserver(mutations => {
-      for (let { attributeName } of mutations) {
-        if (attributeName === 'style') {
-          this.layout()
-        }
-      }
-    });
-    this.observer.observe(this, { attributes: true, attributeFilter: [ 'style' ], attributeOldValue: true });
+    super.observe(this, [ 'style' ], (attribute: string) => this.layout());
 
-    // Arrange the layout of this component
+    // Adjust the layout
     this.layout();
    }
 
   /**
-   * Arrange the layout of this component
+   * Adjust the layout
    *
    * @return {void}
    */
-  private layout(): void {
+  public layout(): void {
     if (this.css('position') === 'static') {
       this.css('position', 'relative');
     }

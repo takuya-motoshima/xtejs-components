@@ -7,7 +7,6 @@ import './styles/image-view.css';
 declare class ImageView extends ComponentBase {
     image: HTMLImageElement;
     canvas: Canvas;
-    private observer;
     /**
      * is attribute
      *
@@ -21,10 +20,23 @@ declare class ImageView extends ComponentBase {
      */
     protected connectedCallback(): void;
     /**
-     * Arrange the layout of this component
+     * Adjust the layout
      *
      * @return {void}
      */
-    private layout;
+    layout(): void;
+    /**
+     * Wait for the image to load
+     *
+     * @param  {string|File} file
+     * @return {Promise<void>}
+     */
+    awaitImageLoaded(file: string | File): Promise<void>;
+    /**
+     * Get whether the image has finished loading
+     *
+     * @return {boolean}
+     */
+    get complete(): boolean;
 }
 export default ImageView;

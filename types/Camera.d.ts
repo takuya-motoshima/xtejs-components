@@ -33,7 +33,6 @@ declare class Camera extends ComponentBase {
     facing: 'nothing' | 'front' | 'back';
     state: 'unopened' | 'loading' | 'opened';
     private captured;
-    private observer;
     /**
      * is attribute
      *

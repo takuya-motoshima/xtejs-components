@@ -231,4 +231,24 @@ export default class extends HTMLElement {
     this.parentElement!.insertBefore(element, this.nextElementSibling);
     return this;
   }
+
+  /**
+   * Observe attribute changes
+   * 
+   * @param {HTMLElement}                 target
+   * @param {string[]}                    attributeFilter
+   * @param {(attribute: string) => void} calback
+   * @return {MutationObserver}
+   */
+  protected observe(target: HTMLElement, attributeFilter: string[], calback: (attribute: string) => void ): MutationObserver {
+    const observer = new MutationObserver(mutations => {
+      for (let { attributeName } of mutations) {
+        if (attributeFilter.indexOf(attributeName!)) {
+          calback(attributeName!);
+        }
+      }
+    });
+    observer.observe(target, { attributes: true, attributeFilter });
+    return observer;
+  }
 }

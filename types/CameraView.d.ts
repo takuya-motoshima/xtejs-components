@@ -46,7 +46,6 @@ import './styles/camera-view.css';
 declare class CameraView extends ComponentBase {
     camera: Camera;
     canvas: Canvas;
-    private observer;
     /**
      * is attribute
      *
@@ -60,10 +59,10 @@ declare class CameraView extends ComponentBase {
      */
     protected connectedCallback(): void;
     /**
-     * Arrange the layout of this component
+     * Adjust the layout
      *
      * @return {void}
      */
-    private layout;
+    layout(): void;
 }
 export default CameraView;

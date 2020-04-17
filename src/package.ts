@@ -1,5 +1,5 @@
 export var name = "xtejs-components";
-export var version = "1.0.1";
+export var version = "1.0.2";
 export var description = "This package is a component developed based on custom element v1.";
 export var main = "dist/build.common.js";
 export var module = "dist/build.esm.js";

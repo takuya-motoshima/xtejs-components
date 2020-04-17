@@ -7,7 +7,6 @@ import { Misc, Graphics, Color } from 'xtejs-utils';
 class Canvas extends ComponentBase {
 
   public readonly extends: HTMLCanvasElement;
-  private readonly observer: MutationObserver;
 
   /**
    * is attribute
@@ -48,14 +47,7 @@ class Canvas extends ComponentBase {
     this.extends.style.height = '100%';
 
     // Watch for changes to this component attribute
-    this.observer = new MutationObserver(mutations => {
-      for (let { attributeName } of mutations) {
-        if (/^width|height$/.test(attributeName!)) {
-          this.extends.setAttribute(attributeName!, this.attr(attributeName!) as string);
-        }
-      }
-    });
-    this.observer.observe(this, { attributes: true, attributeFilter: [ 'width', 'height' ] });
+    super.observe(this, [ 'width', 'height' ], (attribute: string) => this.extends.setAttribute(attribute, this.attr(attribute) as string));
   }
 
   /**

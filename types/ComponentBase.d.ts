@@ -129,4 +129,13 @@ export default class extends HTMLElement {
      * @return {this}
      */
     after(element: HTMLElement): any;
+    /**
+     * Observe attribute changes
+     *
+     * @param {HTMLElement}                 target
+     * @param {string[]}                    attributeFilter
+     * @param {(attribute: string) => void} calback
+     * @return {MutationObserver}
+     */
+    protected observe(target: HTMLElement, attributeFilter: string[], calback: (attribute: string) => void): MutationObserver;
 }

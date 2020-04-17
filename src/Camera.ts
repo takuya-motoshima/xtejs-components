@@ -39,7 +39,6 @@ class Camera extends ComponentBase {
   public facing: 'nothing'|'front'|'back' = 'nothing';
   public state: 'unopened'|'loading'|'opened' = 'unopened';
   private captured!: Canvas;
-  private observer!: MutationObserver;
 
   /**
    * is attribute
@@ -57,8 +56,18 @@ class Camera extends ComponentBase {
    */
   protected connectedCallback(): void {
     super.connectedCallback();
+
+    // Video element to this component
     this.extends = document.createElement('video');
+    this.extends.setAttribute('playsinline', 'true');
+    this.extends.setAttribute('muted', 'true');
+    this.extends.style.boxSizing = 'border-box';
+    this.extends.style.width = '100%';
+    this.extends.style.height = '100%';
+    this.extends.style.objectFit = 'cover';
     this.append(this.extends);
+
+    // Styles this component
     this.css('box-sizing', 'border-box');
     this.css('display', 'block');
     if (this.css('position') === 'static') {
@@ -70,23 +79,12 @@ class Camera extends ComponentBase {
     if (!this.css('height')) {
       this.css('height', getComputedStyle(this.extends).getPropertyValue('height'));
     }
-    this.extends.setAttribute('playsinline', 'true');
-    this.extends.setAttribute('muted', 'true');
-    this.extends.style.boxSizing = 'border-box';
-    this.extends.style.width = '100%';
-    this.extends.style.height = '100%';
-    this.extends.style.objectFit = 'cover';
+
+    // Add overlay canvas to this component
     this.captured = Canvas.createElement();
-    this.observer = new MutationObserver(mutations => {
-      for (let { attributeName } of mutations) {
-        if (/^width|height$/.test(attributeName!)) {
-          this.extends.setAttribute(attributeName!, this.attr(attributeName!) as string);
-        }
-      }
-    });
 
     // Watch for changes to this component attribute
-    this.observer.observe(this, { attributes: true, attributeFilter: [ 'width', 'height' ] });
+    super.observe(this, [ 'width', 'height' ], (attribute: string) => this.extends.setAttribute(attribute, this.attr(attribute) as string));
 
     // Check for the option to open the camera automatically
     if (this.attr('autoplay')) {

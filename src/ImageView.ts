@@ -10,7 +10,6 @@ class ImageView extends ComponentBase {
 
   public image!: HTMLImageElement;
   public canvas!: Canvas;
-  private observer!: MutationObserver;
 
   /**
    * is attribute
@@ -31,42 +30,42 @@ class ImageView extends ComponentBase {
     this.classList.add('xj-image-view');
     this.image = document.createElement('img');
     this.image.classList.add('xj-image-view-image');
+    this.image.addEventListener('load', () => super.invoke('load'));
     this.append(this.image);
     this.canvas = Canvas.createElement();
     this.canvas.classList.add('xj-image-view-canvas');
     this.append(this.canvas);
 
     // Watch for changes to this component attribute
-    this.observer = new MutationObserver(mutations => {
-      for (let { attributeName } of mutations) {
-        if (attributeName === 'style') {
-          this.layout();
-        } else if (attributeName === 'src') {
-          this.image.setAttribute('src', this.attr('src') as string);
-        }
+    super.observe(this, [ 'style', 'src' ], async (attribute: string) => {
+      if (attribute === 'src') {
+        this.image.setAttribute('src', this.attr('src') as string);
       }
+      this.layout();
     });
-    this.observer.observe(this, { attributes: true, attributeFilter: [ 'style', 'src' ] });
 
-    // Arrange the layout of this component
+    // Adjust the layout
     this.layout();
   }
 
   /**
-   * Arrange the layout of this component
+   * Adjust the layout
    *
    * @return {void}
    */
-  private layout(): void {
-    console.log('Start image view layout');
-    console.log(`Image ObjectFit before change: ${getComputedStyle(this.image).getPropertyValue('object-fit')}`);
+  public layout(): void {
+    
+    // Set object fit of base element to image
     if (getComputedStyle(this.image).getPropertyValue('object-fit') !== this.css('object-fit') as string) {
       this.image.style.objectFit = this.css('object-fit') as string;
     }
-    console.log(`Image ObjectFit after change: ${getComputedStyle(this.image).getPropertyValue('object-fit')}`);
+
+    // The base element is forced into relative position.
     if (this.css('position') === 'static') {
       this.css('position', 'relative');
     }
+
+    // Adjust the position of the overlay canvas
     const rect = Graphics.getOverlayRect(this, this.image);
     const dimensions = Graphics.getMediaDimensions(this.image);
     this.canvas.attr('width', dimensions.width);
@@ -75,7 +74,32 @@ class ImageView extends ComponentBase {
     this.canvas.css('top', `${rect.y}px`);
     this.canvas.css('width', `${rect.width}px`);
     this.canvas.css('height', `${rect.height}px`);
-    console.log('End image view layout');
+  }
+
+  /**
+   * Wait for the image to load
+   * 
+   * @param  {string|File} file
+   * @return {Promise<void>}
+   */
+  public async awaitImageLoaded(file: string|File): Promise<void> {
+    if (file instanceof File) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file as File);
+      file = await new Promise<string>(resolve => reader.addEventListener('load', () => resolve(reader.result! as string)));
+    }
+    this.image.setAttribute('src', file as string);
+    await new Promise(resolve => this.on('load', resolve, { once: true }));
+    this.layout();
+  }
+
+  /**
+   * Get whether the image has finished loading
+   * 
+   * @return {boolean}
+   */
+  public get complete(): boolean {
+    return this.image.complete;
   }
 }
 
