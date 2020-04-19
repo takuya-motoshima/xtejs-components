@@ -62,8 +62,9 @@ import 'xtejs-components';
 const cameraView = document.querySelector('#cameraView');
 
 // Get a photo taken
-cameraView.on('capture', base64Image => {
+cameraView.on('capture', event => {
   // Photos taken can be received in base64 format.
+  console.log(event.detail.data);// "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC"
 });
 ```
 
@@ -122,6 +123,21 @@ await camera.open('front');
 
 // Open camera in back mode
 await camera.open('back');
+
+// Execute a JavaScript when opening camera
+camera.on('opened', event => console.log('Camera opened'));
+
+// Execute a JavaScript when playing camera
+camera.on('played', event => console.log('Camera played'));
+
+// Execute a JavaScript when the camera is paused
+camera.on('paused', event => console.log('Camera paused'));
+
+// You can also use method chains to set events.
+camera
+  .on('opened', event => console.log('Camera opened'))
+  .on('played', event => console.log('Camera played'))
+  .on('paused', event => console.log('Camera paused'));
 ```
 
 ## Examples

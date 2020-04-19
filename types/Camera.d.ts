@@ -26,6 +26,22 @@
  *
  * // Open camera in back mode
  * await camera.open('back');
+ *
+ * // Execute a JavaScript when opening camera
+ * camera.on('opened', event => console.log('Camera opened'));
+ *
+ * // Execute a JavaScript when playing camera
+ * camera.on('played', event => console.log('Camera played'));
+ *
+ * // Execute a JavaScript when the camera is paused
+ * camera.on('paused', event => console.log('Camera paused'));
+ *
+ * // You can also use method chains to set events.
+ * camera
+ *   .on('opened', event => console.log('Camera opened'))
+ *   .on('played', event => console.log('Camera played'))
+ *   .on('paused', event => console.log('Camera paused'));
+ *
  */
 import ComponentBase from '~/ComponentBase';
 declare class Camera extends ComponentBase {

@@ -5,8 +5,8 @@ import { Misc } from 'xtejs-utils';
 
 export default class extends HTMLElement {
 
-  protected handles: { [key: string]: { handler: (...params: any[]) => any, option: { once: boolean } }[] } = {};
   protected readonly global: Window = Misc.getGlobal<Window>();
+  // protected listeners: { [key: string]: { listener: (...detail: any[]) => any, option: { once: boolean } }[] } = {};
 
   /**
    * Constructor
@@ -31,9 +31,7 @@ export default class extends HTMLElement {
    * 
    * @return {void}
    */
-  protected connectedCallback(): void {
-    // super.connectedCallback();
-  }
+  protected connectedCallback(): void {}
 
   /**
    * Called when an observed attribute has been added, removed, updated, or replaced.
@@ -45,9 +43,7 @@ export default class extends HTMLElement {
    * @param {string|null} newValue
    * @return {void}
    */
-  protected attributeChangedCallback(attributeName: string, oldValue: string|null, newValue: string|null): void {
-    // super.attributeChangedCallback(attributeName, oldValue, newValue);
-  }
+  protected attributeChangedCallback(attributeName: string, oldValue: string|null, newValue: string|null): void {}
 
   /**
    * is attribute
@@ -96,54 +92,59 @@ export default class extends HTMLElement {
   }
 
   /**
-   * Add event handler
+   * Add event listener
    * 
-   * @param  {string}          event
-   * @param  {any[]) => any}   handler
-   * @param  {boolean = false} once
-   * @return {void}
+   * @param  {string}           type
+   * @param  {() => void}       listener
+   * @param  {{ once: boolen }} options.once
+   * @return {this}
    */
-   public on(event: string, handler: (...params: any[]) => any, option: { once: boolean} = { once: false }): any {
-    if (!this.handles[event]) {
-      this.handles[event] = [];
-    }
-    this.handles[event].push({ handler, option });
+   public on(type: string, listener: () => void, option: { once: boolean } = { once: false }): any {
+    this.addEventListener(type, listener, option);
+    // if (!this.listeners[type]) {
+    //   this.listeners[type] = [];
+    // }
+    // this.listeners[type].push({ listener, option });
     return this;
   }
 
   /**
-   * Remove event handler
+   * Remove event listener
    * 
-   * @param  {string} event
-   * @param  {(...params: any[]) => any} handler
-   * @return {void}
+   * @param  {string}     type
+   * @param  {() => void} listener
+   * @return {this}
    */
-   public off(event: string, handler: (...params: any[]) => any ): any {
-    const i = this.handles[event] && this.handles[event].findIndex(handleObj => handleObj.handler === handler);
-    if (i > -1) {
-      this.handles[event].splice(i, 1);
-    }
+   public off(type: string, listener: () => void): any {
+    this.removeEventListener(type, listener);
+    // const i = this.listeners[type] && this.listeners[type].findIndex(handleObj => handleObj.listener === listener);
+    // if (i > -1) {
+    //   this.listeners[type].splice(i, 1);
+    // }
     return this;
   }
 
   /**
-   * Call event handler
+   * Call event listener
    * 
-   * @param  {string} event
-   * @param  {any[]}  ...params
-   * @return {void}
+   * @param  {string} type
+   * @param  {{}}     detail
+   * @return {this}
    */
-  public invoke(event: string, ...params: any[]): void {
-    if (this.handles[event]) {
-      let i = this.handles[event].length;
-      while (i--) {
-        const { handler, option } = this.handles[event][i];
-        handler.apply(null, params);
-        if (option.once) {
-          this.handles[event].splice(i, 1);
-        }
-      }
-    }
+  public invoke(type: string, detail: {} = {}): any {
+    const event = new CustomEvent(type, { detail });
+    this.dispatchEvent(event);
+    // if (this.listeners[type]) {
+    //   let i = this.listeners[type].length;
+    //   while (i--) {
+    //     const { listener, option } = this.listeners[type][i];
+    //     listener.apply(null, detail);
+    //     if (option.once) {
+    //       this.listeners[type].splice(i, 1);
+    //     }
+    //   }
+    // }
+    return this;
   }
 
   /**

@@ -26,6 +26,22 @@
  * 
  * // Open camera in back mode
  * await camera.open('back');
+ *
+ * // Execute a JavaScript when opening camera
+ * camera.on('opened', event => console.log('Camera opened'));
+ *
+ * // Execute a JavaScript when playing camera
+ * camera.on('played', event => console.log('Camera played'));
+ * 
+ * // Execute a JavaScript when the camera is paused
+ * camera.on('paused', event => console.log('Camera paused'));
+ *
+ * // You can also use method chains to set events.
+ * camera
+ *   .on('opened', event => console.log('Camera opened'))
+ *   .on('played', event => console.log('Camera played'))
+ *   .on('paused', event => console.log('Camera paused'));
+ * 
  */
 import ComponentBase from '~/ComponentBase';
 import Canvas from '~/Canvas';
@@ -125,8 +141,8 @@ class Camera extends ComponentBase {
     });
     this.facing = facing;
     this.state = 'opened';
-    this.play();
     super.invoke('opened');
+    this.play();
   }
 
   /**
@@ -147,6 +163,7 @@ class Camera extends ComponentBase {
    */
   public play() {
     this.extends.play();
+    super.invoke('played');
   }
 
   /**
@@ -156,6 +173,7 @@ class Camera extends ComponentBase {
    */
   public pause() {
     this.extends.pause();
+    super.invoke('paused');
   }
 
   /**
