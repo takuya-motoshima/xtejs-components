@@ -1,12 +1,4 @@
 export default class extends HTMLElement {
-    protected handles: {
-        [key: string]: {
-            handler: (...params: any[]) => any;
-            option: {
-                once: boolean;
-            };
-        }[];
-    };
     protected readonly global: Window;
     /**
      * Constructor
@@ -56,32 +48,32 @@ export default class extends HTMLElement {
      */
     static createElement(): any;
     /**
-     * Add event handler
+     * Add event listener
      *
-     * @param  {string}          event
-     * @param  {any[]) => any}   handler
-     * @param  {boolean = false} once
-     * @return {void}
+     * @param  {string}           type
+     * @param  {() => void}       listener
+     * @param  {{ once: boolen }} options.once
+     * @return {this}
      */
-    on(event: string, handler: (...params: any[]) => any, option?: {
+    on(type: string, listener: () => void, option?: {
         once: boolean;
     }): any;
     /**
-     * Remove event handler
+     * Remove event listener
      *
-     * @param  {string} event
-     * @param  {(...params: any[]) => any} handler
-     * @return {void}
+     * @param  {string}     type
+     * @param  {() => void} listener
+     * @return {this}
      */
-    off(event: string, handler: (...params: any[]) => any): any;
+    off(type: string, listener: () => void): any;
     /**
-     * Call event handler
+     * Call event listener
      *
-     * @param  {string} event
-     * @param  {any[]}  ...params
-     * @return {void}
+     * @param  {string} type
+     * @param  {{}}     detail
+     * @return {this}
      */
-    invoke(event: string, ...params: any[]): void;
+    invoke(type: string, detail?: {}): any;
     /**
      * Get or set the value of an attribute
      * Numeric attributes are returned as Int type. (Cols, colspan, height, high, low, max, maxlength, minlength, min, rows, rowspan, size, start, step, tabindex, width).

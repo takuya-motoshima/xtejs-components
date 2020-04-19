@@ -34,8 +34,9 @@
  * const cameraView = document.querySelector('#cameraView');
  * 
  * // Get a photo taken
- * cameraView.on('capture', base64Image => {
+ * cameraView.on('capture', event => {
  *   // Photos taken can be received in base64 format.
+ *   console.log(event.detail.data);// "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC"
  * });
  * 
  */
@@ -90,6 +91,42 @@ class CameraView extends ComponentBase {
     this.canvas.classList.add('xj-camera-view-canvas');
     this.append(this.canvas);
 
+    // Added camera play and pause controls
+    this.insertAdjacentHTML('afterbegin', `
+      <div action-tap-camera-player class="xj-camera-view-player">
+        <button action-play-pause-camera class="xj-camera-view-play-pause-button" type="button" played="false"><i></i></button>
+      </div>`);
+
+    // Controlling camera play and pause
+    const playPauseButton = this.querySelector('[action-play-pause-camera]')!;
+    playPauseButton.addEventListener('click', event => {
+      // event.stopPropagation();
+      if (this.camera.paused) {
+        this.camera.play();
+      } else {
+        this.camera.pause();
+      }
+      // player.classList.remove('fadein');
+    });
+
+    // Control display of player menu
+    const player = this.querySelector('[action-tap-camera-player]')!;
+    let playerHideTimer: ReturnType<typeof setTimeout>|undefined = undefined;
+    player.addEventListener('click', event => {
+      if (playerHideTimer !== undefined) {
+        clearTimeout(playerHideTimer);
+      }
+      playPauseButton.setAttribute('played', !this.camera.paused ? 'true' : 'false');
+      if (player.classList.contains('fadein')) {
+        player.classList.remove('fadein');
+      } else {
+        player.classList.add('fadein');
+        playerHideTimer = setTimeout(() => {
+          playerHideTimer = undefined;
+          player.classList.remove('fadein');
+        }, 2000);
+      }
+    });
 
     // Adds a menu to this component if the menu option is on
     if (this.attr('menu') !== false) {
@@ -138,20 +175,20 @@ class CameraView extends ComponentBase {
         <div class="xj-camera-view-control">
           <div class="xj-camera-view-control-content">
             <a class="xj-camera-view-captured"><img></a>
-            <button action-camera-capture class="xj-camera-view-capture-button" type="button"></button>
-            <button action-switch-camera-face class="xj-camera-view-switch-face-button" type="button"></button>
+            <button action-camera-capturing class="xj-camera-view-capture-button" type="button"></button>
+            <button action-change-camera-facing class="xj-camera-view-switch-face-button" type="button"></button>
           </div>
         </div>`);
 
       // Get a capture of the current frame if the take a picture button is pressed
-      this.querySelector('[action-camera-capture]')!.addEventListener('click', () => {
+      this.querySelector('[action-camera-capturing]')!.addEventListener('click', () => {
         const data = this.camera.capture();
         this.querySelector('.xj-camera-view-captured img')!.setAttribute('src', data);
-        super.invoke('capture', data);
+        super.invoke('capture', { data });
       });
 
       // Switch camera face when facing button is pressed
-      this.querySelector('[action-switch-camera-face]')!.addEventListener('touchstart', async () => {
+      this.querySelector('[action-change-camera-facing]')!.addEventListener('touchstart', async () => {
         await this.camera.open(this.camera.facing === 'front' ? 'back' : 'front');
       });
     }
