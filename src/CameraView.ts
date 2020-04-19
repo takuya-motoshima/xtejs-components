@@ -91,6 +91,42 @@ class CameraView extends ComponentBase {
     this.canvas.classList.add('xj-camera-view-canvas');
     this.append(this.canvas);
 
+    // Added camera play and pause controls
+    this.insertAdjacentHTML('afterbegin', `
+      <div action-tap-camera-player class="xj-camera-view-player">
+        <button action-play-pause-camera class="xj-camera-view-play-pause-button" type="button" played="false"><i></i></button>
+      </div>`);
+
+    // Controlling camera play and pause
+    const playPauseButton = this.querySelector('[action-play-pause-camera]')!;
+    playPauseButton.addEventListener('click', event => {
+      // event.stopPropagation();
+      if (this.camera.paused) {
+        this.camera.play();
+      } else {
+        this.camera.pause();
+      }
+      // player.classList.remove('fadein');
+    });
+
+    // Control display of player menu
+    const player = this.querySelector('[action-tap-camera-player]')!;
+    let playerHideTimer: ReturnType<typeof setTimeout>|undefined = undefined;
+    player.addEventListener('click', event => {
+      if (playerHideTimer !== undefined) {
+        clearTimeout(playerHideTimer);
+      }
+      playPauseButton.setAttribute('played', !this.camera.paused ? 'true' : 'false');
+      if (player.classList.contains('fadein')) {
+        player.classList.remove('fadein');
+      } else {
+        player.classList.add('fadein');
+        playerHideTimer = setTimeout(() => {
+          playerHideTimer = undefined;
+          player.classList.remove('fadein');
+        }, 2000);
+      }
+    });
 
     // Adds a menu to this component if the menu option is on
     if (this.attr('menu') !== false) {
@@ -128,15 +164,7 @@ class CameraView extends ComponentBase {
               </ul>
             {{/if}}
           </div>
-        </nav>
-        <div action-open-camera-player-control class="xj-camera-view-player-control">
-          <button class="xj-camera-view-play-pause-button" type="button" played="false"><i></i></button>
-        </div>`, { menu }));
-
-      // Open play control when screen is tapped
-      this.querySelector('[action-open-camera-player-control]')!.addEventListener('click', event => {
-        console.log(event);
-      });
+        </nav>`, { menu }));
     }
 
     // Add camera control to this component if the control option is on

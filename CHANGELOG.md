@@ -3,6 +3,11 @@
 ### Base component
 * Changed the parameter passed to the event handler of the component to be an event object instead of just an object.
 
+### Camera view component
+* Added the features of play and pause
+
+![Play and pause camera view](https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/camera-view-play-pause.jpg)
+
 ### Camera component
 * Added open, play and pause events for the camera.
 

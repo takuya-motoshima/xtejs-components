@@ -16,7 +16,11 @@ npm install xtejs-components;
 
 ### Camera component with controller, menu and overlay canvas.
 
+Version 1.05 added play and pause features.
+
 ![Camera component with controller, menu and overlay canvas](https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/camera-view.gif)
+
+![Play and pause camera view](https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/camera-view-play-pause.jpg)
 
 Optional Attributes:
 
@@ -98,6 +102,13 @@ passcodeAuth.authenticate(correctPasscode, success => {
 ```
 
 ### Camera component.
+
+Optional Attributes:
+
+|Attribute|Value|Description|
+|-|-|-|
+|autoplay|true\|false|Specify to open the camera when ready. The default is not to open automatically.|
+|facing|back\|front|Specify the camera face. The front is "front" and the back is "back".|
 
 HTML:
 
