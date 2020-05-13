@@ -1,17 +1,17 @@
 :root {
-  --passcode-auth-numbers-columns: 3;
-  --passcode-auth-numbers-gap: 1px;
+  --passcode-numbers-columns: 3;
+  --passcode-numbers-gap: 1px;
 }
 
-body.passcode-auth-wrong {
-  animation: passcode-auth-bg-red 1s ease-in;
+body.passcode-wrong {
+  animation: passcode-bg-red 1s ease-in;
 }
 
-body.passcode-auth-correct {
-  animation: passcode-auth-bg-green 1s ease-in;
+body.passcode-correct {
+  animation: passcode-bg-green 1s ease-in;
 }
 
-.passcode-auth {
+.passcode {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -26,14 +26,14 @@ body.passcode-auth-correct {
   color: rgba(255, 255, 255, 0.2);
 }
 
-  .passcode-auth-dots {
+  .passcode-dots {
     display: flex;
     justify-content: space-around;
     padding: 3em 1em 1em;
     width: 50%;
   }
 
-    .passcode-auth-dot {
+    .passcode-dot {
       position: relative;
       width: 0.8em;
       height: 0.8em;
@@ -42,24 +42,24 @@ body.passcode-auth-correct {
       transform: scale3d(0.7, 0.7, 0.7);
     }
 
-    .passcode-auth-dot.passcode-auth-dot-active {
-      animation: passcode-auth-grow-dot .5s ease;
+    .passcode-dot.passcode-dot-active {
+      animation: passcode-grow-dot .5s ease;
       animation-fill-mode: forwards;
     }
 
-    .passcode-auth-dot.passcode-auth-wrong {
-      animation: passcode-auth-wrong .9s ease;
+    .passcode-dot.passcode-wrong {
+      animation: passcode-wrong .9s ease;
     }
 
-    .passcode-auth-dot.passcode-auth-correct {
-      animation: passcode-auth-correct .9s ease;
+    .passcode-dot.passcode-correct {
+      animation: passcode-correct .9s ease;
     }
 
-  .passcode-auth p {
+  .passcode p {
     font-size: .8em;
   }
 
-  .passcode-auth-numbers {
+  .passcode-numbers {
     display: flex;
     flex-flow: row wrap;
     align-items: center;
@@ -69,20 +69,20 @@ body.passcode-auth-correct {
     margin: 2em 0;
   }
 
-    .passcode-auth-number {
+    .passcode-number {
       box-sizing: border-box;
       position: relative;
-      margin: var(--passcode-auth-numbers-gap);
-      width: calc(100% / var(--passcode-auth-numbers-columns) - var(--passcode-auth-numbers-gap) * 2 * 3);
+      margin: var(--passcode-numbers-gap);
+      width: calc(100% / var(--passcode-numbers-columns) - var(--passcode-numbers-gap) * 2 * 3);
       user-select: none;
       transition: all .5s ease;
     }
 
-    .passcode-auth-number:hover {
+    .passcode-number:hover {
       color: rgba(255, 255, 255, 0.5);
     }
 
-      .passcode-auth-number span {
+      .passcode-number span {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -91,7 +91,7 @@ body.passcode-auth-correct {
         font-size: 1.8em;
       }
 
-      .passcode-auth-number::before {
+      .passcode-number::before {
         content: '';
         box-sizing: border-box;
         position: absolute;
@@ -105,15 +105,15 @@ body.passcode-auth-correct {
         transition: all .5s ease;
       }
 
-      .passcode-auth-number:hover::before {
+      .passcode-number:hover::before {
         border: 2px solid rgba(255, 255, 255, 0.5);
       }
 
-      .passcode-auth-number.passcode-auth-number-grow::before {
-        animation: passcode-auth-grow-number .6s ease;
+      .passcode-number.passcode-number-grow::before {
+        animation: passcode-grow-number .6s ease;
       }
 
-      .passcode-auth-number::after {
+      .passcode-number::after {
         content: '';
         display: inline-block;
         padding-bottom: 100%;
@@ -121,14 +121,14 @@ body.passcode-auth-correct {
         vertical-align: top;
       }
 
-@keyframes passcode-auth-grow-dot {
+@keyframes passcode-grow-dot {
   100% {
     background: white;
     transform: scale3d(0.9, 0.9, 0.9);
   }
 }
 
-@keyframes passcode-auth-grow-number {
+@keyframes passcode-grow-number {
   50% {
     transform: translate(-50%, -50%) scale3d(1.5, 1.5, 1.5);
   }
@@ -137,7 +137,7 @@ body.passcode-auth-correct {
   }
 }
 
-@keyframes passcode-auth-wrong {
+@keyframes passcode-wrong {
   20% {
     background: crimson;
   }
@@ -152,7 +152,7 @@ body.passcode-auth-correct {
   }
 }
 
-@keyframes passcode-auth-correct {
+@keyframes passcode-correct {
   20% {
     background: limegreen;
   }
@@ -167,13 +167,13 @@ body.passcode-auth-correct {
   }
 }
 
-@keyframes passcode-auth-bg-red {
+@keyframes passcode-bg-red {
   50% {
     background: crimson;
   }
 }
 
-@keyframes passcode-auth-bg-green {
+@keyframes passcode-bg-green {
   50% {
     background: limegreen;
   }

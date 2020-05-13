@@ -40,13 +40,13 @@
  * });
  *
  */
-import ComponentBase from '~/ComponentBase';
-import Camera from '~/Camera';
-import Canvas from '~/Canvas';
-import './styles/camera-view.css';
-declare class CameraView extends ComponentBase {
-    camera: Camera;
-    canvas: Canvas;
+import BaseComponent from '~/BaseComponent';
+import './styles/camera.css';
+declare class CameraView extends BaseComponent {
+    video: HTMLVideoElement;
+    facing: 'nothing' | 'front' | 'back';
+    state: 'unopened' | 'loading' | 'opened';
+    private canvas;
     /**
      * is attribute
      *
@@ -60,10 +60,66 @@ declare class CameraView extends ComponentBase {
      */
     protected connectedCallback(): void;
     /**
-     * Adjust the layout
+     * Open camera
+     *
+     * @param  {'front'|'back'} facing|back
+     * @param  {'FHD'|'HD'|'VGA'|'HVGA'|'QVGA'} quality
+     * @return {Promise<void>}
+     */
+    open(facing?: 'front' | 'back', quality?: 'FHD' | 'HD' | 'VGA' | 'HVGA' | 'QVGA'): Promise<void>;
+    /**
+     * Close camera
      *
      * @return {void}
      */
-    layout(): void;
+    close(): void;
+    /**
+     * Play camera
+     *
+     * @return {void}
+     */
+    play(): void;
+    /**
+     * Pause camera
+     *
+     * @return {void}
+     */
+    pause(): void;
+    /**
+     * Is the camera open?
+     *
+     * @return {boolean}
+     */
+    get opened(): boolean;
+    /**
+     * Is the camera paused?
+     *
+     * @return {boolean}
+     */
+    get paused(): boolean;
+    /**
+     * Get media tracks
+     *
+     * @return {MediaStreamTrack[]}
+     */
+    get tracks(): MediaStreamTrack[];
+    /**
+     * Get current camera constraints
+     *
+     * @return {MediaTrackConstraints|undefined}
+     */
+    get constraints(): MediaTrackConstraints | undefined;
+    /**
+     * Capture a single frame
+     *
+     * @return {void}
+     */
+    capture(): string;
+    /**
+     * Wait for camera to open
+     *
+     * @return {Promise<void>}
+     */
+    waitOpened(): Promise<void>;
 }
 export default CameraView;

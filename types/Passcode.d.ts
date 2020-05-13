@@ -4,16 +4,16 @@
  * @example
  *
  * HTML:
- * <xj-passcode-auth id="passcodeAuth"></xj-passcode-auth>
+ * <xj-passcode id="passcode"></xj-passcode>
  *
  * JS:
  * import 'xtejs-components';
  *
  * const correctPasscode = '1234';
- * const passcodeAuth = document.querySelector('#passcodeAuth');
+ * const passcode = document.querySelector('#passcode');
  *
  * // Event handler when passcode input is completed
- * passcodeAuth.authenticate(correctPasscode, success => {
+ * passcode.authenticate(correctPasscode, success => {
  *   // If the passcode is correct, the success variable will be true.
  *   if (success) {
  *     alert('Authenticated Successfully');
@@ -22,9 +22,9 @@
  *   }
  * });
  */
-import ComponentBase from '~/ComponentBase';
-import './styles/passcode-auth.css';
-declare class PasscodeAuth extends ComponentBase {
+import BaseComponent from '~/BaseComponent';
+import './styles/passcode.css';
+declare class Passcode extends BaseComponent {
     private passcode;
     private resolve;
     /**
@@ -47,4 +47,4 @@ declare class PasscodeAuth extends ComponentBase {
      */
     authenticate(passcode: string, resolve: (success: boolean) => void): void;
 }
-export default PasscodeAuth;
+export default Passcode;
