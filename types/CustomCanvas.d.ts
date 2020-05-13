@@ -2,7 +2,7 @@
  * Canvas component.
  */
 import BaseComponent from '~/BaseComponent';
-declare class Canvas extends BaseComponent {
+declare class CustomCanvas extends BaseComponent {
     readonly extends: HTMLCanvasElement;
     /**
      * is attribute
@@ -28,16 +28,16 @@ declare class Canvas extends BaseComponent {
      * @param  {number}                                              y
      * @param  {number}                                              w
      * @param  {number}                                              h
-     * @return {Canvas}
+     * @return {CustomCanvas}
      */
-    drawImage(image: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement, sx?: number, sy?: number, sw?: number, sh?: number, dx?: number, dy?: number, dw?: number, dh?: number): Canvas;
+    drawImage(image: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement, sx?: number, sy?: number, sw?: number, sh?: number, dx?: number, dy?: number, dw?: number, dh?: number): CustomCanvas;
     /**
      * Draw and scale the image to fit the canvas
      *
      * @param  {HTMLImageElement|HTMLVideoElement|HTMLCanvasElement} image
-     * @return {Canvas}
+     * @return {CustomCanvas}
      */
-    drawImageScaled(image: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement): Canvas;
+    drawImageScaled(image: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement): CustomCanvas;
     /**
      * Draw point
      *
@@ -45,19 +45,19 @@ declare class Canvas extends BaseComponent {
      * @param  {number} y
      * @param  {number} options.radius
      * @param  {string} options.color
-     * @return {Canvas}
+     * @return {CustomCanvas}
      */
     drawPoint(x: number, y: number, { radius, color }?: {
         radius?: number;
         color?: string;
-    }): Canvas;
+    }): CustomCanvas;
     /**
      * Draw center point
      *
      * @param  {Object[]} coordinates
      * @param  {number} options.radius
      * @param  {string} options.color
-     * @return {Canvas}
+     * @return {CustomCanvas}
      */
     drawCenterPoint(coordinates: {
         x: number;
@@ -65,7 +65,7 @@ declare class Canvas extends BaseComponent {
     }[], { radius, color }?: {
         radius?: number;
         color?: string;
-    }): Canvas;
+    }): CustomCanvas;
     /**
      * Draw rectangle
      *
@@ -76,13 +76,13 @@ declare class Canvas extends BaseComponent {
      * @param  {number} options.degree
      * @param  {number} options.lineWidth
      * @param  {string} options.color
-     * @return {Canvas}
+     * @return {CustomCanvas}
      */
     drawRectangle(x: number, y: number, width: number, height: number, { degree, lineWidth, color }?: {
         degree?: number;
         lineWidth?: number;
         color?: string;
-    }): Canvas;
+    }): CustomCanvas;
     /**
      * Draw rectangle corners
      *
@@ -92,24 +92,24 @@ declare class Canvas extends BaseComponent {
      * @param  {number} height
      * @param  {number} options.lineWidth
      * @param  {string} options.color
-     * @return {Canvas}
+     * @return {CustomCanvas}
      */
     drawRectangleCorners(x: number, y: number, width: number, height: number, { lineWidth, color }?: {
         lineWidth?: number;
         color?: string;
-    }): Canvas;
+    }): CustomCanvas;
     /**
      * Flip canvas horizontally
      *
-     * @return {Canvas}
+     * @return {CustomCanvas}
      */
-    flipHorizontal(): Canvas;
+    flipHorizontal(): CustomCanvas;
     /**
      * Clear canvas
      *
-     * @return {Canvas}
+     * @return {CustomCanvas}
      */
-    clear(): Canvas;
+    clear(): CustomCanvas;
     /**
      * Get a canvas image in base 64 format
      *
@@ -118,4 +118,4 @@ declare class Canvas extends BaseComponent {
      */
     toDataURL(flip?: boolean): string;
 }
-export default Canvas;
+export default CustomCanvas;

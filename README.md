@@ -18,9 +18,11 @@ npm install xtejs-components;
 
 Version 1.05 added play and pause features.
 
-![Camera component with controller, menu and overlay canvas](https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/camera-view.gif)
+![Camera component with controller, menu and overlay canvas](https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/camera.gif)
 
-![Play and pause camera view](https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/camera-view-play-pause.jpg)
+![Camera playback button capture](https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/camera-play.png)
+
+![Camera pause button capture](https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/camera-pause.png)
 
 Optional Attributes:
 
@@ -34,14 +36,12 @@ Optional Attributes:
 CSS:
 
 ```css
-.xj-camera-view {
+#camera {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 320px !important;
-  height: 568px !important;
-  /*width: 414px !important;
-  height: 736px !important;*/
+  width: 414px !important;
+  height: 736px !important;
   transform: translate(-50%, -50%);
 }
 ```
@@ -49,13 +49,13 @@ CSS:
 HTML:
 
 ```html
-<xj-camera-view id="cameraView" control menu autoplay facing="back">
-  <xj-camera-view-menu>
-    <xj-camera-view-menu-item href="#">Home</xj-camera-view-menu-item>
-    <xj-camera-view-menu-item href="#">About</xj-camera-view-menu-item>
-    <xj-camera-view-menu-item href="#">Events</xj-camera-view-menu-item>
-  </xj-camera-view-menu>
-</xj-camera-view>
+<xj-camera id="camera" control menu autoplay facing="back">
+  <xj-camera-menu>
+    <xj-camera-menu-item href="#">Home</xj-camera-menu-item>
+    <xj-camera-menu-item href="#">About</xj-camera-menu-item>
+    <xj-camera-menu-item href="#">Events</xj-camera-menu-item>
+  </xj-camera-menu>
+</xj-camera>
 ```
 
 JS:
@@ -63,23 +63,50 @@ JS:
 ```js
 import 'xtejs-components';
 
-const cameraView = document.querySelector('#cameraView');
+// Get the camera element
+const camera = document.querySelector('#camera');
 
-// Get a photo taken
-cameraView.on('capture', event => {
-  // Photos taken can be received in base64 format.
-  console.log(event.detail.data);// "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC"
-});
+// If the autoplay attribute is true, please wait for the camera to open first.
+await camera.waitOpened();
+
+// The following is the basic operation of the camera.
+// Open front camera
+await camera.open('front');
+
+// Open rear camera
+await camera.open('back');
+
+// Play
+camera.play();
+
+// Pause.
+camera.pause();
+
+// The following are the events issued by the camera.
+camera
+  .on('opened', event => {
+    // Called when open
+  })
+  .on('played', event => {
+    // Called after playing
+  })
+  .on('paused', event => {
+    // Called when paused
+  })
+  .on('capture', event => {
+    // Called after the shoot button is pressed.
+    // The captured image can be received from "event.detail.dat" in base64 format.
+  });
 ```
 
 ### Passcode authentication.
 
-![Passcode authentication](https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/passcode-auth.gif)
+![Passcode authentication](https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/passcode.gif)
 
 HTML:
 
 ```html
-<xj-passcode-auth id="passcodeAuth"></xj-passcode-auth>
+<xj-passcode id="passcode"></xj-passcode>
 ```
 
 JS:
@@ -88,10 +115,10 @@ JS:
 import "xtejs-components";
 
 const correctPasscode = '1234';
-const passcodeAuth = document.querySelector('#passcodeAuth');
+const passcode = document.querySelector('#passcode');
 
 // Event handler when passcode input is completed
-passcodeAuth.authenticate(correctPasscode, success => {
+passcode.authenticate(correctPasscode, success => {
   // If the passcode is correct, the success variable will be true.
   if (success) {
     alert('Authenticated Successfully');
@@ -99,56 +126,6 @@ passcodeAuth.authenticate(correctPasscode, success => {
     alert('Authentication Failed');
   }
 });
-```
-
-### Camera component.
-
-Optional Attributes:
-
-|Attribute|Value|Description|
-|-|-|-|
-|autoplay|true\|false|Specify to open the camera when ready. The default is not to open automatically.|
-|facing|back\|front|Specify the camera face. The front is "front" and the back is "back".|
-
-HTML:
-
-```html
-<xj-camera id="camera" autoplay facing="back"></xj-camera>
-```
-
-JS:
-
-```js
-import 'xtejs-components';
-
-const camera = document.querySelector('#camera');
-
-// Wait until the camera opens
-await camera.waitOpened();
-
-// Pause camera
-camera.pause();
-
-// Open camera in front mode
-await camera.open('front');
-
-// Open camera in back mode
-await camera.open('back');
-
-// Execute a JavaScript when opening camera
-camera.on('opened', event => console.log('Camera opened'));
-
-// Execute a JavaScript when playing camera
-camera.on('played', event => console.log('Camera played'));
-
-// Execute a JavaScript when the camera is paused
-camera.on('paused', event => console.log('Camera paused'));
-
-// You can also use method chains to set events.
-camera
-  .on('opened', event => console.log('Camera opened'))
-  .on('played', event => console.log('Camera played'))
-  .on('paused', event => console.log('Camera paused'));
 ```
 
 ## Examples

@@ -1,10 +1,10 @@
 /**
  * Canvas component.
  */
-import ComponentBase from '~/ComponentBase';
+import BaseComponent from '~/BaseComponent';
 import { Misc, Graphics, Color } from 'xtejs-utils';
 
-class Canvas extends ComponentBase {
+class CustomCanvas extends BaseComponent {
 
   public readonly extends: HTMLCanvasElement;
 
@@ -14,7 +14,7 @@ class Canvas extends ComponentBase {
    * @return {string}
    */
   protected static get is(): string {
-    return 'xj-canvas';
+    return 'xj-custom-canvas';
   }
 
   /**
@@ -62,7 +62,7 @@ class Canvas extends ComponentBase {
    * @param  {number}                                              y
    * @param  {number}                                              w
    * @param  {number}                                              h
-   * @return {Canvas}
+   * @return {CustomCanvas}
    */
   public drawImage(
     image: HTMLImageElement|HTMLVideoElement|HTMLCanvasElement,
@@ -74,7 +74,7 @@ class Canvas extends ComponentBase {
     dy?: number,
     dw?: number,
     dh?: number
-  ): Canvas {
+  ): CustomCanvas {
     if (sw !== undefined && sh !== undefined && dx !== undefined && dy !== undefined && dw !== undefined && dh !== undefined) {
       this.extends.getContext('2d')!.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
     } else if (sw !== undefined && sh !== undefined) {
@@ -89,9 +89,9 @@ class Canvas extends ComponentBase {
    * Draw and scale the image to fit the canvas
    * 
    * @param  {HTMLImageElement|HTMLVideoElement|HTMLCanvasElement} image
-   * @return {Canvas}
+   * @return {CustomCanvas}
    */
-  public drawImageScaled(image: HTMLImageElement|HTMLVideoElement|HTMLCanvasElement): Canvas {
+  public drawImageScaled(image: HTMLImageElement|HTMLVideoElement|HTMLCanvasElement): CustomCanvas {
    const dimensions = Graphics.getMediaDimensions(image);
    const hRatio = this.extends.width  / dimensions.width;
    const vRatio =  this.extends.height / dimensions.height;
@@ -111,9 +111,9 @@ class Canvas extends ComponentBase {
    * @param  {number} y
    * @param  {number} options.radius
    * @param  {string} options.color
-   * @return {Canvas}
+   * @return {CustomCanvas}
    */
-  public drawPoint(x: number, y: number, { radius = 3, color = Color.accessibleDarkBlue }: { radius?: number, color?: string } = {}): Canvas {
+  public drawPoint(x: number, y: number, { radius = 3, color = Color.accessibleDarkBlue }: { radius?: number, color?: string } = {}): CustomCanvas {
     Graphics.drawPoint(this.extends, x, y, { radius, color });
     return this;
   }
@@ -124,9 +124,9 @@ class Canvas extends ComponentBase {
    * @param  {Object[]} coordinates
    * @param  {number} options.radius
    * @param  {string} options.color
-   * @return {Canvas}
+   * @return {CustomCanvas}
    */
-  public drawCenterPoint(coordinates: { x: number, y: number }[], { radius = 3, color = Color.accessibleDarkBlue }: { radius?: number, color?: string } = {}): Canvas {
+  public drawCenterPoint(coordinates: { x: number, y: number }[], { radius = 3, color = Color.accessibleDarkBlue }: { radius?: number, color?: string } = {}): CustomCanvas {
     Graphics.drawCenterPoint(this.extends, coordinates, { radius, color });
     return this;
   }
@@ -141,9 +141,9 @@ class Canvas extends ComponentBase {
    * @param  {number} options.degree
    * @param  {number} options.lineWidth
    * @param  {string} options.color
-   * @return {Canvas}
+   * @return {CustomCanvas}
    */
-  public drawRectangle(x: number, y: number, width: number, height: number, { degree = 0, lineWidth = 3, color = Color.accessibleDarkBlue }: { degree?: number, lineWidth?: number, color?: string } = {}): Canvas {
+  public drawRectangle(x: number, y: number, width: number, height: number, { degree = 0, lineWidth = 3, color = Color.accessibleDarkBlue }: { degree?: number, lineWidth?: number, color?: string } = {}): CustomCanvas {
     Graphics.drawRectangle(this.extends, x, y, width, height, { degree, lineWidth, color });
     return this;
   }
@@ -157,9 +157,9 @@ class Canvas extends ComponentBase {
    * @param  {number} height
    * @param  {number} options.lineWidth
    * @param  {string} options.color
-   * @return {Canvas}
+   * @return {CustomCanvas}
    */
-  public drawRectangleCorners(x: number, y: number, width: number, height: number, { lineWidth = 3, color = Color.accessibleDarkBlue }: { lineWidth?: number, color?: string } = {}): Canvas {
+  public drawRectangleCorners(x: number, y: number, width: number, height: number, { lineWidth = 3, color = Color.accessibleDarkBlue }: { lineWidth?: number, color?: string } = {}): CustomCanvas {
     Graphics.drawRectangleCorners(this.extends, x, y, width, height, { lineWidth, color });
     return this;
   }
@@ -167,9 +167,9 @@ class Canvas extends ComponentBase {
   /**
    * Flip canvas horizontally
    * 
-   * @return {Canvas}
+   * @return {CustomCanvas}
    */
-  public flipHorizontal(): Canvas {
+  public flipHorizontal(): CustomCanvas {
     Graphics.flipHorizontal(this.extends);
     return this;
   }
@@ -177,9 +177,9 @@ class Canvas extends ComponentBase {
   /**
    * Clear canvas
    * 
-   * @return {Canvas}
+   * @return {CustomCanvas}
    */
-  public clear(): Canvas {
+  public clear(): CustomCanvas {
     this.extends.getContext('2d')!.clearRect(0, 0, this.extends.width, this.extends.height);
     return this;
   }
@@ -198,5 +198,5 @@ class Canvas extends ComponentBase {
   }
 }
 
-Canvas.define();
-export default Canvas;
+CustomCanvas.define();
+export default CustomCanvas;

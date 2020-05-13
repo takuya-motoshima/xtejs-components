@@ -1,54 +1,78 @@
 /**
- * Camera component.
+ * Camera component with controller, menu and overlay canvas.
  *
  * Optional Attributes:
  * autoplay:Specify to open the camera when ready. The default is not to open automatically.
+ * control: Specifies to display the camera control. (Camera shooting button, camera face switching button, etc.) The default is to display.The default is back.
+ * menu: Specifies to display the camera menu. The default is to display.
  * facing: Specify the camera face. The front is "front" and the back is "back".
  *
  * @example
  *
+ * CSS:
+ * #camera {
+ *   position: absolute;
+ *   top: 50%;
+ *   left: 50%;
+ *   width: 414px !important;
+ *   height: 736px !important;
+ *   transform: translate(-50%, -50%);
+ * }
+ *
  * HTML:
- * <xj-camera id="camera" autoplay facing="back"></xj-camera>
+ * <xj-camera id="camera" control menu autoplay facing="back">
+ *   <xj-camera-menu>
+ *     <xj-camera-menu-item href="#">Home</xj-camera-menu-item>
+ *     <xj-camera-menu-item href="#">About</xj-camera-menu-item>
+ *     <xj-camera-menu-item href="#">Events</xj-camera-menu-item>
+ *   </xj-camera-menu>
+ * </xj-camera>
  *
  * JS:
  * import 'xtejs-components';
  *
+ * // Get the camera element
  * const camera = document.querySelector('#camera');
  *
- * // Wait until the camera opens
+ * // If the autoplay attribute is true, please wait for the camera to open first.
  * await camera.waitOpened();
  *
- * // Pause camera
- * camera.pause();
- *
- * // Open camera in front mode
+ * // The following is the basic operation of the camera.
+ * // Open front camera
  * await camera.open('front');
  *
- * // Open camera in back mode
+ * // Open rear camera
  * await camera.open('back');
  *
- * // Execute a JavaScript when opening camera
- * camera.on('opened', event => console.log('Camera opened'));
+ * // Play
+ * camera.play();
  *
- * // Execute a JavaScript when playing camera
- * camera.on('played', event => console.log('Camera played'));
+ * // Pause.
+ * camera.pause();
  *
- * // Execute a JavaScript when the camera is paused
- * camera.on('paused', event => console.log('Camera paused'));
- *
- * // You can also use method chains to set events.
+ * // The following are the events issued by the camera.
  * camera
- *   .on('opened', event => console.log('Camera opened'))
- *   .on('played', event => console.log('Camera played'))
- *   .on('paused', event => console.log('Camera paused'));
- *
+ *   .on('opened', event => {
+ *     // Called when open
+ *   })
+ *   .on('played', event => {
+ *     // Called after playing
+ *   })
+ *   .on('paused', event => {
+ *     // Called when paused
+ *   })
+ *   .on('capture', event => {
+ *     // Called after the shoot button is pressed.
+ *     // The captured image can be received from "event.detail.dat" in base64 format.
+ *   });
  */
-import ComponentBase from '~/ComponentBase';
-declare class Camera extends ComponentBase {
-    extends: HTMLVideoElement;
+import BaseComponent from '~/BaseComponent';
+import './styles/camera.css';
+declare class Camera extends BaseComponent {
+    video: HTMLVideoElement;
     facing: 'nothing' | 'front' | 'back';
     state: 'unopened' | 'loading' | 'opened';
-    private captured;
+    private canvas;
     /**
      * is attribute
      *
@@ -105,15 +129,6 @@ declare class Camera extends ComponentBase {
      * @return {MediaStreamTrack[]}
      */
     get tracks(): MediaStreamTrack[];
-    /**
-     * Get camera dimensions
-     *
-     * @return {{ width: number, height: number }}
-     */
-    get dimensions(): {
-        width: number;
-        height: number;
-    };
     /**
      * Get current camera constraints
      *
