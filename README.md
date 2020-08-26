@@ -1,11 +1,5 @@
 # xtejs-components
 
-<img src="https://raw.githubusercontent.com/takuya-motoshima/xtejs-components/master/documents/brand.png" width="58" height="90" align="left" hspace="10" vspace="6">
-
-**XteJS components** is a component developed based on custom element v1.
-
-### &nbsp;<!-- Code required for line break in README header -->
-
 ## Installation
 
 ```sh
